@@ -10,7 +10,7 @@ published: true
 
 When you've managed as many [content campaigns](/creative-content-marketing) as I have, you're bound to pick up knowledge of how to report on success.
 
-I help businesses get clarity with data frameworks and dashboards. They're quick to construct, simple to understand and seamless to share with colleagues, clients and your big bosses.
+I help businesses get clarity with data frameworks and dashboards. They're quick to construct, simple to understand and seamless to share with colleagues, clients and the big bosses.
 
 This isn’t about yet another expensive tool or ripping up what you’re doing. It’s about a better, more valuable interpretation of the data you’re already collecting.
 
