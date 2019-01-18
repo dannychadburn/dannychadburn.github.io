@@ -27,7 +27,8 @@ I was once described by a manager as a maverick. It may or may not have been int
 ## A few facts about me
 
 - I live a few miles north of Brighton, in [a village](https://www.wikiwand.com/en/Hurstpierpoint) mentioned in the Domesday Book
-- I've completed the [Brighton Marathon](https://www.wikiwand.com/en/Brighton_Marathon) twice, with a PB of 3 hours 43 minutes
+- I've completed the [Brighton Marathon](https://www.wikiwand.com/en/Brighton_Marathon) twice, with a PB of 3h 43m
+- I have a [polyphasic sleep](https://polyphasic.net/index.php/polyphasic-sleep/schedules/everyman/) schedule
 - I played youth football for Swindon Town FC, receiving coaching from [Glenn Hoddle](https://www.wikiwand.com/en/Glenn_Hoddle)
 - I appeared as an extra in Oscar-winning movie [Gladiator](https://www.wikiwand.com/en/Gladiator_(2000_film))
 - I'm (distantly) related to snooker legend [Stephen Hendry](https://www.wikiwand.com/en/Stephen_Hendry)
