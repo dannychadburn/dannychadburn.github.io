@@ -8,7 +8,7 @@ published: true
 
 <a href="#facts">Facts</a> / <a href="#faq">FAQ</a> / <a href="#why">Why Tidy Swan?</a>
 
-#### Since the late 90's I've been working in digital marketing. I've generated billions of page views for household name companies, global agencies, government-funded charities and fledgling startups.
+#### Since the late 90s I've been working in digital marketing. I've generated billions of page views for household name companies, global agencies, government-funded charities and fledgling startups.
 
 It seemed unfair to limit all that experience to just one employer. So I'm now a freelance consultant offering [IA](/content-information-architecture), [performance analysis](/content-campaign-analytics) and [content marketing](/creative-content-marketing) services to companies of all shapes and sizes.
 
@@ -28,7 +28,8 @@ I was once described by a manager as a maverick. It may or may not have been int
 
 - I live a few miles north of Brighton, in [a village](https://www.wikiwand.com/en/Hurstpierpoint) mentioned in the Domesday Book
 - I've completed the [Brighton Marathon](https://www.wikiwand.com/en/Brighton_Marathon) twice, with a PB of 3h 43m
-- I have a [polyphasic sleep](https://polyphasic.net/index.php/polyphasic-sleep/schedules/everyman/) schedule
+- I have a [polyphasic sleep](https://patient.info/news-and-features/what-is-biphasic-or-polyphasic-sleep-and-is-it-good-for-you) schedule
+- I'm part-owner of a [coworking space](https://www.deskvillage.com)
 - I played youth football for Swindon Town FC, receiving coaching from [Glenn Hoddle](https://www.wikiwand.com/en/Glenn_Hoddle)
 - I appeared as an extra in Oscar-winning movie [Gladiator](https://www.wikiwand.com/en/Gladiator_(2000_film))
 - I'm (distantly) related to snooker legend [Stephen Hendry](https://www.wikiwand.com/en/Stephen_Hendry)
@@ -53,7 +54,7 @@ You won't be faced with a heavy sales pitch, I'd just prefer to show you things 
 No. I have a penchant for technology and sport, but I've plied my trade in pretty much every market from agriculture to zoology.
 
 #### What's your day rate?
-Prices start at £400 a day, but could be double that depending on the nature of each project.
+£400 a day, but could be higher or lower depending on the nature of each project.
 
 #### Do you work pro-bono?
 I have done and would do again for the right cause. [Send me a pitch](/contact)!
