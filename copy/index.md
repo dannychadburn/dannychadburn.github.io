@@ -15,10 +15,9 @@ Whether it's a headline for your hompepage, or something more substantial, I put
 
 * [How to plan a content strategy](https://drive.google.com/file/d/0B50_BJikw1taQnFiN0p1S3Q2V28/view) (author)
 * [What to do with your responsive design](https://drive.google.com/file/d/0B50_BJikw1tadmpKdU9VQ1RlNUE/view) (author)
-* [Fashion bloggers and brands](https://drive.google.com/file/d/17O7TN_TbM3YtO_W3C78o_44-lXgwKZue/view)(editor)
-* (editor)
+* [Fashion bloggers and brands](https://drive.google.com/file/d/17O7TN_TbM3YtO_W3C78o_44-lXgwKZue/view) (editor)
 
-> **[eBook Development](/copy/ebook-writing)** - turning ideas into a massive lead generators. A full service from conception to promotion.
+> **[eBook Development](/copy/ebook-writing)** - turning ideas into lead generators, I provide a full service from conception to promotion.
 
 ### Products
 
@@ -46,4 +45,3 @@ I've also contributed many articles for [searchenginewatch.com](https://searchen
 #### Seen something you like?
 
 <a href="/contact"><button class="button">Get in touch</button></a>
-
