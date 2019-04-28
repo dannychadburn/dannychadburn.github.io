@@ -1,13 +1,13 @@
 ---
 layout: default
-title: 'Tidy Swan | Product Owner and Content Strategist | Danny Chadburn'
+title: Tidy Swan | Product Owner and Content Strategist | Danny Chadburn
 published: true
 ---
 
 
 # Delivering your next project
 
-#### I'm Danny, an agile Product Owner and experienced Content Strategist providing freelance services to businesses in the UK and beyond.
+#### I'm Danny, a Product Owner, Content Strategist and Copywriter providing freelance services to businesses in the UK and beyond.
 
 I've honed my craft with household name brands and digital agencies, launching market-leading products and generating billions of page views.
 
@@ -17,7 +17,7 @@ Enough [about me](/about), here's what I can do for you:
 
 > **[Contracting](/contracting-cv/)** - Need a Product Owner or Content Strategist to lead your project? Take a look at my credentials.
 
-> **[eBook Creation](/ebook-creation/)** - Get a new prospect magnet for your business. I offer a full digital asset production, publishing and promotion service.
+> **[Copywriting](/copy/)** - Captivating headlines, plain English guidance, interesting articles and [ebook development](/copy/ebook-writing).
 
 &nbsp;
 
