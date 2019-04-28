@@ -12,7 +12,6 @@ Alternatively, email [hello@tidyswan.com](mailto:hello@tidyswan.com) with a few 
 
 [Check out my FAQ](/about/#faq) to find out a bit more about me. 
 
-## Sign up for my ideasletter
-I don't have regular news, but I have no shortage of ideas! These are sporadically sent via email to those who wish to receive my random moments of genius.
+## Want to find out a bit more about me?
 
-<a href="https://tinyletter.com/tidyswan" target="_blank"><button class="button">Subscribe now</button></a>
+<a href="/about/#faq" target="_blank"><button class="button">Check out my FAQ</button></a>
