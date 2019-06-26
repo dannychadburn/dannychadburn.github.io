@@ -6,7 +6,7 @@ published: true
 
 # Let me lead your next project
 
-### Available from July 2019
+### Available from January 2020
 
 #### My recent job titles include Product Owner, Head of Content, Content Strategist, and Content Designer, but that covers just a tiny selection of roles I've successfully taken on within companies and agencies.
 
