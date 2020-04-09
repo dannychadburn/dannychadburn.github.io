@@ -541,8 +541,9 @@ dd{
 }
 .header{
 	background-color:#2e8b57;
-	background-image:url(../img/swan.jpg);
-	background-size:cover;
+	background-image:url(../img/swans.png);
+	background-size:200px 200px;
+	background-repeat: repeat-y;
 	background-position:50%;
 	color:#fff;
 	padding:0;
