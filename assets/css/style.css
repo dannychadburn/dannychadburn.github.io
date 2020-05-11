@@ -455,10 +455,10 @@ audio,iframe,img,object,video{
 	margin-right:auto
 }
 a{
-	color:#2e8b57
+	color:#e6b51f
 }
 a:hover{
-	color:#1b5233
+	color:#c2b67c
 }
 .nav-collapse{
 	z-index:1
@@ -540,11 +540,12 @@ dd{
 	padding-top:1em
 }
 .header{
-	background-color:#2e8b57;
+	background-color:#acbccc;
 	background-image:url(../img/swans.png);
 	background-size:400px 400px;
 	background-repeat: repeat;
 	background-position:50%;
+	filter: brightness(50%);
 	color:#fff;
 	padding:0;
 	height:3em
