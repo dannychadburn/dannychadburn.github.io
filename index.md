@@ -20,3 +20,5 @@ Interested in seeing some examples? [Get in touch](mailto:hello@tidyswan.com).
 
 * Email: [hello@tidyswan.com](mailto:hello@tidyswan.com)
 * Phone: 07720057767
+
+© 2019 Tidy Swan Ltd / Company number: 11730535
