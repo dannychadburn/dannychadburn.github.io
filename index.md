@@ -2,10 +2,6 @@
 layout: default
 ---
 
-# Content Consultant in Sussex
-
-I'm a **CONTENT DESIGNER** with expertise in **SEO** and **ANALYTICS**.
-
 Hiring me for your digital projects means you get perfectly formed words, more users, and better results.
 
 * * *
