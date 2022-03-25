@@ -2,7 +2,7 @@
 layout: default
 ---
 
-## Why use Tiody Swan?
+## Why use Tidy Swan?
 
 Hiring me for your digital projects means you get perfectly formed words, more users, and better results.
 
