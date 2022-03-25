@@ -2,8 +2,6 @@
 layout: default
 ---
 
-## Why choose Tidy Swan?
-
 Hiring me for your digital projects means you get perfectly formed words, more users, and better results.
 
 * * *
