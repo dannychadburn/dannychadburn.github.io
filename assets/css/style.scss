@@ -3,6 +3,16 @@
 
 @import 'jekyll-theme-cayman';
 .page-header {
-    background-color: #19547B;
-    background-image: linear-gradient(120deg, #FFD89B, #19547B);
+    background-color: #53565A;
+    background-image: linear-gradient(120deg, #53565A, #FF206E);
 }
+
+.main-content {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: #FF206E;
+  }
