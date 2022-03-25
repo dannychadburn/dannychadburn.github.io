@@ -2,6 +2,8 @@
 layout: default
 ---
 
+## Why choose Tidy Swan?
+
 Hiring me for your digital projects means you get perfectly formed words, more users, and better results.
 
 * * *
@@ -12,7 +14,9 @@ I've worked with (almost) every kind of company, including:
 
 Amazon • Audible • Babylon Health • Bayer • Betfair • Bwin • CEMEX • EDF Energy • Ferrero • FXCM • Gala Bingo • GOV.UK • KPMG • LinkedIn • LG • Monster • North Face • P&O Ferries • Pfizer • Rolls-Royce • Schiff Vitamins • Timberland • Topps Tiles • Totaljobs • Vans • Verizon
 
-Interested in seeing some examples? [Get in touch](mailto:hello@tidyswan.com).
+### Interested in seeing some examples?
+
+[Get in touch](mailto:hello@tidyswan.com).
 
 * * *
 
