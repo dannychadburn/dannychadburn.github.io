@@ -2,6 +2,7 @@
 ---
 
 @import 'jekyll-theme-cayman';
+
 .page-header {
     background-color: #53565A;
     background-image: linear-gradient(120deg, #53565A, #FF206E);
@@ -17,3 +18,8 @@
     color: #FF206E;
   }
 }
+
+.logo {
+    font-size: 2.25rem;
+    font-family: 'Kanit', sans-serif;
+    font-weight:900;
