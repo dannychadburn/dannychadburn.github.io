@@ -2,7 +2,7 @@
 layout: default
 ---
 
-Hiring me for your digital projects give you perfectly formed words, more users, and better results.
+Hiring me for your digital projects gives you perfectly formed words, more users, and better results.
 
 * * *
 
