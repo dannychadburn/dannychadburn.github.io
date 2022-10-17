@@ -10,7 +10,7 @@ Hiring me for your digital projects gives you perfectly formed words, more users
 
 I've worked with (almost) every kind of company, including:
 
-Amazon • Audible • Babylon Health • Bayer • Betfair • Bwin • CEMEX • EDF Energy • Ferrero • FXCM • Gala Bingo • GOV.UK • KPMG • LinkedIn • LG • Monster • North Face • P&O Ferries • Pfizer • Rolls-Royce • Schiff Vitamins • Timberland • Topps Tiles • Totaljobs • Vans • Verizon
+Bayer • Betfair • Bwin • EDF Energy • FXCM • Gala Bingo • GOV.UK • KPMG • LinkedIn • LG • Monster • P&O Ferries • Pfizer • Rolls-Royce • Schiff Vitamins • Totaljobs • Verizon
 
 ### Interested in seeing some examples?
 
