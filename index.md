@@ -34,7 +34,7 @@ Covering industries such as:
 - [Decader](https://tidyswan.com/decader)
 - [Tuuuuunes](https://tidyswan.com/tuuuuunes)
 - [Punchit](https://tidyswan.com/punchit)
-- Stataday
+- [Stataday](https://tidyswan.com/stataday/)
 - [Exclaim Games](http://exclaimgames.com)
 
 
