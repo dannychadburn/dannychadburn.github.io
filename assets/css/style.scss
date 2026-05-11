@@ -5,7 +5,7 @@
 
 .page-header {
     background-color: #53565A;
-    background-image: linear-gradient(120deg, #53565A, #FF206E),url('http://tidyswan.com/assets/images/swans-greyscale.png');
+    background-image: linear-gradient(120deg, #353E43 60%, #EF0107 60%);
 }
 
 .main-content {
@@ -15,12 +15,19 @@
   h4,
   h5,
   h6 {
-    color: #FF206E;
+    color: #EF0107;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-block-start: 1.5em;
   }
 }
 
 .logo {
-    font-size: 2.25rem;
-    font-family: 'Kanit', sans-serif;
-    font-weight:900;
+    font-size: 1.25rem;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
 }

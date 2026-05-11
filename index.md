@@ -2,21 +2,49 @@
 layout: default
 ---
 
-Hiring me for your digital projects gives you perfectly formed words, more users, and better results.
 
-* * *
+
+***
 
 ## Clients
 
-I've worked with (almost) every kind of company, including:
+[Get in touch](mailto:hello@tidyswan.com) if you'd like to see examples of my work.
 
-Bayer • Betfair • Bwin • EDF Energy • FXCM • Gala Bingo • GOV.UK • KPMG • LinkedIn • LG • Monster • P&O Ferries • Pfizer • Rolls-Royce • Schiff Vitamins • Totaljobs • Verizon
+### Government services
 
-### Interested in seeing some examples?
+Senior-level content design for:
 
-[Get in touch](mailto:hello@tidyswan.com).
+- NHS England
+- Department for Education
+- Department for International Trade
+- Cyber and Government Security Directorate
+- Civil Service Policy Profession
 
-* * *
+### Commercial contracts
+
+Covering industries such as:
+
+- education (Open University)
+- pharma (Bayer, Pfizer, Schiff Vitamins)
+- finance (KPMG, FXCM, ABN AMRO)
+- recruitment (LinkedIn, Monster, Totaljobs)
+- gaming (Betfair, Bwin, Gala Bingo)
+- and many more (Audible, Rolls-Royce, EDF Energy)
+
+***
+
+## Side projects
+
+A selection of experiments
+
+- [Decader](/decader)
+- [Tuuuuunes](/tuuuuunes)
+- [Punchit](/punchit)
+- Stataday
+- [Exclaim Games](http://exclaimgames.com)
+
+
+***
 
 ## Contact me
 
