@@ -32,9 +32,9 @@ Experience in industries such as:
 ## Side projects
 
 - [Decader](/projects/decader/)
-- [Tuuuuunes](/projects/tuuuuunes/)
+- [Tunabble](/projects/tunabble/)
 - [Punchabble](/projects/punchabble/)
-- [Stataday](/projects/stataday/)
+- [Statabble](/projects/statabble/)
 - [Readabble](/projects/readabble/)
 - [Exclaim Games](http://exclaimgames.com)
 

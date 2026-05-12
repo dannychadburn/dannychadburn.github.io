@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tuuuuunes</title>
+    <title>Tunabble</title>
     <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
     <link rel="shortcut icon" href="/assets/images/favicon.svg">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -100,7 +100,7 @@
     <div class="bg-gray-800 shadow-2xl rounded-3xl p-6 sm:p-8 w-full max-w-md mx-auto border border-gray-700">
 
         <div class="flex justify-between items-center mb-6">
-            <h1 class="logo-text">Tuuuuunes</h1>
+            <h1 class="logo-text">Tunabble</h1>
             <button id="random-button" class="flex items-center bg-gray-700 hover:bg-gray-600 text-gray-200 text-xs font-medium py-2 px-4 rounded-full transition-all shadow-md active:scale-95">
                 <i class="fas fa-shuffle mr-2 text-[10px]"></i>
                 <span>Random</span>
@@ -189,7 +189,7 @@
             if (currentStationId === station.id) return;
             currentStationId = station.id;
             setStationState(station.id, 'loading');
-            document.title = `Tuuuuunes · ${station.name}`;
+            document.title = `Tunabble · ${station.name}`;
             localStorage.setItem('lastStation', station.id);
 
             audio.src = station.url;
@@ -198,7 +198,7 @@
                 console.warn('Playback error', e);
                 setStationState(station.id, 'error');
                 currentStationId = null;
-                document.title = 'Tuuuuunes';
+                document.title = 'Tunabble';
                 localStorage.removeItem('lastStation');
             });
 
@@ -213,7 +213,7 @@
             audio.src = '';
             currentStationId = null;
             setStationState(null, null);
-            document.title = 'Tuuuuunes';
+            document.title = 'Tunabble';
         }
 
         radioStations.forEach(station => {
@@ -290,12 +290,12 @@
             if (station) {
                 currentStationId = station.id;
                 setStationState(station.id, 'loading');
-                document.title = `Tuuuuunes · ${station.name}`;
+                document.title = `Tunabble · ${station.name}`;
                 audio.src = station.url;
                 audio.play().catch(() => {
                     setStationState(station.id, null);
                     currentStationId = null;
-                    document.title = 'Tuuuuunes';
+                    document.title = 'Tunabble';
                 });
             }
         }

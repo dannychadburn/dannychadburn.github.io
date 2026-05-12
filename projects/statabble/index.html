@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statabble | Estimation Game</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+    <link rel="shortcut icon" href="/assets/images/favicon.svg">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <button id="back-btn" class="back-btn hidden" aria-label="Back to menu">← Menu</button>
+        </div>
+        <div class="logo">Statabble</div>
+        <div class="header-right">
+            <button class="icon-btn hidden" id="info-trigger" aria-label="How to play">?</button>
+        </div>
+    </header>
+
+    <!-- Menu Screen -->
+    <section id="menu-screen">
+        <p class="tagline">Estimate your way to mastery</p>
+        <div id="game-list"></div>
+    </section>
+
+    <!-- Game Screen -->
+    <section id="game-screen" class="hidden">
+        <main id="game-board"></main>
+    </section>
+
+    <!-- Action bar (game only) -->
+    <div id="action-bar" class="action-bar hidden">
+        <button id="main-action-btn" class="btn btn-primary" disabled>Enter your guesses</button>
+    </div>
+
+    <!-- How to Play -->
+    <div class="overlay hidden" id="info-overlay">
+        <div class="modal">
+            <button class="close-x" id="close-info-x" aria-label="Close">✕</button>
+            <h2>How to Play</h2>
+            <div class="how-rules">
+                <p>Three questions. Up to three guesses each.</p>
+                <p>After each guess, tap <strong>Lock In</strong> to commit your answer early and earn a bigger score multiplier.</p>
+                <p>Or keep guessing to get closer — but the multiplier drops each round.</p>
+            </div>
+            <div class="accuracy-legend">
+                <div class="legend-row"><span class="legend-tile close"></span> Under 5% away</div>
+                <div class="legend-row"><span class="legend-tile near"></span> 5–20% away</div>
+                <div class="legend-row"><span class="legend-tile far"></span> 20–50% away</div>
+                <div class="legend-row"><span class="legend-tile miss"></span> Over 50% away</div>
+            </div>
+            <div class="mult-info">
+                <strong>Multipliers</strong><br>
+                Lock after guess 1 → ×1.6 &nbsp;·&nbsp; guess 2 → ×1.2 &nbsp;·&nbsp; guess 3 → ×1.0
+            </div>
+            <button class="btn btn-primary" id="close-info-btn">Got it!</button>
+        </div>
+    </div>
+
+    <!-- Results -->
+    <div class="overlay hidden" id="results-overlay">
+        <div class="modal">
+            <h2 id="results-game-name">Results</h2>
+            <div id="score-display" class="score-big">0</div>
+            <p id="rank-text" class="rank-label"></p>
+            <table class="breakdown-table" id="breakdown-body"></table>
+            <div class="share-box" id="share-text"></div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="copy-btn">Copy Results</button>
+                <button class="btn btn-secondary" id="play-again-btn">Play Again</button>
+                <button class="btn btn-secondary" id="back-to-menu-btn">Back to Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const BRACKETS = [
+            { limit: 5,        emoji: '🟢', cls: 'close' },
+            { limit: 20,       emoji: '🟡', cls: 'near'  },
+            { limit: 50,       emoji: '🔴', cls: 'far'   },
+            { limit: Infinity, emoji: '⚫', cls: 'miss'  }
+        ];
+
+        let state = {
+            allData: [],
+            currentGame: null,
+            guesses: [[], [], []],
+            lockedIdx: [null, null, null],
+            isFinished: false
+        };
+
+        function getBracket(pct) {
+            return BRACKETS.find(b => pct < b.limit);
+        }
+
+        function fmtNum(n) {
+            if (n >= 1e9) return (n / 1e9).toFixed(1).replace(/\.0$/, '') + 'B';
+            if (n >= 1e6) return (n / 1e6).toFixed(1).replace(/\.0$/, '') + 'M';
+            if (n >= 1e3) return (n / 1e3).toFixed(1).replace(/\.0$/, '') + 'k';
+            return n.toString();
+        }
+
+        async function init() {
+            try {
+                state.allData = await fetch('questions.json').then(r => r.json());
+            } catch (e) {
+                document.getElementById('game-list').innerHTML =
+                    '<p style="color:var(--text-muted);padding:20px;text-align:center">Failed to load games.</p>';
+                return;
+            }
+
+            const list = document.getElementById('game-list');
+            state.allData.forEach(g => {
+                const btn = document.createElement('button');
+                btn.className = 'game-list-item';
+                btn.innerHTML = `
+                    <span class="game-item-emoji">${g.emoji}</span>
+                    <span class="game-item-name">${g.name}</span>
+                    <span class="game-item-arrow">›</span>
+                `;
+                btn.addEventListener('click', () => startGame(g.id));
+                list.appendChild(btn);
+            });
+
+            document.getElementById('back-btn').addEventListener('click', goToMenu);
+            document.getElementById('main-action-btn').addEventListener('click', handleMainAction);
+            document.getElementById('info-trigger').addEventListener('click', () => showOverlay('info-overlay'));
+            document.getElementById('close-info-btn').addEventListener('click', () => hideOverlay('info-overlay'));
+            document.getElementById('close-info-x').addEventListener('click', () => hideOverlay('info-overlay'));
+            document.getElementById('copy-btn').addEventListener('click', copyResults);
+            document.getElementById('play-again-btn').addEventListener('click', playAgain);
+            document.getElementById('back-to-menu-btn').addEventListener('click', () => {
+                hideOverlay('results-overlay');
+                goToMenu();
+            });
+        }
+
+        function showOverlay(id) { document.getElementById(id).classList.remove('hidden'); }
+        function hideOverlay(id) { document.getElementById(id).classList.add('hidden'); }
+
+        function showScreen(name) {
+            document.getElementById('menu-screen').classList.toggle('hidden', name !== 'menu');
+            document.getElementById('game-screen').classList.toggle('hidden', name !== 'game');
+            document.getElementById('action-bar').classList.toggle('hidden', name !== 'game');
+            document.getElementById('back-btn').classList.toggle('hidden', name !== 'game');
+            document.getElementById('info-trigger').classList.toggle('hidden', name !== 'game');
+        }
+
+        function goToMenu() {
+            state.currentGame = null;
+            showScreen('menu');
+        }
+
+        function startGame(id) {
+            state.currentGame = state.allData.find(g => g.id === id);
+            state.guesses    = [[], [], []];
+            state.lockedIdx  = [null, null, null];
+            state.isFinished = false;
+            showScreen('game');
+            render();
+        }
+
+        function playAgain() {
+            hideOverlay('results-overlay');
+            startGame(state.currentGame.id);
+        }
+
+        // Lock only the most recent guess for a question — no unlock
+        function lockGuess(qIdx) {
+            const latestIdx = state.guesses[qIdx].length - 1;
+            state.lockedIdx[qIdx] = latestIdx;
+            render();
+        }
+
+        function render() {
+            const board = document.getElementById('game-board');
+            board.innerHTML = '';
+
+            state.currentGame.questions.forEach((q, i) => {
+                const history  = state.guesses[i];
+                const lockedAt = state.lockedIdx[i];
+                const isComplete = lockedAt !== null || history.length >= 3;
+                // Can lock after guess 1 or 2, but not after 3 (auto-complete) and not if already locked
+                const canLock = history.length > 0 && history.length < 3 && lockedAt === null;
+                const mult = history.length === 1 ? '×1.6' : '×1.2';
+
+                const card = document.createElement('div');
+                card.className = 'q-card' + (lockedAt !== null ? ' locked' : '');
+
+                const tilesHtml = history.length > 0 ? `
+                    <div class="guess-tiles">
+                        ${history.map((g, idx) => {
+                            const br = getBracket(g.pct);
+                            const isLocked = lockedAt === idx;
+                            const isLatest = idx === history.length - 1;
+                            return `<div class="guess-tile ${br.cls}${isLocked ? ' is-locked' : ''}${isLatest ? ' latest' : ''}">
+                                        <span class="tile-val">${fmtNum(g.val)}</span>
+                                        ${isLocked ? '<span class="tile-check">✓</span>' : ''}
+                                    </div>`;
+                        }).join('')}
+                    </div>
+                    ${canLock ? `<button class="lock-in-btn" onclick="lockGuess(${i})">Lock in — ${mult}</button>` : ''}
+                ` : '';
+
+                card.innerHTML = `
+                    <div class="card-head">
+                        <span class="q-num">Question ${i + 1}</span>
+                        ${lockedAt !== null ? '<span class="locked-tag">Locked ✓</span>' : ''}
+                        ${!isComplete && history.length > 0 ? `<span class="guess-count">${history.length}/3</span>` : ''}
+                    </div>
+                    <p class="q-text">${q.text}</p>
+                    ${tilesHtml}
+                    ${!isComplete ? `
+                        <div class="input-row">
+                            <input type="number"
+                                   id="input-${i}"
+                                   placeholder="Your estimate…"
+                                   inputmode="numeric"
+                                   autocomplete="off"
+                                   oninput="updateButtonUI()">
+                        </div>
+                    ` : ''}
+                `;
+                board.appendChild(card);
+            });
+
+            updateButtonUI();
+        }
+
+        function updateButtonUI() {
+            const btn = document.getElementById('main-action-btn');
+            const allComplete = state.guesses.every((g, i) =>
+                state.lockedIdx[i] !== null || g.length >= 3
+            );
+
+            if (allComplete) {
+                state.isFinished = true;
+                btn.textContent = 'View Results →';
+                btn.disabled    = false;
+                return;
+            }
+
+            state.isFinished = false;
+            let count = 0;
+            state.currentGame.questions.forEach((_, i) => {
+                const el = document.getElementById(`input-${i}`);
+                if (el && el.value !== '' && state.lockedIdx[i] === null && state.guesses[i].length < 3) count++;
+            });
+
+            btn.textContent = count === 0
+                ? 'Enter your guesses'
+                : `Submit ${count} Guess${count !== 1 ? 'es' : ''}`;
+            btn.disabled = count === 0;
+        }
+
+        function handleMainAction() {
+            if (state.isFinished) {
+                showResults();
+                return;
+            }
+
+            let submitted = false;
+            state.currentGame.questions.forEach((q, i) => {
+                const el = document.getElementById(`input-${i}`);
+                if (!el || el.value === '' || state.lockedIdx[i] !== null || state.guesses[i].length >= 3) return;
+                const val = parseFloat(el.value);
+                if (isNaN(val)) return;
+                const pct = (Math.abs(val - q.answer) / q.answer) * 100;
+                state.guesses[i].push({ val, pct });
+                submitted = true;
+            });
+
+            if (submitted) render();
+        }
+
+        function showResults() {
+            const gameName = state.currentGame.name;
+            document.getElementById('results-game-name').textContent = gameName;
+
+            let total = 0;
+            let rows  = '';
+            let share = `Statabble — ${gameName}\n`;
+
+            state.guesses.forEach((history, i) => {
+                const finalIdx   = state.lockedIdx[i] !== null ? state.lockedIdx[i] : history.length - 1;
+                const finalGuess = history[finalIdx] || { pct: 100, val: 0 };
+                const tries      = finalIdx + 1;
+                const mult       = tries === 1 ? 1.6 : tries === 2 ? 1.2 : 1.0;
+                const pts        = Math.round(Math.max(0, 100 - finalGuess.pct) * mult);
+                total += pts;
+
+                const answer    = state.currentGame.questions[i].answer.toLocaleString();
+                const triesText = tries === 1 ? '1st guess' : tries === 2 ? '2nd guess' : '3rd guess';
+
+                rows += `<tr>
+                    <td>
+                        <div class="breakdown-q">Q${i + 1} — ${triesText}</div>
+                        <div class="breakdown-ans">Answer: ${answer}</div>
+                    </td>
+                    <td class="breakdown-pts">
+                        ${finalGuess.pct.toFixed(1)}% off
+                        <strong>${pts} pts</strong>
+                    </td>
+                </tr>`;
+
+                share += `Q${i + 1}: ${history.map(g => getBracket(g.pct).emoji).join('')}\n`;
+            });
+
+            document.getElementById('score-display').textContent = total;
+            document.getElementById('breakdown-body').innerHTML  = rows;
+
+            const rankEl = document.getElementById('rank-text');
+            rankEl.textContent =
+                total > 400 ? '💎 Diamond Estimator' :
+                total > 300 ? '🥇 Gold Expert'       :
+                total > 200 ? '🥈 Silver Pro'        :
+                              '🥉 Bronze Rookie';
+
+            document.getElementById('share-text').textContent = share + `\nScore: ${total}`;
+            showOverlay('results-overlay');
+        }
+
+        function copyResults() {
+            const text = document.getElementById('share-text').textContent;
+            const btn  = document.getElementById('copy-btn');
+            (navigator.clipboard
+                ? navigator.clipboard.writeText(text)
+                : Promise.reject()
+            ).catch(() => {
+                const el = Object.assign(document.createElement('textarea'), { value: text });
+                document.body.appendChild(el);
+                el.select();
+                document.execCommand('copy');
+                document.body.removeChild(el);
+            }).finally(() => {
+                const orig = btn.textContent;
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = orig, 2000);
+            });
+        }
+
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>

@@ -1,0 +1,493 @@
+:root {
+    --bg: #0d1117;
+    --card: #161b22;
+    --border: #21262d;
+    --neon: #00d4ff;
+    --neon-dim: rgba(0, 212, 255, 0.2);
+    --neon-glow: rgba(0, 212, 255, 0.3);
+    --text: #e6edf3;
+    --text-muted: #8b949e;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body { height: 100%; }
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100%;
+    padding-bottom: 90px;
+}
+
+/* ─── Header ─── */
+header {
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+.logo {
+    font-size: 1.35rem;
+    font-weight: 900;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, var(--neon) 0%, #0072ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 10px var(--neon-dim));
+}
+
+.icon-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    background: var(--card);
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.15s, color 0.15s;
+}
+
+.icon-btn:hover {
+    border-color: var(--neon);
+    color: var(--neon);
+}
+
+/* ─── Game Picker Strip ─── */
+.game-strip-wrap {
+    width: 100%;
+    max-width: 480px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+}
+
+.game-strip {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 2px;
+}
+
+.game-strip::-webkit-scrollbar { display: none; }
+
+.game-pill {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: var(--card);
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+}
+
+.game-pill.active {
+    border-color: var(--neon);
+    color: var(--neon);
+    background: var(--neon-dim);
+}
+
+.pill-emoji { font-size: 0.95rem; line-height: 1; }
+
+/* ─── Game Board ─── */
+main {
+    width: 100%;
+    max-width: 480px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* ─── Question Cards ─── */
+.q-card {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.q-card.locked {
+    border-color: var(--neon);
+    box-shadow: 0 0 14px var(--neon-dim);
+}
+
+.card-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.q-num {
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.locked-tag {
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--neon);
+    background: var(--neon-dim);
+    padding: 2px 8px;
+    border-radius: 10px;
+    border: 1px solid var(--neon);
+    text-transform: uppercase;
+}
+
+.guess-count {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-left: auto;
+}
+
+.q-text {
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--text);
+    margin-bottom: 14px;
+}
+
+/* ─── Guess Tiles ─── */
+.guess-tiles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-bottom: 12px;
+}
+
+.guess-tile {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 13px;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.15s;
+    font-weight: 700;
+    font-size: 0.82rem;
+    user-select: none;
+}
+
+.guess-tile:active { transform: scale(0.96); }
+
+.guess-tile.close { background: #14532d; color: #4ade80; }
+.guess-tile.near  { background: #451a03; color: #fbbf24; }
+.guess-tile.far   { background: #450a0a; color: #f87171; }
+.guess-tile.miss  { background: #1c2128; color: var(--text-muted); }
+
+.guess-tile.is-locked {
+    border-color: var(--neon);
+    box-shadow: 0 0 8px var(--neon-glow);
+}
+
+.tile-check {
+    font-size: 0.75rem;
+    color: var(--neon);
+    font-weight: 900;
+}
+
+.lock-hint {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    opacity: 0.8;
+}
+
+/* ─── Number Input ─── */
+.input-row { display: flex; }
+
+input[type="number"] {
+    width: 100%;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 1.15rem;
+    font-weight: 600;
+    padding: 13px 16px;
+    outline: none;
+    -moz-appearance: textfield;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+input[type="number"]:focus {
+    border-color: var(--neon);
+    box-shadow: 0 0 0 3px var(--neon-dim);
+}
+
+input[type="number"]::placeholder {
+    color: var(--text-muted);
+    font-weight: 400;
+    font-size: 0.88rem;
+    letter-spacing: 0;
+}
+
+/* ─── Action Bar (fixed bottom) ─── */
+.action-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px 16px 14px;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: center;
+    z-index: 10;
+}
+
+.action-bar .btn-primary {
+    max-width: 480px;
+    width: 100%;
+}
+
+/* ─── Buttons ─── */
+.btn {
+    padding: 14px 20px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 0.88rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: block;
+    text-align: center;
+}
+
+.btn-primary {
+    background: var(--neon);
+    color: var(--bg);
+}
+
+.btn-primary:disabled {
+    background: var(--border);
+    color: #3d444d;
+    cursor: default;
+    box-shadow: none;
+}
+
+.btn-secondary {
+    background: #21262d;
+    color: var(--text);
+}
+
+/* ─── Overlay & Modal ─── */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.88);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 16px;
+    backdrop-filter: blur(6px);
+}
+
+.overlay.hidden { display: none; }
+
+.modal {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 18px;
+    padding: 26px 22px;
+    width: 100%;
+    max-width: 380px;
+    position: relative;
+    text-align: center;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal h2 {
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+
+.close-x {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 4px 6px;
+    line-height: 1;
+}
+
+/* ─── How to Play ─── */
+.how-rules p {
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    line-height: 1.65;
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+.accuracy-legend {
+    margin: 16px 0 12px;
+    text-align: left;
+}
+
+.legend-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.83rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+.legend-tile {
+    width: 26px;
+    height: 26px;
+    border-radius: 5px;
+    flex-shrink: 0;
+}
+
+.legend-tile.close { background: #14532d; }
+.legend-tile.near  { background: #451a03; }
+.legend-tile.far   { background: #450a0a; }
+.legend-tile.miss  { background: #1c2128; border: 1px solid #30363d; }
+
+.mult-info {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    padding: 11px 14px;
+    background: var(--bg);
+    border-radius: 8px;
+    line-height: 1.6;
+    text-align: left;
+}
+
+/* ─── Results Modal ─── */
+.score-big {
+    font-size: 4.5rem;
+    font-weight: 900;
+    color: var(--neon);
+    letter-spacing: -3px;
+    line-height: 1.05;
+    margin: 10px 0 4px;
+    filter: drop-shadow(0 0 16px var(--neon-glow));
+}
+
+.rank-label {
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--neon);
+    margin-bottom: 16px;
+    text-transform: uppercase;
+}
+
+.breakdown-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 6px 0 16px;
+    text-align: left;
+    font-size: 0.83rem;
+}
+
+.breakdown-table td {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+}
+
+.breakdown-q {
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 2px;
+}
+
+.breakdown-ans {
+    font-size: 0.73rem;
+    color: var(--text-muted);
+}
+
+.breakdown-pts {
+    text-align: right;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    white-space: nowrap;
+    padding-left: 10px;
+}
+
+.breakdown-pts strong {
+    display: block;
+    color: var(--neon);
+    font-size: 0.9rem;
+}
+
+.share-box {
+    background: var(--bg);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-family: monospace;
+    font-size: 0.78rem;
+    text-align: left;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    white-space: pre;
+    overflow-x: auto;
+}
+
+.modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.modal-actions .btn { width: 100%; }
