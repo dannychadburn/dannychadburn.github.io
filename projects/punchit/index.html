@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PUNCHIT</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .neon-text {
+      background: linear-gradient(to right, #00ffd0, #009dff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+    }
+    @keyframes flash {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+    .flash-timer { animation: flash 1s infinite; }
+  </style>
+</head>
+<body class="bg-gray-900 text-white flex flex-col items-center justify-center min-h-screen p-4">
+
+  <h1 class="text-6xl font-black mb-6 neon-text tracking-tighter">PUNCHIT</h1>
+
+  <div class="bg-gray-800 p-8 sm:p-12 rounded-3xl shadow-2xl flex flex-col items-center gap-8 w-full max-w-lg border border-gray-700">
+    
+    <!-- SETTINGS PANEL -->
+    <div id="settingsPanel" class="w-full space-y-4">
+      <p class="text-center text-gray-400 font-bold uppercase tracking-widest text-xs">Rest Duration</p>
+      <div class="flex gap-4">
+        <button id="rest30Btn" class="flex-1 py-4 rounded-2xl border-2 border-teal-400 text-teal-400 font-bold bg-teal-400/10 transition-all">30s Rest</button>
+        <button id="rest60Btn" class="flex-1 py-4 rounded-2xl border-2 border-gray-600 text-gray-400 font-bold hover:bg-gray-700 transition-all">60s Rest</button>
+      </div>
+    </div>
+
+    <!-- WORKOUT DISPLAY -->
+    <div id="activeDisplay" class="hidden flex flex-col items-center w-full">
+      <p id="timer" class="text-8xl font-mono mb-4 transition-colors duration-300">00:00</p>
+      <div class="h-32 flex items-center justify-center">
+        <p id="sequenceText" class="text-5xl sm:text-7xl font-black text-teal-400 uppercase text-center leading-none"></p>
+      </div>
+    </div>
+    
+    <!-- CONTROLS -->
+    <button id="mainButton" class="bg-teal-400 text-gray-900 px-12 py-5 font-black uppercase rounded-full shadow-xl transition-all transform hover:scale-105 active:scale-95 w-full text-lg tracking-widest">
+      Start Workout
+    </button>
+    
+    <p id="roundCount" class="text-xl font-bold text-blue-400">Round: 0</p>
+  </div>
+
+  <script>
+    // Configuration
+    const ROUND_TIME = 180;
+    const COMBO_INTERVAL = 30;
+    const START_DELAY = 10;
+    const PUNCHE_POOL = { odd: [1, 3, 5, 7], even: [2, 4, 6, 8] };
+    const MOVEMENTS = { 'D': 'Duck', 'L': 'Dodge Left', 'R': 'Dodge Right', 'B': 'Block' };
+
+    // State
+    let isRunning = false;
+    let restTime = 30;
+    let currentRound = 0;
+    let roundMovementCount = 0;
+    let timerVal = 0;
+    let mode = 'idle'; // idle, delay, round, rest
+    
+    let mainInterval = null;
+    let comboInterval = null;
+
+    const mainBtn = document.getElementById('mainButton');
+    const timerEl = document.getElementById('timer');
+    const sequenceEl = document.getElementById('sequenceText');
+    const roundEl = document.getElementById('roundCount');
+    const settingsPanel = document.getElementById('settingsPanel');
+    const activeDisplay = document.getElementById('activeDisplay');
+
+    function safeSpeak(text) {
+      if (!window.speechSynthesis) return;
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 1.1;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+
+    // Rest Selection Logic
+    document.getElementById('rest30Btn').onclick = () => updateRestSelection(30);
+    document.getElementById('rest60Btn').onclick = () => updateRestSelection(60);
+
+    function updateRestSelection(t) {
+      restTime = t;
+      const active = "flex-1 py-4 rounded-2xl border-2 border-teal-400 text-teal-400 font-bold bg-teal-400/10 transition-all";
+      const inactive = "flex-1 py-4 rounded-2xl border-2 border-gray-600 text-gray-400 font-bold hover:bg-gray-700 transition-all";
+      document.getElementById('rest30Btn').className = t === 30 ? active : inactive;
+      document.getElementById('rest60Btn').className = t === 60 ? active : inactive;
+    }
+
+    function triggerSequence() {
+      if (mode !== 'round' || !isRunning) return;
+
+      const sequence = [];
+      let lastParity = Math.random() > 0.5 ? 'even' : 'odd';
+      let movementInThisSequence = false;
+
+      for (let i = 0; i < 4; i++) {
+        // Movement Logic: Max 1 per sequence, fewer than 4 per round
+        if (!movementInThisSequence && roundMovementCount < 4 && Math.random() < 0.25) {
+          const keys = Object.keys(MOVEMENTS);
+          const key = keys[Math.floor(Math.random() * keys.length)];
+          sequence.push(key);
+          movementInThisSequence = true;
+          roundMovementCount++;
+        } else {
+          // Punch Logic: 80% chance to alternate parity
+          if (Math.random() < 0.8) lastParity = (lastParity === 'even' ? 'odd' : 'even');
+          const pool = PUNCHE_POOL[lastParity];
+          sequence.push(pool[Math.floor(Math.random() * pool.length)]);
+        }
+      }
+
+      sequenceEl.textContent = sequence.join('-');
+      sequence.forEach((item, idx) => {
+        setTimeout(() => {
+          if (mode === 'round' && isRunning) safeSpeak(MOVEMENTS[item] || item);
+        }, idx * 600);
+      });
+    }
+
+    function tick() {
+      if (!isRunning) return;
+      timerVal--;
+      timerEl.textContent = formatTime(timerVal);
+
+      if (mode === 'delay') {
+        if (timerVal === 3) safeSpeak("Ready");
+        if (timerVal === 2) safeSpeak("To");
+        if (timerVal === 1) safeSpeak("Rumble");
+        if (timerVal <= 0) startRound();
+      } 
+      else if (mode === 'round') {
+        if (timerVal <= 30) timerEl.classList.add('text-teal-400', 'flash-timer');
+        if (timerVal <= 0) {
+          safeSpeak("Ding ding");
+          startRest();
+        }
+      } 
+      else if (mode === 'rest') {
+        if (timerVal <= 0) startRound();
+      }
+    }
+
+    function startRound() {
+      mode = 'round';
+      currentRound++;
+      roundMovementCount = 0;
+      timerVal = ROUND_TIME;
+      roundEl.textContent = `Round: ${currentRound}`;
+      sequenceEl.textContent = "";
+      timerEl.classList.remove('text-teal-400', 'flash-timer');
+      
+      if (comboInterval) clearInterval(comboInterval);
+      triggerSequence(); 
+      comboInterval = setInterval(triggerSequence, COMBO_INTERVAL * 1000);
+    }
+
+    function startRest() {
+      mode = 'rest';
+      timerVal = restTime;
+      sequenceEl.textContent = "REST";
+      timerEl.classList.remove('text-teal-400', 'flash-timer');
+      if (comboInterval) clearInterval(comboInterval);
+      window.speechSynthesis.cancel();
+    }
+
+    function startWorkout() {
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance("");
+      window.speechSynthesis.speak(u);
+
+      isRunning = true;
+      mode = 'delay';
+      timerVal = START_DELAY;
+      currentRound = 0;
+      
+      settingsPanel.classList.add('hidden');
+      activeDisplay.classList.remove('hidden');
+      mainBtn.textContent = "Stop Workout";
+      mainBtn.classList.replace('bg-teal-400', 'bg-red-500');
+      mainBtn.classList.replace('text-gray-900', 'text-white');
+      
+      timerEl.textContent = formatTime(timerVal);
+      sequenceEl.textContent = "GET READY";
+      roundEl.textContent = "Round: 0";
+      
+      mainInterval = setInterval(tick, 1000);
+    }
+
+    function stopWorkout() {
+      isRunning = false;
+      mode = 'idle';
+      clearInterval(mainInterval);
+      clearInterval(comboInterval);
+      window.speechSynthesis.cancel();
+
+      settingsPanel.classList.remove('hidden');
+      activeDisplay.classList.add('hidden');
+      mainBtn.textContent = "Start Workout";
+      mainBtn.classList.replace('bg-red-500', 'bg-teal-400');
+      mainBtn.classList.replace('text-white', 'text-gray-900');
+      
+      timerEl.classList.remove('text-teal-400', 'flash-timer');
+      timerEl.textContent = "00:00";
+      sequenceEl.textContent = "";
+      roundEl.textContent = "Round: 0";
+    }
+
+    mainBtn.onclick = () => {
+      if (isRunning) stopWorkout();
+      else startWorkout();
+    };
+  </script>
+</body>
+</html>

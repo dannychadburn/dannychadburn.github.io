@@ -18,7 +18,7 @@ Senior-level content design for:
 
 ### Commercial contracts
 
-Covering industries such as:
+Experience in industries such as:
 
 - Education (Open University)
 - Pharma (Bayer, Pfizer, Schiff Vitamins)
@@ -31,10 +31,10 @@ Covering industries such as:
 
 ## Side projects
 
-- [Decader](https://tidyswan.com/decader)
-- [Tuuuuunes](https://tidyswan.com/tuuuuunes)
-- [Punchit](https://tidyswan.com/punchit)
-- [Stataday](https://tidyswan.com/stataday/)
+- [Decader](/projects/decader/)
+- [Tuuuuunes](/projects/tuuuuunes/)
+- [Punchit](/projects/punchit/)
+- [Stataday](/projects/stataday/)
 - [Exclaim Games](http://exclaimgames.com)
 
 

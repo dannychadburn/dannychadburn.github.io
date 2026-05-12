@@ -1,0 +1,52 @@
+name: Deploy PR Preview
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed] # Added 'closed'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  # JOB 1: DEPLOY (Only runs if the PR is still open)
+  deploy-preview:
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy to Folder
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: .
+          branch: gh-pages
+          target-folder: previews/pr-${{ github.event.number }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Post Preview Link
+        uses: mshick/add-pr-comment@v2
+        with:
+          message: |
+            🚀 **PR Preview Ready!**
+            [https://tidyswan.com/decader/previews/pr-${{ github.event.number }}/](https://tidyswan.com/decader/previews/pr-${{ github.event.number }}/)
+
+  # JOB 2: CLEANUP (Only runs when the PR is closed)
+  cleanup-preview:
+    if: github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages # We need to check out the branch where the folders live
+
+      - name: Delete Preview Folder
+        run: |
+          rm -rf previews/pr-${{ github.event.number }}
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Cleanup: Remove preview for PR ${{ github.event.number }}" || echo "Nothing to cleanup"
+          git push origin gh-pages

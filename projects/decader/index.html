@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decader | The Manual</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <main class="main-content">
+        <div class="container">
+            <h1>D E C A D E R (P W E V O O O)</h1>
+            <p class="hero-tagline">The manual for the landmark years.</p>
+            <p class="hero-pitch">Every ten years, your life, body, and finances change. We provide the precise, long-term briefing you need—once a decade.</p>
+
+            <div id="errorSummary" class="error-summary">Please correct the errors below.</div>
+            
+            <form id="signupForm" novalidate>
+                <label class="gov-label" for="email">Email address</label>
+                <div id="emailError" class="error-message">Enter a valid email address</div>
+                <input type="email" id="email" name="email" spellcheck="false" autocomplete="email">
+
+                <br><br>
+
+                <fieldset style="border:none; padding:0;">
+                    <legend class="gov-label">Date of birth</legend>
+                    <div class="gov-hint">For example, 31 3 1980</div>
+                    <div id="dateError" class="error-message">Enter a valid date of birth</div>
+                    
+                    <div class="date-group">
+                        <div class="date-item">
+                            <label for="day">Day</label>
+                            <input class="input-day" id="day" name="day" type="number" pattern="[0-9]*" inputmode="numeric">
+                        </div>
+                        <div class="date-item">
+                            <label for="month">Month</label>
+                            <input class="input-month" id="month" name="month" type="number" pattern="[0-9]*" inputmode="numeric">
+                        </div>
+                        <div class="date-item">
+                            <label for="year">Year</label>
+                            <input class="input-year" id="year" name="year" type="number" pattern="[0-9]*" inputmode="numeric">
+                        </div>
+                    </div>
+                </fieldset>
+
+                <button type="submit" id="submitBtn">BEGIN THE DECADE</button>
+            </form>
+
+            <div id="successMsg" style="display:none;">
+                <h2>Synchronization Complete.</h2>
+                <p>Your life manual is now standing by. Check your inbox.</p>
+            </div>
+        </div>
+    </main>
+
+    <section class="qa-outer-wrapper">
+        <div class="qa-container">
+            <div class="qa-section">
+                <details>
+                    <summary><h3>What is this?</h3></summary>
+                    <div class="qa-content">Decader is a long-term synchronization tool. We provide high-impact guidance exactly when your biological and financial needs shift—once every ten years.</div>
+                </details>
+                <details>
+                    <summary><h3>Why only once a decade?</h3></summary>
+                    <div class="qa-content">Most advice is noise. We focus on the signals that actually move the needle over a 10-year horizon. No weekly newsletters, no distraction.</div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <span>decader copyright 2026</span>
+        <a href="mailto:hello@decadermail.com">contact us</a>
+    </footer>
+
+    <script>
+        // ... (Keep the script logic exactly as before) ...
+    </script>
+</body>
+</html>

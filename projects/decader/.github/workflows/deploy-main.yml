@@ -1,0 +1,24 @@
+name: Deploy Production
+
+on:
+  push:
+    branches:
+      - main # Trigger on any push or merge to main
+
+permissions:
+  contents: write
+
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy to gh-pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: . # Deploy the root of the main branch
+          branch: gh-pages # To the gh-pages branch
+          clean: false # IMPORTANT: Set to false so it doesn't delete your "previews" folder
+          token: ${{ secrets.GITHUB_TOKEN }}

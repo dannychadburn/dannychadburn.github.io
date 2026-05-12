@@ -1,0 +1,89 @@
+/* --- RESET & BASE --- */
+body { 
+    font-family: "Inter", "GDS Transport", arial, sans-serif, monospace; 
+    background: #ffffff; 
+    margin: 0; 
+    display: flex; 
+    flex-direction: column;
+    min-height: 100vh;
+    align-items: center; /* Centers everything globally */
+}
+
+.main-content {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 60px 20px;
+}
+
+/* --- TIGHT CENTRAL CONTAINER --- */
+.container { 
+    max-width: 420px; /* The "Tight" sweet spot */
+    width: 100%;
+}
+
+/* --- TYPOGRAPHY --- */
+h1 { font-size: 28px; font-weight: bold; margin: 0 0 10px 0; letter-spacing: 3px; }
+.hero-tagline { font-size: 18px; font-weight: bold; margin-bottom: 15px; }
+.hero-pitch { font-size: 16px; line-height: 1.6; color: #505a5f; margin-bottom: 35px; }
+
+.gov-label { display: block; font-size: 18px; font-weight: bold; margin-bottom: 5px; }
+.gov-hint { color: #505a5f; font-size: 14px; margin-bottom: 15px; line-height: 1.3; }
+
+/* --- FORM ELEMENTS --- */
+input { 
+    border: 2px solid #0b0c0c; padding: 10px; font-size: 18px; font-family: monospace;
+    width: 100%; box-sizing: border-box;
+}
+input:focus { outline: 3px solid #ffdd00; outline-offset: 0; }
+
+.date-group { display: flex; gap: 12px; margin-bottom: 35px; }
+.date-item label { display: block; font-size: 14px; margin-bottom: 5px; }
+.input-day, .input-month { width: 65px; }
+.input-year { width: 100px; }
+
+/* --- ERRORS & STATUS --- */
+.error-summary { border: 4px solid #d4351c; padding: 15px; margin-bottom: 25px; display: none; color: #d4351c; font-weight: bold; }
+.error-message { color: #d4351c; font-size: 14px; margin-top: 5px; display: none; }
+
+button { 
+    width: 100%; padding: 18px; background: #000; color: #fff; 
+    border: none; font-weight: bold; font-size: 18px; cursor: pointer; letter-spacing: 1px;
+}
+button:hover { background: #333; }
+button:disabled { background: #ccc; cursor: not-allowed; }
+
+/* --- TWO-THIRDS WIDTH Q&A --- */
+.qa-outer-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background-color: #f3f2f1;
+    border-top: 1px solid #b1b4b6;
+    padding: 60px 0;
+}
+.qa-container {
+    width: 66%; /* Two-thirds width */
+    max-width: 800px;
+    padding: 0 20px;
+}
+.qa-section { border-top: 2px solid #000; }
+details { border-bottom: 1px solid #b1b4b6; padding: 15px 0; }
+summary { cursor: pointer; font-weight: bold; font-size: 19px; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+summary h3 { margin: 0; font-size: 19px; display: inline; }
+summary::after { content: "+"; font-size: 24px; font-weight: normal; }
+details[open] summary::after { content: "−"; }
+.qa-content { margin-top: 10px; padding-right: 40px; line-height: 1.6; color: #505a5f; }
+
+/* --- FOOTER --- */
+footer { 
+    width: 100%;
+    background-color: #f3f2f1; padding: 25px 40px; box-sizing: border-box;
+    display: flex; justify-content: space-between; font-size: 14px; 
+}
+footer a { color: #000; text-decoration: underline; }
+
+@media (max-width: 768px) {
+    .qa-container { width: 90%; }
+}

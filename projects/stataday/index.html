@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stataday | Neon Estimation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo">Stataday</div>
+        <div class="nav-controls">
+            <select id="version-toggle" class="version-toggle">
+                <option value="classic">Classic Edition</option>
+                <option value="sports">Sports Edition</option>
+            </select>
+            <select id="game-selector"></select>
+            <span style="cursor:pointer" id="info-trigger">ℹ️</span>
+        </div>
+    </header>
+
+    <main id="game-board"></main>
+
+    <div style="margin-top: 24px; width: 100%; max-width: 500px;">
+        <button id="main-action-btn" class="btn btn-neon" style="width: 100%">Submit 0 Guesses</button>
+    </div>
+
+    <div id="modal-overlay">
+        <div class="modal">
+            <h2 id="modal-title" style="color:white; font-size: 1.1rem; letter-spacing: 1px;">DAILY REPORT</h2>
+            <div id="score-display" class="score-big">0</div>
+            <p id="rank-text"></p>
+            
+            <table class="breakdown-table" id="breakdown-body"></table>
+
+            <div class="share-box" id="share-text"></div>
+            
+            <div style="display:flex; gap: 10px; flex-direction: column;">
+                <button class="btn btn-neon" id="copy-btn">Copy Results</button>
+                <button class="btn" id="close-modal-btn" style="background:#3d444d; color:white">Back to Board</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        Precision + Efficiency = Mastery.
+    </footer>
+
+    <script>
+        let state = {
+            guesses: [[], [], []],
+            lockedIdx: [null, null, null],
+            currentGame: null,
+            isFinished: false,
+            allData: [],
+            edition: 'classic' // 'classic' or 'sports'
+        };
+
+        const BRACKETS = [
+            { limit: 5, emoji: "🟢" },
+            { limit: 20, emoji: "🟡" },
+            { limit: 50, emoji: "🔴" },
+            { limit: Infinity, emoji: "⚫" }
+        ];
+
+        async function init() {
+            try {
+                const response = await fetch('questions.json');
+                state.allData = await response.json();
+                
+                const selector = document.getElementById('game-selector');
+                state.allData.forEach(g => {
+                    const opt = document.createElement('option');
+                    opt.value = g.date; opt.textContent = g.date;
+                    selector.appendChild(opt);
+                });
+
+                selector.onchange = (e) => loadGame(e.target.value);
+                
+                const versionToggle = document.getElementById('version-toggle');
+                versionToggle.onchange = (e) => {
+                    state.edition = e.target.value;
+                    document.body.classList.toggle('sports-mode', state.edition === 'sports');
+                    loadGame(document.getElementById('game-selector').value);
+                };
+
+                loadGame(state.allData[state.allData.length - 1].date);
+                
+                document.getElementById('main-action-btn').onclick = handleMainAction;
+                document.getElementById('info-trigger').onclick = () => alert('Rules: 3 questions, 3 guesses each. Lock a guess to finish a question. 1st guess lock = 1.6x points, 2nd = 1.2x, 3rd = 1.0x.');
+                document.getElementById('copy-btn').onclick = copyResults;
+                document.getElementById('close-modal-btn').onclick = () => document.getElementById('modal-overlay').style.display = 'none';
+
+            } catch (err) {
+                console.error("Failed to load question data:", err);
+            }
+        }
+
+        function loadGame(date) {
+            const rawGame = state.allData.find(g => g.date === date);
+            // Map the correct questions based on edition
+            const activeQuestions = state.edition === 'sports' ? rawGame.sports_questions : rawGame.questions;
+            
+            state.currentGame = {
+                date: rawGame.date,
+                questions: activeQuestions
+            };
+            
+            state.guesses = [[], [], []];
+            state.lockedIdx = [null, null, null];
+            state.isFinished = false;
+            document.getElementById('game-selector').value = date;
+            render();
+        }
+
+        function getEmoji(pct) { return BRACKETS.find(b => pct < b.limit).emoji; }
+
+        function render() {
+            const board = document.getElementById('game-board');
+            board.innerHTML = '';
+
+            state.currentGame.questions.forEach((q, i) => {
+                const history = state.guesses[i];
+                const lockedAt = state.lockedIdx[i];
+                const isQuestionComplete = (lockedAt !== null) || (history.length >= 3);
+                
+                const card = document.createElement('div');
+                card.className = `q-card ${lockedAt !== null ? 'locked' : ''}`;
+                
+                card.innerHTML = `
+                    <div class="q-row">
+                        <div class="q-text">${q.text}</div>
+                        <div class="q-input-container">
+                            <input type="number" id="input-${i}" placeholder="0" 
+                                   ${isQuestionComplete ? 'disabled' : ''}
+                                   oninput="updateButtonUI()">
+                        </div>
+                    </div>
+                    <div class="history-list">
+                        ${history.map((g, idx) => {
+                            const isLatest = idx === history.length - 1;
+                            const isLockedHere = lockedAt === idx;
+                            return `
+                                <div class="history-item ${isLockedHere ? 'is-locked' : ''}">
+                                    <div>
+                                        <span>${getEmoji(g.pct)}</span>
+                                        <span style="margin-left:8px">(${g.val.toLocaleString()})</span>
+                                    </div>
+                                    ${(isLatest || isLockedHere) ? `
+                                        <button class="btn-lock-toggle ${isLockedHere ? 'active' : ''}" 
+                                                onclick="toggleLock(${i}, ${idx})">
+                                            ${isLockedHere ? 'UNLOCK' : 'LOCK'}
+                                        </button>
+                                    ` : ''}
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+                board.appendChild(card);
+            });
+
+            updateButtonUI();
+        }
+
+        function toggleLock(qIdx, gIdx) {
+            state.lockedIdx[qIdx] = (state.lockedIdx[qIdx] === gIdx) ? null : gIdx;
+            render();
+        }
+
+        function updateButtonUI() {
+            const btn = document.getElementById('main-action-btn');
+            const allComplete = state.guesses.every((g, i) => state.lockedIdx[i] !== null || g.length >= 3);
+            
+            if (allComplete) {
+                state.isFinished = true;
+                btn.innerText = "Show Daily Report";
+                btn.disabled = false;
+                return;
+            }
+
+            state.isFinished = false;
+            let activeInputs = 0;
+            state.currentGame.questions.forEach((_, i) => {
+                const inputEl = document.getElementById(`input-${i}`);
+                if (inputEl && inputEl.value !== "" && state.lockedIdx[i] === null && state.guesses[i].length < 3) {
+                    activeInputs++;
+                }
+            });
+
+            btn.innerText = `Submit ${activeInputs} Guess${activeInputs !== 1 ? 'es' : ''}`;
+            btn.disabled = activeInputs === 0;
+        }
+
+        function handleMainAction() {
+            if (state.isFinished) {
+                showFinalScore();
+                return;
+            }
+
+            state.currentGame.questions.forEach((q, i) => {
+                const el = document.getElementById(`input-${i}`);
+                if (el && el.value !== "" && state.lockedIdx[i] === null && state.guesses[i].length < 3) {
+                    const val = parseFloat(el.value);
+                    const pct = (Math.abs(val - q.answer) / q.answer) * 100;
+                    state.guesses[i].push({ val, pct });
+                    el.value = "";
+                }
+            });
+            render();
+        }
+
+        function showFinalScore() {
+            const overlay = document.getElementById('modal-overlay');
+            const breakdownTable = document.getElementById('breakdown-body');
+            const shareText = document.getElementById('share-text');
+            const modalTitle = document.getElementById('modal-title');
+            
+            let totalPoints = 0;
+            let rowsHtml = '';
+            const editionLabel = state.edition.charAt(0).toUpperCase() + state.edition.slice(1);
+            modalTitle.innerText = `DAILY REPORT (${editionLabel})`;
+            
+            let shareMatrix = `Stataday ${editionLabel} ${state.currentGame.date}\n`;
+
+            state.guesses.forEach((history, i) => {
+                const finalIdx = state.lockedIdx[i] !== null ? state.lockedIdx[i] : history.length - 1;
+                const finalGuess = history[finalIdx] || { pct: 100 };
+                
+                const triesUsed = finalIdx + 1;
+                const triesText = triesUsed === 1 ? "1 try" : `${triesUsed} tries`;
+                const mult = (triesUsed === 1) ? 1.6 : (triesUsed === 2) ? 1.2 : 1.0;
+                
+                const base = Math.max(0, 100 - finalGuess.pct);
+                const qPoints = Math.round(base * mult);
+                totalPoints += qPoints;
+
+                const correctAnswer = state.currentGame.questions[i].answer.toLocaleString();
+
+                rowsHtml += `
+                    <tr>
+                        <td style="vertical-align: top;">
+                            <div style="font-weight: 500;">Q${i+1} (${triesText})</div>
+                            <div style="font-size: 0.7rem; color: var(--text-dim); margin-top: 2px;">
+                                Answer: ${correctAnswer}
+                            </div>
+                        </td>
+                        <td style="text-align:right; vertical-align: top;">
+                            ${finalGuess.pct.toFixed(1)}% away (${qPoints} pts)
+                        </td>
+                    </tr>
+                `;
+                shareMatrix += `Q${i+1}: ${history.map((g, idx) => getEmoji(g.pct)).join('')}\n`;
+            });
+
+            document.getElementById('score-display').innerText = totalPoints;
+            const rankText = document.getElementById('rank-text');
+            rankText.innerText = totalPoints > 400 ? "DIAMOND ESTIMATOR" : totalPoints > 300 ? "GOLD EXPERT" : totalPoints > 200 ? "SILVER PRO" : "BRONZE ROOKIE";
+            rankText.style.color = 'var(--neon-main)';
+            rankText.style.fontWeight = '800';
+
+            breakdownTable.innerHTML = rowsHtml;
+            shareText.innerText = shareMatrix + `\nScore: ${totalPoints}`;
+            overlay.style.display = 'flex';
+        }
+
+        function copyResults() {
+            const text = document.getElementById('share-text').innerText;
+            const el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            const btn = document.getElementById('copy-btn');
+            const original = btn.innerText;
+            btn.innerText = "COPIED!";
+            setTimeout(() => btn.innerText = original, 2000);
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+[
+  {
+    "date": "2026-05-04",
+    "questions": [
+      { "id": 1, "text": "Depth of the Mariana Trench at its deepest point (metres)?", "answer": 10935 },
+      { "id": 2, "text": "Words estimated in the current Oxford English Dictionary?", "answer": 171476 },
+      { "id": 3, "text": "Estimated population of the Tokyo Greater Manila Area?", "answer": 37000000 }
+    ],
+    "sports_questions": [
+      { "id": 1, "text": "What is the total length of the Tour de France (approximate km)?", "answer": 3500 },
+      { "id": 2, "text": "Seating capacity of the Silverstone Circuit main grandstands?", "answer": 150000 },
+      { "id": 3, "text": "Number of professional goals scored by Cristiano Ronaldo (career)?", "answer": 900 }
+    ]
+  },
+  {
+    "date": "2026-05-03",
+    "questions": [
+      { "id": 1, "text": "Kilometres per second light travels in a vacuum?", "answer": 299792 },
+      { "id": 2, "text": "Total height of the Burj Khalifa in Dubai (metres)?", "answer": 828 },
+      { "id": 3, "text": "Member states currently in the United Nations?", "answer": 193 }
+    ],
+    "sports_questions": [
+      { "id": 1, "text": "The length of an Olympic archery range (metres)?", "answer": 70 },
+      { "id": 2, "text": "Weight of a standard men's shot put (in grams)?", "answer": 7260 },
+      { "id": 3, "text": "Seating capacity of the Melbourne Cricket Ground?", "answer": 100024 }
+    ]
+  },
+  {
+    "date": "2026-05-02",
+    "questions": [
+      { "id": 1, "text": "Average distance from the Earth to the Moon in kilometres?", "answer": 384400 },
+      { "id": 2, "text": "Heartbeats an average human has in a single day?", "answer": 100000 },
+      { "id": 3, "text": "Islands estimated to make up Indonesia?", "answer": 17508 }
+    ],
+    "sports_questions": [
+      { "id": 1, "text": "Height of a standard NBA basketball hoop (millimetres)?", "answer": 3048 },
+      { "id": 2, "text": "Estimated number of marathons completed globally each year?", "answer": 1100000 },
+      { "id": 3, "text": "Capacity of the Indianapolis Motor Speedway?", "answer": 257325 }
+    ]
+  },
+  {
+    "date": "2026-05-01",
+    "questions": [
+      { "id": 1, "text": "Pieces of art in the Louvre's collection?", "answer": 480000 },
+      { "id": 2, "text": "Height of Mount Everest in metres?", "answer": 8848 },
+      { "id": 3, "text": "Estimated population of Australia in 2026?", "answer": 26800000 }
+    ],
+    "sports_questions": [
+      { "id": 1, "text": "Length of a standard cricket pitch (centimetres)?", "answer": 2012 },
+      { "id": 2, "text": "Total number of players in a standard NFL squad?", "answer": 53 },
+      { "id": 3, "text": "Global television viewers for the 2022 World Cup Final?", "answer": 1500000000 }
+    ]
+  },
+  {
+    "date": "2026-04-30",
+    "questions": [
+      { "id": 1, "text": "Kilometres long is the Great Wall of China?", "answer": 21196 },
+      { "id": 2, "text": "Base pairs in the human genome (in millions)?", "answer": 3200 },
+      { "id": 3, "text": "People estimated to live in New York City?", "answer": 8300000 }
+    ],
+    "sports_questions": [
+      { "id": 1, "text": "What is the weight of a standard Olympic discus (men's, grams)?", "answer": 2000 },
+      { "id": 2, "text": "Capacity of the Michigan Stadium ('The Big House')?", "answer": 107601 },
+      { "id": 3, "text": "Distance of the 'Ironman' triathlon cycle leg (km)?", "answer": 180 }
+    ]
+  },
+  {
+    "date": "2026-04-29",
+    "questions": [
+      { "id": 1, "text": "Years ago did the Cretaceous-Paleogene extinction occur?", "answer": 66000000 },
+      { "id": 2, "text": "Litres of water a mature Oak tree absorbs in a year?", "answer": 150000 },
+      { "id": 3, "text": "Stars estimated in the Milky Way (in billions)?", "answer": 100 }
+    ],
+    "sports_questions": [
+      { "id": 1, "text": "How many stitches are on a standard MLB baseball?", "answer": 108 },
+      { "id": 2, "text": "Capacity of the Old Trafford stadium in Manchester?", "answer": 74310 },
+      { "id": 3, "text": "Height of the highest jump in high jump history (centimetres)?", "answer": 245 }
+    ]
+  },
+  {
+    "date": "2026-04-28",
+    "questions": [
+      { "id": 1, "text": "Diameter of the Earth at the equator (kilometres)?", "answer": 12756 },
+      { "id": 2, "text": "Different species of ants classified globally?", "answer": 13800 },
+      { "id": 3, "text": "Daily active users on platform X?", "answer": 250000000 }
+    ],
+    "sports_questions": [
+      { "id": 1, "text": "What is the width of a football goal (metres)?", "answer": 7 },
+      { "id": 2, "text": "Length of a professional bowling lane (centimetres)?", "answer": 1829 },
+      { "id": 3, "text": "Maximum points in a single frame of snooker?", "answer": 147 }
+    ]
+  },
+  {
+    "date": "2026-04-27",
+    "questions": [
+      { "id": 1, "text": "Seconds it takes light to travel from Sun to Earth?", "answer": 499 },
+      { "id": 2, "text": "Capacity of the Maracanã Stadium in Rio?", "answer": 78838 },
+      { "id": 3, "text": "People globally estimated to speak Spanish?", "answer": 485000000 }
+    ],
+    "sports_questions": [
+      { "id": 1, "text": "Length of the Silverstone F1 circuit (metres)?", "answer": 5891 },
+      { "id": 2, "text": "Number of tiles in a standard Scrabble set?", "answer": 100 },
+      { "id": 3, "text": "Seating capacity of Centre Court at Wimbledon?", "answer": 14979 }
+    ]
+  }
+]
