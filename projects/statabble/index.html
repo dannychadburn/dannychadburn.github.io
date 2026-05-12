@@ -168,10 +168,9 @@
             startGame(state.currentGame.id);
         }
 
-        // Lock only the most recent guess for a question — no unlock
-        function lockGuess(qIdx) {
+        function toggleLock(qIdx) {
             const latestIdx = state.guesses[qIdx].length - 1;
-            state.lockedIdx[qIdx] = latestIdx;
+            state.lockedIdx[qIdx] = (state.lockedIdx[qIdx] === latestIdx) ? null : latestIdx;
             render();
         }
 
@@ -179,13 +178,13 @@
             const board = document.getElementById('game-board');
             board.innerHTML = '';
 
+            const placeholders = ['Your 1st guess', 'Your 2nd guess', 'Your final guess'];
+
             state.currentGame.questions.forEach((q, i) => {
-                const history  = state.guesses[i];
-                const lockedAt = state.lockedIdx[i];
+                const history    = state.guesses[i];
+                const lockedAt   = state.lockedIdx[i];
                 const isComplete = lockedAt !== null || history.length >= 3;
-                // Can lock after guess 1 or 2, but not after 3 (auto-complete) and not if already locked
-                const canLock = history.length > 0 && history.length < 3 && lockedAt === null;
-                const mult = history.length === 1 ? '×1.6' : '×1.2';
+                const showLockIcon = history.length > 0 && history.length < 3;
 
                 const card = document.createElement('div');
                 card.className = 'q-card' + (lockedAt !== null ? ' locked' : '');
@@ -201,23 +200,24 @@
                                         ${isLocked ? '<span class="tile-check">✓</span>' : ''}
                                     </div>`;
                         }).join('')}
+                        ${showLockIcon ? `
+                            <button class="lock-icon-btn${lockedAt !== null ? ' locked' : ''}"
+                                    onclick="toggleLock(${i})"
+                                    title="${lockedAt !== null ? 'Unlock' : 'Lock in this guess'}">
+                                ${lockedAt !== null ? '🔓' : '🔒'}
+                            </button>
+                        ` : ''}
                     </div>
-                    ${canLock ? `<button class="lock-in-btn" onclick="lockGuess(${i})">Lock in — ${mult}</button>` : ''}
                 ` : '';
 
                 card.innerHTML = `
-                    <div class="card-head">
-                        <span class="q-num">Question ${i + 1}</span>
-                        ${lockedAt !== null ? '<span class="locked-tag">Locked ✓</span>' : ''}
-                        ${!isComplete && history.length > 0 ? `<span class="guess-count">${history.length}/3</span>` : ''}
-                    </div>
-                    <p class="q-text">${q.text}</p>
+                    <p class="q-text"><span class="q-label">Q${i + 1}</span>${q.text}</p>
                     ${tilesHtml}
                     ${!isComplete ? `
                         <div class="input-row">
                             <input type="number"
                                    id="input-${i}"
-                                   placeholder="Your estimate…"
+                                   placeholder="${placeholders[history.length] || 'Your estimate'}"
                                    inputmode="numeric"
                                    autocomplete="off"
                                    oninput="updateButtonUI()">
