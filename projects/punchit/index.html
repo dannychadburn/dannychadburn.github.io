@@ -214,7 +214,7 @@
       50% { opacity: 0.2; }
     }
     .flash-round { animation: flash 1s infinite; }
-    .flash-rest  { animation: flash 0.6s infinite; color: #fbbf24; }
+    .flash-rest  { animation: flash 1s infinite; }
 
     /* ── Utility ──────────────────────────────────────── */
     .hidden { display: none !important; }
@@ -242,6 +242,7 @@
         <div class="btn-group">
           <button class="toggle-btn rounds-btn active" data-value="3">3</button>
           <button class="toggle-btn rounds-btn" data-value="6">6</button>
+          <button class="toggle-btn rounds-btn" data-value="9">9</button>
           <button class="toggle-btn rounds-btn" data-value="12">12</button>
           <button class="toggle-btn rounds-btn" data-value="0">∞</button>
         </div>
@@ -286,7 +287,7 @@
     // ── Configuration ─────────────────────────────────────────────
     const ROUND_TIME  = 180;
     const COMBO_EVERY = 30;
-    const START_DELAY = 10;
+    const START_DELAY = 3;
     const PUNCH_POOL  = { odd: [1, 3, 5, 7], even: [2, 4, 6, 8] };
     const MOVEMENTS   = { D: 'Duck', L: 'Dodge Left', R: 'Dodge Right', B: 'Block' };
 
@@ -327,9 +328,30 @@
       return availableVoices[0] || null;
     }
 
+    function preloadVocabulary() {
+      if (!window.speechSynthesis) return;
+      const vocab = [
+        '1','2','3','4','5','6','7','8',
+        'Duck','Dodge Left','Dodge Right','Block',
+        'Ready','To','Rumble','Fight','Ding ding','Ten seconds',
+        'Workout complete. Well done.'
+      ];
+      vocab.forEach(word => {
+        const u = new SpeechSynthesisUtterance(word);
+        u.volume = 0;
+        u.rate   = 1.1;
+        const v  = getVoice();
+        if (v) u.voice = v;
+        window.speechSynthesis.speak(u);
+      });
+    }
+
     if (window.speechSynthesis) {
       loadVoices();
-      window.speechSynthesis.onvoiceschanged = loadVoices;
+      window.speechSynthesis.onvoiceschanged = () => {
+        loadVoices();
+        preloadVocabulary();
+      };
     }
 
     // ── Speech ────────────────────────────────────────────────────
@@ -499,7 +521,6 @@
       timerEl.textContent = formatTime(r);
 
       if (mode === 'delay') {
-        if (r === 3) safeSpeak('Ready');
         if (r === 2) safeSpeak('To');
         if (r === 1) safeSpeak('Rumble');
         if (r <= 0)  startRound();
@@ -530,8 +551,6 @@
 
     // ── Workout control ───────────────────────────────────────────
     function startWorkout() {
-      unlockSpeech();
-
       isRunning    = true;
       mode         = 'delay';
       currentRound = 0;
@@ -543,8 +562,10 @@
       mainBtn.classList.add('danger');
 
       timerEl.textContent    = formatTime(START_DELAY);
-      sequenceEl.textContent = 'GET READY';
+      sequenceEl.textContent = '';
       roundEl.textContent    = 'Round 0';
+
+      safeSpeak('Ready'); // also acts as iOS audio context unlock (called from user gesture)
 
       if (mainInterval) clearInterval(mainInterval);
       mainInterval = setInterval(tick, 1000);
