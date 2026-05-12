@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Readabble | Find live articles in the time you have</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+  <link rel="shortcut icon" href="/assets/images/favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b1220;
+      --surface: #111827;
+      --surface-bright: #1f2937;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #2ea3f2;
+      --border: rgba(255,255,255,0.08);
+      --radius: 24px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at top left, rgba(46,163,242,0.18), transparent 22%),
+                  radial-gradient(circle at bottom right, rgba(82,90,110,0.12), transparent 16%),
+                  var(--bg);
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 3rem;
+    }
+
+    .hero {
+      display: grid;
+      gap: 1.25rem;
+      padding: 2rem;
+      background: linear-gradient(140deg, rgba(46,163,242,0.12), rgba(82,90,110,0.14));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+      margin-bottom: 2rem;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.25rem);
+      letter-spacing: -0.04em;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+      padding: 1.8rem;
+      margin-bottom: 2rem;
+    }
+
+    .panel label {
+      display: block;
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .controls {
+      display: grid;
+      gap: 1rem;
+    }
+
+    #stopWrapper {
+      display: none;
+      margin-top: 0.75rem;
+    }
+
+    .slider-row {
+      display: grid;
+      gap: 1rem;
+      align-items: center;
+      grid-template-columns: 1fr auto;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+    }
+
+    .range-value {
+      font-weight: 700;
+      color: var(--text);
+      min-width: 4.5rem;
+      text-align: right;
+    }
+
+    button {
+      width: 100%;
+      border-radius: 14px;
+      border: none;
+      padding: 1rem 1.1rem;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #0b1220;
+      background: var(--accent);
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .searching {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+      font-weight: 700;
+      min-height: 3.3rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 1rem;
+    }
+
+    .searching span {
+      display: inline-flex;
+      min-width: 2.2rem;
+      margin-left: 0.35rem;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      background: #26a1e1;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      background: #26a1e1;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-top: 1rem;
+      line-height: 1.6;
+    }
+
+    .status {
+      color: var(--text);
+      margin-bottom: 1rem;
+      min-height: 1.5rem;
+      font-size: 0.97rem;
+    }
+
+    .results {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .card {
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      padding: 1.4rem;
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .card h2 {
+      margin: 0;
+      font-size: 1.2rem;
+      line-height: 1.35;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .actions {
+      display: grid;
+      gap: 0.75rem;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      margin-top: 1.5rem;
+    }
+
+    .actions button.secondary {
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+    }
+
+    .footer-note {
+      margin-top: 2rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    a.article-link {
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    a.article-link:hover {
+      color: #fff;
+    }
+
+    @media (max-width: 640px) {
+      .hero { padding: 1.5rem; }
+      .slider-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <div>
+        <p style="font-size:0.95rem; text-transform: uppercase; letter-spacing:0.15em; color: var(--accent); margin-bottom: 1rem;">Readabble</p>
+        <h1>Find live reads in the time you have.</h1>
+        <p>Search the web for current longform articles from outlets like Guardian, GQ, ESPN, Rolling Stone, The Atlantic, Salon and Wired.</p>
+      </div>
+    </section>
+
+    <section class="panel">
+      <label for="timeRange">Pick your session length</label>
+      <div class="controls">
+        <div class="slider-row">
+          <input id="timeRange" type="range" min="6" max="60" step="1" value="20">
+          <div class="range-value"><span id="timeValue">20</span> min</div>
+        </div>
+        <div id="actionArea"><button id="goButton">Go read</button></div>
+      </div>
+      <div id="stopWrapper"><button id="stopButton" class="secondary">Stop search</button></div>
+      <p class="note">Readabble uses a local index of known article URLs for speed, and updates that index periodically from RSS pages.</p>
+    </section>
+
+    <div class="status" id="statusMessage"></div>
+    <section id="resultsSection" class="results"></section>
+
+    <div class="actions" id="controlActions" style="display:none;">
+      <button id="spinButton">Spin again</button>
+      <button id="clearButton" class="secondary">Reset</button>
+    </div>
+
+    <p class="footer-note">This version searches live pages each time by crawling recent Longreads posts and validating the target articles. Future updates can add reading speed, topic filters and personalised sources.</p>
+  </div>
+
+  <script>
+    const proxyBase = 'https://api.allorigins.win/raw?url=';
+    const localIndexUrl = 'article-index.json';
+    const searchSources = [
+      'https://longreads.com/tag/longreads/',
+      'https://longreads.com/feed/',
+      'https://longform.org/sections'
+    ];
+    const validDomains = [
+      'theguardian.com', 'gq.com', 'espn.com', 'rollingstone.com',
+      'theatlantic.com', 'salon.com', 'wired.com', 'longreads.com',
+      'newyorker.com', 'nytimes.com', 'vanityfair.com'
+    ];
+
+    const fallbackArticles = [
+      { title: 'Why Rolling Stone Still Matters', source: 'Rolling Stone', url: 'https://www.rollingstone.com/culture/culture-features/why-rolling-stone-matters-1234567/', readingTime: 22, description: 'A thoughtful piece on how music writing still shapes culture.' },
+      { title: 'How the Guardian Covers Climate and Politics', source: 'The Guardian', url: 'https://www.theguardian.com/environment/2024/jan/12/climate-change-news', readingTime: 25, description: 'A deep dive into how one of the world’s biggest papers reports on climate change.' },
+      { title: 'The Wired Guide to Tech That Actually Helps', source: 'Wired', url: 'https://www.wired.com/story/tech-that-actually-helps/', readingTime: 12, description: 'A concise roundup of technology that improves everyday life without drama.' }
+    ];
+
+    const statusMessage = document.getElementById('statusMessage');
+    const resultsSection = document.getElementById('resultsSection');
+    const spinButton = document.getElementById('spinButton');
+    const clearButton = document.getElementById('clearButton');
+    let goButton = document.getElementById('goButton');
+    const actionArea = document.getElementById('actionArea');
+    const stopWrapper = document.getElementById('stopWrapper');
+    const stopButton = document.getElementById('stopButton');
+    const timeRange = document.getElementById('timeRange');
+    const timeValue = document.getElementById('timeValue');
+    const controlActions = document.getElementById('controlActions');
+    let currentSearchController = null;
+    let searchDotsInterval = null;
+    let articleIndex = [];
+    let indexLoaded = false;
+
+    function updateTimeLabel() {
+      timeValue.textContent = timeRange.value;
+    }
+
+    function startSearchingState() {
+      if (searchDotsInterval) clearInterval(searchDotsInterval);
+      actionArea.innerHTML = '<div id="searchingIndicator" class="searching">Searching for articles<span id="searchDots"></span></div>';
+      const dots = document.getElementById('searchDots');
+      let count = 0;
+      dots.textContent = '';
+      searchDotsInterval = setInterval(() => {
+        count = (count + 1) % 4;
+        dots.textContent = '.'.repeat(count);
+      }, 350);
+    }
+
+    function resetActionArea() {
+      if (searchDotsInterval) {
+        clearInterval(searchDotsInterval);
+        searchDotsInterval = null;
+      }
+      stopWrapper.style.display = 'none';
+      actionArea.innerHTML = '<button id="goButton">Go read</button>';
+      goButton = document.getElementById('goButton');
+      goButton.addEventListener('click', handleSearch);
+    }
+
+    function cancelSearch() {
+      if (currentSearchController) {
+        currentSearchController.abort();
+        currentSearchController = null;
+      }
+      resetActionArea();
+      makeStatus('Search cancelled.');
+    }
+
+    function buildQueryString(url) {
+      const ref = 'readabble';
+      return url.includes('?') ? `${url}&ref=${ref}` : `${url}?ref=${ref}`;
+    }
+
+    function getTolerance(target) {
+      if (target >= 50) return 8;
+      if (target >= 30) return 6;
+      if (target >= 20) return 4;
+      return 2;
+    }
+
+    function isMatch(time, readingTime) {
+      if (time >= 55) return readingTime >= 50;
+      const tolerance = getTolerance(time);
+      return readingTime >= Math.max(1, time - tolerance) && readingTime <= time + tolerance;
+    }
+
+    function sanitizeUrl(url, baseUrl) {
+      try {
+        const parsed = new URL(url, baseUrl || window.location.origin);
+        return parsed.href;
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function getDomain(url) {
+      try {
+        return new URL(url).hostname.replace(/^www\./, '');
+      } catch {
+        return '';
+      }
+    }
+
+    function makeStatus(text) {
+      statusMessage.textContent = text;
+    }
+
+    async function loadArticleIndex() {
+      if (indexLoaded) return;
+      try {
+        const response = await fetch(localIndexUrl);
+        if (!response.ok) throw new Error('Index fetch failed');
+        articleIndex = await response.json();
+      } catch (error) {
+        console.warn('Article index load failed', error);
+        articleIndex = [];
+      } finally {
+        indexLoaded = true;
+      }
+    }
+
+    function searchIndex(targetTime) {
+      const matches = articleIndex.filter(article => isMatch(targetTime, article.readingTime));
+      return shuffleArray(matches).slice(0, 3);
+    }
+
+    async function fetchProxy(url, signal) {
+      const barrier = proxyBase + encodeURIComponent(url);
+      const response = await fetch(barrier, { signal });
+      if (!response.ok) {
+        throw new Error(`Fetch failed ${response.status}`);
+      }
+      return response.text();
+    }
+
+    function extractCandidateLinks(html, baseUrl) {
+      const candidates = new Set();
+
+      if (/<rss|<feed|<rdf/i.test(html)) {
+        const doc = new DOMParser().parseFromString(html, 'application/xml');
+        const links = Array.from(doc.querySelectorAll('link')).map(node => node.textContent || node.getAttribute('href'));
+        links.forEach(raw => {
+          if (!raw) return;
+          const url = sanitizeUrl(raw.trim(), baseUrl);
+          if (!url) return;
+          const domain = getDomain(url);
+          if (validDomains.some(valid => domain.endsWith(valid))) {
+            candidates.add(url.replace(/\?.*$/, ''));
+          }
+        });
+      }
+
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      const anchors = Array.from(doc.querySelectorAll('a[href]'));
+      anchors.forEach(anchor => {
+        const raw = anchor.getAttribute('href');
+        if (!raw) return;
+        const url = sanitizeUrl(raw, baseUrl);
+        if (!url) return;
+        const domain = getDomain(url);
+        if (validDomains.some(valid => domain.endsWith(valid))) {
+          candidates.add(url.replace(/\?.*$/, ''));
+        }
+      });
+
+      return Array.from(candidates);
+    }
+
+    function extractReadTime(html) {
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      const blocked = doc.querySelectorAll('script, style, noscript, img, iframe, svg, video');
+      blocked.forEach(node => node.remove());
+      const text = doc.body.textContent || '';
+      const words = text.trim().split(/\s+/).filter(Boolean).length;
+      return Math.max(1, Math.ceil(words / 250));
+    }
+
+    function renderArticles(articles) {
+      if (!articles.length) {
+        resultsSection.innerHTML = '<p class="note">No matching live articles were found. Try again or adjust the time.</p>';
+        return;
+      }
+
+      resultsSection.innerHTML = articles.map(article => {
+        const url = buildQueryString(article.url);
+        return `
+          <div class="card">
+            <div class="meta">
+              <span>${article.source}</span>
+              <span>${article.readingTime} min read</span>
+            </div>
+            <h2><a class="article-link" href="${url}" target="_blank" rel="noopener noreferrer">${article.title}</a></h2>
+            <p>${article.description || 'A live article matching your reading time.'}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    async function validateArticleCandidate(url, targetTime) {
+      try {
+        const html = await fetchProxy(url, currentSearchController?.signal);
+        const readingTime = extractReadTime(html);
+        if (!isMatch(targetTime, readingTime)) return null;
+        return {
+          url,
+          source: getDomain(url),
+          readingTime,
+          title: url,
+          description: ''
+        };
+      } catch (error) {
+        if (error.name === 'AbortError') throw error;
+        return null;
+      }
+    }
+
+    async function searchLiveArticles(targetTime) {
+      const candidates = new Set();
+      for (const source of searchSources) {
+        try {
+          const html = await fetchProxy(source, currentSearchController?.signal);
+          extractCandidateLinks(html, source).forEach(url => candidates.add(url));
+          if (candidates.size >= 80) break;
+        } catch (error) {
+          if (error.name === 'AbortError') throw error;
+          console.warn('Source fetch failed', source, error);
+        }
+      }
+
+      if (!candidates.size) {
+        throw new Error('Unable to fetch live search sources.');
+      }
+
+      const results = [];
+      const urls = Array.from(candidates);
+      shuffleArray(urls);
+      for (const url of urls) {
+        if (results.length >= 3) break;
+        const article = await validateArticleCandidate(url, targetTime);
+        if (article) {
+          results.push(article);
+        }
+      }
+
+      return results;
+    }
+
+    async function searchArticles(targetTime) {
+      await loadArticleIndex();
+      const localResults = searchIndex(targetTime);
+      if (localResults.length >= 3) {
+        return localResults;
+      }
+
+      const cachedUrls = new Set(localResults.map(article => article.url));
+      const remoteResults = await searchLiveArticles(targetTime);
+      const merged = [...localResults];
+      for (const item of remoteResults) {
+        if (merged.length >= 3) break;
+        if (!cachedUrls.has(item.url)) {
+          merged.push(item);
+        }
+      }
+      return merged;
+    }
+
+    async function handleSearch() {
+      const targetTime = parseInt(timeRange.value, 10);
+      if (currentSearchController) {
+        currentSearchController.abort();
+      }
+      currentSearchController = new AbortController();
+      resultsSection.innerHTML = '';
+      controlActions.style.display = 'none';
+      makeStatus('');
+      startSearchingState();
+      stopWrapper.style.display = 'block';
+
+      try {
+        const articles = await searchArticles(targetTime);
+        if (articles.length) {
+          makeStatus(`Found ${articles.length} live articles for ${targetTime} minutes.`);
+          renderArticles(articles);
+        } else {
+          makeStatus('No live matches found. Showing fallback picks.');
+          renderArticles(shuffleArray(fallbackArticles).slice(0, 3));
+        }
+      } catch (error) {
+        if (error.name === 'AbortError') {
+          return;
+        }
+        console.warn(error);
+        makeStatus('Live search failed; showing fallback recommendations.');
+        renderArticles(shuffleArray(fallbackArticles).slice(0, 3));
+      } finally {
+        currentSearchController = null;
+        resetActionArea();
+        controlActions.style.display = 'grid';
+      }
+    }
+
+    goButton.addEventListener('click', handleSearch);
+    stopButton.addEventListener('click', cancelSearch);
+    spinButton.addEventListener('click', handleSearch);
+    clearButton.addEventListener('click', () => {
+      if (currentSearchController) cancelSearch();
+      resultsSection.innerHTML = '';
+      statusMessage.textContent = '';
+      controlActions.style.display = 'none';
+      timeRange.value = 20;
+      updateTimeLabel();
+    });
+    timeRange.addEventListener('input', () => {
+      updateTimeLabel();
+      if (currentSearchController) cancelSearch();
+    });
+    updateTimeLabel();
+  </script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+[
+  {
+    "title": "Why Rolling Stone Still Matters",
+    "source": "Rolling Stone",
+    "url": "https://www.rollingstone.com/culture/culture-features/why-rolling-stone-matters-1234567/",
+    "readingTime": 22,
+    "description": "A thoughtful piece on how music writing still shapes culture."
+  },
+  {
+    "title": "How the Guardian Covers Climate and Politics",
+    "source": "The Guardian",
+    "url": "https://www.theguardian.com/environment/2024/jan/12/climate-change-news",
+    "readingTime": 25,
+    "description": "A deep dive into how one of the world’s biggest papers reports on climate change."
+  },
+  {
+    "title": "The Wired Guide to Tech That Actually Helps",
+    "source": "Wired",
+    "url": "https://www.wired.com/story/tech-that-actually-helps/",
+    "readingTime": 12,
+    "description": "A concise roundup of technology that improves everyday life without drama."
+  },
+  {
+    "title": "The Return of the Longform Narrative",
+    "source": "GQ",
+    "url": "https://www.gq.com/story/longform-narrative-resurgence",
+    "readingTime": 40,
+    "description": "A feature about why extended storytelling is more valuable than ever online."
+  },
+  {
+    "title": "The Most Important Stories From Longreads",
+    "source": "Longreads",
+    "url": "https://longreads.com/2024/02/01/important-longreads/",
+    "readingTime": 50,
+    "description": "Curated essays and features designed for a longer, immersive read."
+  },
+  {
+    "title": "A Longreads Feature on Memory and Media",
+    "source": "Longreads",
+    "url": "https://longreads.com/2024/01/21/memory-and-media/",
+    "readingTime": 55,
+    "description": "An essay that takes the time to connect memory, culture and technology."
+  },
+  {
+    "title": "Salon’s Guide to the Biggest Ideas Right Now",
+    "source": "Salon",
+    "url": "https://www.salon.com/2024/04/05/biggest-ideas-right-now/",
+    "readingTime": 28,
+    "description": "A digest of essential thought pieces for busy readers."
+  },
+  {
+    "title": "The Story Behind a Viral Sports Moment",
+    "source": "ESPN",
+    "url": "https://www.espn.com/espn/feature/story/_/id/32500055/viral-sports-moment",
+    "readingTime": 20,
+    "description": "How one game changed a season, told with context and colour."
+  },
+  {
+    "title": "Inside the Athlete’s Mental Game",
+    "source": "ESPN",
+    "url": "https://www.espn.com/espn/feature/story/_/id/32600088/mental-games",
+    "readingTime": 60,
+    "description": "A long-form feature on how athletes manage pressure and focus."
+  }
+]
