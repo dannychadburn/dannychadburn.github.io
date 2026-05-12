@@ -25,22 +25,12 @@
     /* ── Logo ─────────────────────────────────────────── */
     .logo {
       font-size: 3.75rem;
+      font-weight: 900;
       letter-spacing: -0.05em;
       line-height: 1;
       margin-bottom: 1.5rem;
       user-select: none;
-    }
-    .logo-punch {
-      font-weight: 900;
       background: linear-gradient(90deg, #00ffd0, #009dff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .logo-it {
-      font-weight: 400;
-      font-style: italic;
-      background: linear-gradient(90deg, #009dff, #3b5fe0);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -140,6 +130,14 @@
     .legend dt { color: #2dd4bf; font-weight: 800; font-size: 0.8rem; }
 
     /* ── Active display ───────────────────────────────── */
+    #activeDisplay {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+    #activeDisplay.hidden { display: none !important; }
+
     #timer {
       font-size: 5.5rem;
       font-weight: 900;
@@ -148,6 +146,8 @@
       margin-bottom: 0.5rem;
       font-variant-numeric: tabular-nums;
       transition: color 0.3s;
+      text-align: center;
+      width: 100%;
     }
     #timer.timer-teal { color: #2dd4bf; }
 
@@ -220,9 +220,7 @@
 </head>
 <body>
 
-  <h1 class="logo">
-    <span class="logo-punch">Punch</span><span class="logo-it">it</span>
-  </h1>
+  <h1 class="logo">Punchit</h1>
 
   <div class="card">
 
@@ -244,14 +242,6 @@
           <button class="toggle-btn rounds-btn" data-value="6">6</button>
           <button class="toggle-btn rounds-btn" data-value="12">12</button>
           <button class="toggle-btn rounds-btn" data-value="0">∞</button>
-        </div>
-      </div>
-
-      <div class="setting-section">
-        <p class="setting-label">Voice</p>
-        <div class="btn-group">
-          <button class="toggle-btn voice-btn active" data-value="female">Female</button>
-          <button class="toggle-btn voice-btn" data-value="male">Male</button>
         </div>
       </div>
 
@@ -305,7 +295,6 @@
     let roundLimit         = 3;      // 0 = unlimited
     let currentRound       = 0;
     let roundMovementCount = 0;
-    let preferredGender    = 'female';
     let availableVoices    = [];
 
     let phaseStart       = 0;
@@ -333,10 +322,7 @@
     }
 
     function getVoice() {
-      if (!availableVoices.length) return null;
-      return availableVoices.find(v =>
-        v.name.toLowerCase().includes(preferredGender)
-      ) || availableVoices[0];
+      return availableVoices[0] || null;
     }
 
     if (window.speechSynthesis) {
@@ -401,15 +387,6 @@
       btn.addEventListener('click', () => {
         roundLimit = Number(btn.dataset.value);
         document.querySelectorAll('.rounds-btn').forEach(b =>
-          b.classList.toggle('active', b === btn)
-        );
-      })
-    );
-
-    document.querySelectorAll('.voice-btn').forEach(btn =>
-      btn.addEventListener('click', () => {
-        preferredGender = btn.dataset.value;
-        document.querySelectorAll('.voice-btn').forEach(b =>
           b.classList.toggle('active', b === btn)
         );
       })
