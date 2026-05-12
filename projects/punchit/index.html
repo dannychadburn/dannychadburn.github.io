@@ -3,232 +3,597 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PUNCHIT</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Punchit</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Inter', sans-serif; }
-    .neon-text {
-      background: linear-gradient(to right, #00ffd0, #009dff);
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #111827;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem 1rem;
+    }
+
+    /* ── Logo ─────────────────────────────────────────── */
+    .logo {
+      font-size: 3.75rem;
+      letter-spacing: -0.05em;
+      line-height: 1;
+      margin-bottom: 1.5rem;
+      user-select: none;
+    }
+    .logo-punch {
+      font-weight: 900;
+      background: linear-gradient(90deg, #00ffd0, #009dff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      color: transparent;
     }
+    .logo-it {
+      font-weight: 400;
+      font-style: italic;
+      background: linear-gradient(90deg, #009dff, #3b5fe0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── Card ─────────────────────────────────────────── */
+    .card {
+      background: #1f2937;
+      padding: 2rem;
+      border-radius: 1.75rem;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.75rem;
+      width: 100%;
+      max-width: 30rem;
+      border: 1px solid #374151;
+    }
+
+    @media (min-width: 480px) {
+      .card { padding: 2.5rem 3rem; }
+    }
+
+    /* ── Settings ─────────────────────────────────────── */
+    .settings {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .setting-section { width: 100%; }
+
+    .setting-label {
+      text-align: center;
+      color: #9ca3af;
+      font-weight: 700;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+
+    .btn-group { display: flex; gap: 0.5rem; }
+
+    .toggle-btn {
+      flex: 1;
+      padding: 0.75rem 0.25rem;
+      border-radius: 0.875rem;
+      border: 2px solid #4b5563;
+      color: #9ca3af;
+      font-weight: 700;
+      font-size: 0.875rem;
+      background: transparent;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+      font-family: 'Inter', sans-serif;
+    }
+    .toggle-btn:hover:not(.active) { background: #374151; border-color: #6b7280; }
+    .toggle-btn.active {
+      border-color: #2dd4bf;
+      color: #2dd4bf;
+      background: rgba(45, 212, 191, 0.1);
+    }
+
+    /* ── Punch legend ─────────────────────────────────── */
+    .legend-toggle {
+      background: none;
+      border: none;
+      color: #6b7280;
+      font-size: 0.7rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 0.05em;
+      padding: 0.25rem 0;
+      width: 100%;
+      text-align: center;
+      transition: color 0.15s;
+    }
+    .legend-toggle:hover { color: #9ca3af; }
+
+    .legend {
+      display: none;
+      grid-template-columns: auto 1fr auto 1fr;
+      gap: 0.35rem 0.75rem;
+      font-size: 0.75rem;
+      color: #9ca3af;
+      padding: 0.875rem 1rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 0.875rem;
+      border: 1px solid #374151;
+      margin-top: 0.5rem;
+    }
+    .legend.open { display: grid; }
+    .legend dt { color: #2dd4bf; font-weight: 800; font-size: 0.8rem; }
+
+    /* ── Active display ───────────────────────────────── */
+    #timer {
+      font-size: 5.5rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+      font-variant-numeric: tabular-nums;
+      transition: color 0.3s;
+    }
+    #timer.timer-teal { color: #2dd4bf; }
+
+    .sequence-wrap {
+      height: 8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+
+    #sequenceText {
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: #2dd4bf;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 1;
+      letter-spacing: 0.04em;
+    }
+
+    @media (min-width: 480px) {
+      #sequenceText { font-size: 4.5rem; }
+    }
+
+    /* ── Main button ──────────────────────────────────── */
+    #mainButton {
+      background: #2dd4bf;
+      color: #111827;
+      padding: 1.1rem 2rem;
+      font-weight: 900;
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 9999px;
+      box-shadow: 0 8px 24px rgba(45, 212, 191, 0.25);
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.15s;
+      width: 100%;
+    }
+    #mainButton:hover { transform: scale(1.02); box-shadow: 0 12px 32px rgba(45, 212, 191, 0.35); }
+    #mainButton:active { transform: scale(0.97); }
+    #mainButton.danger {
+      background: #ef4444;
+      color: #fff;
+      box-shadow: 0 8px 24px rgba(239, 68, 68, 0.25);
+    }
+    #mainButton.danger:hover { box-shadow: 0 12px 32px rgba(239, 68, 68, 0.35); }
+
+    /* ── Round count ──────────────────────────────────── */
+    #roundCount {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #60a5fa;
+    }
+
+    /* ── Animations ───────────────────────────────────── */
     @keyframes flash {
       0%, 100% { opacity: 1; }
       50% { opacity: 0.2; }
     }
-    .flash-timer { animation: flash 1s infinite; }
+    .flash-round { animation: flash 1s infinite; }
+    .flash-rest  { animation: flash 0.6s infinite; color: #fbbf24; }
+
+    /* ── Utility ──────────────────────────────────────── */
+    .hidden { display: none !important; }
   </style>
 </head>
-<body class="bg-gray-900 text-white flex flex-col items-center justify-center min-h-screen p-4">
+<body>
 
-  <h1 class="text-6xl font-black mb-6 neon-text tracking-tighter">PUNCHIT</h1>
+  <h1 class="logo">
+    <span class="logo-punch">Punch</span><span class="logo-it">it</span>
+  </h1>
 
-  <div class="bg-gray-800 p-8 sm:p-12 rounded-3xl shadow-2xl flex flex-col items-center gap-8 w-full max-w-lg border border-gray-700">
-    
-    <!-- SETTINGS PANEL -->
-    <div id="settingsPanel" class="w-full space-y-4">
-      <p class="text-center text-gray-400 font-bold uppercase tracking-widest text-xs">Rest Duration</p>
-      <div class="flex gap-4">
-        <button id="rest30Btn" class="flex-1 py-4 rounded-2xl border-2 border-teal-400 text-teal-400 font-bold bg-teal-400/10 transition-all">30s Rest</button>
-        <button id="rest60Btn" class="flex-1 py-4 rounded-2xl border-2 border-gray-600 text-gray-400 font-bold hover:bg-gray-700 transition-all">60s Rest</button>
+  <div class="card">
+
+    <!-- Settings Panel -->
+    <div id="settingsPanel" class="settings">
+
+      <div class="setting-section">
+        <p class="setting-label">Rest Duration</p>
+        <div class="btn-group">
+          <button class="toggle-btn rest-btn active" data-value="30">30s</button>
+          <button class="toggle-btn rest-btn" data-value="60">60s</button>
+        </div>
+      </div>
+
+      <div class="setting-section">
+        <p class="setting-label">Rounds</p>
+        <div class="btn-group">
+          <button class="toggle-btn rounds-btn active" data-value="3">3</button>
+          <button class="toggle-btn rounds-btn" data-value="6">6</button>
+          <button class="toggle-btn rounds-btn" data-value="12">12</button>
+          <button class="toggle-btn rounds-btn" data-value="0">∞</button>
+        </div>
+      </div>
+
+      <div class="setting-section">
+        <p class="setting-label">Voice</p>
+        <div class="btn-group">
+          <button class="toggle-btn voice-btn active" data-value="female">Female</button>
+          <button class="toggle-btn voice-btn" data-value="male">Male</button>
+        </div>
+      </div>
+
+      <div class="setting-section">
+        <button id="legendToggle" class="legend-toggle">▼ Show punch key</button>
+        <dl id="legend" class="legend">
+          <dt>1</dt><dd>Jab</dd>
+          <dt>2</dt><dd>Cross</dd>
+          <dt>3</dt><dd>Left Hook</dd>
+          <dt>4</dt><dd>Right Hook</dd>
+          <dt>5</dt><dd>Left Uppercut</dd>
+          <dt>6</dt><dd>Right Uppercut</dd>
+          <dt>7</dt><dd>Left Body</dd>
+          <dt>8</dt><dd>Right Body</dd>
+          <dt>D</dt><dd>Duck</dd>
+          <dt>L</dt><dd>Dodge Left</dd>
+          <dt>R</dt><dd>Dodge Right</dd>
+          <dt>B</dt><dd>Block</dd>
+        </dl>
+      </div>
+
+    </div>
+
+    <!-- Active Workout Display -->
+    <div id="activeDisplay" class="hidden">
+      <p id="timer">0:00</p>
+      <div class="sequence-wrap">
+        <p id="sequenceText"></p>
       </div>
     </div>
 
-    <!-- WORKOUT DISPLAY -->
-    <div id="activeDisplay" class="hidden flex flex-col items-center w-full">
-      <p id="timer" class="text-8xl font-mono mb-4 transition-colors duration-300">00:00</p>
-      <div class="h-32 flex items-center justify-center">
-        <p id="sequenceText" class="text-5xl sm:text-7xl font-black text-teal-400 uppercase text-center leading-none"></p>
-      </div>
-    </div>
-    
-    <!-- CONTROLS -->
-    <button id="mainButton" class="bg-teal-400 text-gray-900 px-12 py-5 font-black uppercase rounded-full shadow-xl transition-all transform hover:scale-105 active:scale-95 w-full text-lg tracking-widest">
-      Start Workout
-    </button>
-    
-    <p id="roundCount" class="text-xl font-bold text-blue-400">Round: 0</p>
+    <!-- Main CTA -->
+    <button id="mainButton">Start Workout</button>
+
+    <p id="roundCount">Round 0</p>
+
   </div>
 
   <script>
-    // Configuration
-    const ROUND_TIME = 180;
-    const COMBO_INTERVAL = 30;
+    // ── Configuration ─────────────────────────────────────────────
+    const ROUND_TIME  = 180;
+    const COMBO_EVERY = 30;
     const START_DELAY = 10;
-    const PUNCHE_POOL = { odd: [1, 3, 5, 7], even: [2, 4, 6, 8] };
-    const MOVEMENTS = { 'D': 'Duck', 'L': 'Dodge Left', 'R': 'Dodge Right', 'B': 'Block' };
+    const PUNCH_POOL  = { odd: [1, 3, 5, 7], even: [2, 4, 6, 8] };
+    const MOVEMENTS   = { D: 'Duck', L: 'Dodge Left', R: 'Dodge Right', B: 'Block' };
 
-    // State
-    let isRunning = false;
-    let restTime = 30;
-    let currentRound = 0;
+    // ── State ─────────────────────────────────────────────────────
+    let isRunning          = false;
+    let mode               = 'idle'; // idle | delay | round | rest
+    let restTime           = 30;
+    let roundLimit         = 3;      // 0 = unlimited
+    let currentRound       = 0;
     let roundMovementCount = 0;
-    let timerVal = 0;
-    let mode = 'idle'; // idle, delay, round, rest
-    
-    let mainInterval = null;
-    let comboInterval = null;
+    let preferredGender    = 'female';
+    let availableVoices    = [];
 
-    const mainBtn = document.getElementById('mainButton');
-    const timerEl = document.getElementById('timer');
-    const sequenceEl = document.getElementById('sequenceText');
-    const roundEl = document.getElementById('roundCount');
-    const settingsPanel = document.getElementById('settingsPanel');
-    const activeDisplay = document.getElementById('activeDisplay');
+    let phaseStart       = 0;
+    let phaseDuration    = 0;
+    let mainInterval     = null;
+    let comboInterval    = null;
+    let seqTimeouts      = [];
+    let restWarnFired    = false;
 
+    // ── DOM ───────────────────────────────────────────────────────
+    const mainBtn      = document.getElementById('mainButton');
+    const timerEl      = document.getElementById('timer');
+    const sequenceEl   = document.getElementById('sequenceText');
+    const roundEl      = document.getElementById('roundCount');
+    const settingsEl   = document.getElementById('settingsPanel');
+    const activeEl     = document.getElementById('activeDisplay');
+    const legendToggle = document.getElementById('legendToggle');
+    const legendEl     = document.getElementById('legend');
+
+    // ── Voice ─────────────────────────────────────────────────────
+    function loadVoices() {
+      if (!window.speechSynthesis) return;
+      availableVoices = window.speechSynthesis.getVoices()
+        .filter(v => v.lang.startsWith('en'));
+    }
+
+    function getVoice() {
+      if (!availableVoices.length) return null;
+      return availableVoices.find(v =>
+        v.name.toLowerCase().includes(preferredGender)
+      ) || availableVoices[0];
+    }
+
+    if (window.speechSynthesis) {
+      loadVoices();
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    // ── Speech ────────────────────────────────────────────────────
     function safeSpeak(text) {
       if (!window.speechSynthesis) return;
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 1.1;
-      window.speechSynthesis.speak(utterance);
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.rate = 1.1;
+      const v = getVoice();
+      if (v) u.voice = v;
+      window.speechSynthesis.speak(u);
     }
 
-    function formatTime(seconds) {
-      const mins = Math.floor(seconds / 60);
-      const secs = seconds % 60;
-      return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    // Must be called from a user-gesture context (e.g. button click) to unlock
+    // the audio context on iOS Safari before any timed speech fires.
+    function unlockSpeech() {
+      if (!window.speechSynthesis) return;
+      const u = new SpeechSynthesisUtterance(' ');
+      u.volume = 0;
+      window.speechSynthesis.speak(u);
     }
 
-    // Rest Selection Logic
-    document.getElementById('rest30Btn').onclick = () => updateRestSelection(30);
-    document.getElementById('rest60Btn').onclick = () => updateRestSelection(60);
-
-    function updateRestSelection(t) {
-      restTime = t;
-      const active = "flex-1 py-4 rounded-2xl border-2 border-teal-400 text-teal-400 font-bold bg-teal-400/10 transition-all";
-      const inactive = "flex-1 py-4 rounded-2xl border-2 border-gray-600 text-gray-400 font-bold hover:bg-gray-700 transition-all";
-      document.getElementById('rest30Btn').className = t === 30 ? active : inactive;
-      document.getElementById('rest60Btn').className = t === 60 ? active : inactive;
+    function cancelSequenceSpeech() {
+      seqTimeouts.forEach(clearTimeout);
+      seqTimeouts = [];
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
     }
 
+    // ── Formatting ────────────────────────────────────────────────
+    function formatTime(s) {
+      return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+    }
+
+    // ── Drift-resistant timer ─────────────────────────────────────
+    function startPhase(seconds) {
+      phaseStart    = Date.now();
+      phaseDuration = seconds;
+    }
+
+    function remaining() {
+      return Math.max(0,
+        phaseDuration - Math.floor((Date.now() - phaseStart) / 1000)
+      );
+    }
+
+    // ── Settings UI ───────────────────────────────────────────────
+    document.querySelectorAll('.rest-btn').forEach(btn =>
+      btn.addEventListener('click', () => {
+        restTime = Number(btn.dataset.value);
+        document.querySelectorAll('.rest-btn').forEach(b =>
+          b.classList.toggle('active', b === btn)
+        );
+      })
+    );
+
+    document.querySelectorAll('.rounds-btn').forEach(btn =>
+      btn.addEventListener('click', () => {
+        roundLimit = Number(btn.dataset.value);
+        document.querySelectorAll('.rounds-btn').forEach(b =>
+          b.classList.toggle('active', b === btn)
+        );
+      })
+    );
+
+    document.querySelectorAll('.voice-btn').forEach(btn =>
+      btn.addEventListener('click', () => {
+        preferredGender = btn.dataset.value;
+        document.querySelectorAll('.voice-btn').forEach(b =>
+          b.classList.toggle('active', b === btn)
+        );
+      })
+    );
+
+    legendToggle.addEventListener('click', () => {
+      const open = legendEl.classList.toggle('open');
+      legendToggle.textContent = open ? '▲ Hide punch key' : '▼ Show punch key';
+    });
+
+    // ── Sequence generation ───────────────────────────────────────
     function triggerSequence() {
       if (mode !== 'round' || !isRunning) return;
 
-      const sequence = [];
-      let lastParity = Math.random() > 0.5 ? 'even' : 'odd';
-      let movementInThisSequence = false;
+      cancelSequenceSpeech();
+
+      const seq    = [];
+      let parity   = Math.random() > 0.5 ? 'even' : 'odd';
+      let hasMove  = false;
 
       for (let i = 0; i < 4; i++) {
-        // Movement Logic: Max 1 per sequence, fewer than 4 per round
-        if (!movementInThisSequence && roundMovementCount < 4 && Math.random() < 0.25) {
+        if (!hasMove && roundMovementCount < 4 && Math.random() < 0.25) {
           const keys = Object.keys(MOVEMENTS);
-          const key = keys[Math.floor(Math.random() * keys.length)];
-          sequence.push(key);
-          movementInThisSequence = true;
+          seq.push(keys[Math.floor(Math.random() * keys.length)]);
+          hasMove = true;
           roundMovementCount++;
         } else {
-          // Punch Logic: 80% chance to alternate parity
-          if (Math.random() < 0.8) lastParity = (lastParity === 'even' ? 'odd' : 'even');
-          const pool = PUNCHE_POOL[lastParity];
-          sequence.push(pool[Math.floor(Math.random() * pool.length)]);
+          if (Math.random() < 0.8) parity = parity === 'even' ? 'odd' : 'even';
+          const pool = PUNCH_POOL[parity];
+          seq.push(pool[Math.floor(Math.random() * pool.length)]);
         }
       }
 
-      sequenceEl.textContent = sequence.join('-');
-      sequence.forEach((item, idx) => {
-        setTimeout(() => {
-          if (mode === 'round' && isRunning) safeSpeak(MOVEMENTS[item] || item);
-        }, idx * 600);
+      sequenceEl.textContent = seq.join('-');
+
+      // Queue each item 600 ms apart so they play back cleanly
+      seq.forEach((item, i) => {
+        const t = setTimeout(() => {
+          if (mode !== 'round' || !isRunning || !window.speechSynthesis) return;
+          const u = new SpeechSynthesisUtterance(MOVEMENTS[item] ?? String(item));
+          u.rate = 1.1;
+          const v = getVoice();
+          if (v) u.voice = v;
+          window.speechSynthesis.speak(u);
+        }, i * 600);
+        seqTimeouts.push(t);
       });
     }
 
-    function tick() {
-      if (!isRunning) return;
-      timerVal--;
-      timerEl.textContent = formatTime(timerVal);
-
-      if (mode === 'delay') {
-        if (timerVal === 3) safeSpeak("Ready");
-        if (timerVal === 2) safeSpeak("To");
-        if (timerVal === 1) safeSpeak("Rumble");
-        if (timerVal <= 0) startRound();
-      } 
-      else if (mode === 'round') {
-        if (timerVal <= 30) timerEl.classList.add('text-teal-400', 'flash-timer');
-        if (timerVal <= 0) {
-          safeSpeak("Ding ding");
-          startRest();
-        }
-      } 
-      else if (mode === 'rest') {
-        if (timerVal <= 0) startRound();
-      }
-    }
-
+    // ── Phase transitions ─────────────────────────────────────────
     function startRound() {
       mode = 'round';
       currentRound++;
       roundMovementCount = 0;
-      timerVal = ROUND_TIME;
-      roundEl.textContent = `Round: ${currentRound}`;
-      sequenceEl.textContent = "";
-      timerEl.classList.remove('text-teal-400', 'flash-timer');
-      
-      if (comboInterval) clearInterval(comboInterval);
-      triggerSequence(); 
-      comboInterval = setInterval(triggerSequence, COMBO_INTERVAL * 1000);
+      startPhase(ROUND_TIME);
+
+      timerEl.classList.remove('timer-teal', 'flash-round', 'flash-rest');
+      sequenceEl.textContent = '';
+      roundEl.textContent = roundLimit
+        ? `Round ${currentRound} / ${roundLimit}`
+        : `Round ${currentRound}`;
+
+      safeSpeak('Fight');
+
+      if (comboInterval) { clearInterval(comboInterval); comboInterval = null; }
+      triggerSequence();
+      comboInterval = setInterval(triggerSequence, COMBO_EVERY * 1000);
     }
 
     function startRest() {
-      mode = 'rest';
-      timerVal = restTime;
-      sequenceEl.textContent = "REST";
-      timerEl.classList.remove('text-teal-400', 'flash-timer');
-      if (comboInterval) clearInterval(comboInterval);
-      window.speechSynthesis.cancel();
+      mode          = 'rest';
+      restWarnFired = false;
+      startPhase(restTime);
+
+      cancelSequenceSpeech();
+      if (comboInterval) { clearInterval(comboInterval); comboInterval = null; }
+
+      timerEl.classList.remove('timer-teal', 'flash-round', 'flash-rest');
+      sequenceEl.textContent = 'REST';
+      safeSpeak('Ding ding');
     }
 
-    function startWorkout() {
-      window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance("");
-      window.speechSynthesis.speak(u);
+    function completeWorkout() {
+      isRunning = false;
+      mode      = 'idle';
 
-      isRunning = true;
-      mode = 'delay';
-      timerVal = START_DELAY;
+      clearInterval(mainInterval); mainInterval = null;
+      if (comboInterval) { clearInterval(comboInterval); comboInterval = null; }
+      cancelSequenceSpeech();
+
+      timerEl.classList.remove('timer-teal', 'flash-round', 'flash-rest');
+      timerEl.textContent    = '0:00';
+      sequenceEl.textContent = '';
+      roundEl.textContent    = `${currentRound} round${currentRound !== 1 ? 's' : ''} complete`;
+
+      settingsEl.classList.remove('hidden');
+      activeEl.classList.add('hidden');
+      mainBtn.textContent = 'Start Workout';
+      mainBtn.classList.remove('danger');
+
+      safeSpeak('Workout complete. Well done.');
+    }
+
+    // ── Tick ──────────────────────────────────────────────────────
+    function tick() {
+      if (!isRunning) return;
+      const r = remaining();
+      timerEl.textContent = formatTime(r);
+
+      if (mode === 'delay') {
+        if (r === 3) safeSpeak('Ready');
+        if (r === 2) safeSpeak('To');
+        if (r === 1) safeSpeak('Rumble');
+        if (r <= 0)  startRound();
+      }
+      else if (mode === 'round') {
+        if (r <= 30) timerEl.classList.add('timer-teal', 'flash-round');
+        if (r <= 0) {
+          timerEl.classList.remove('timer-teal', 'flash-round');
+          if (roundLimit > 0 && currentRound >= roundLimit) {
+            completeWorkout();
+          } else {
+            startRest();
+          }
+        }
+      }
+      else if (mode === 'rest') {
+        if (r <= 10 && !restWarnFired) {
+          restWarnFired = true;
+          timerEl.classList.add('flash-rest');
+          safeSpeak('Ten seconds');
+        }
+        if (r <= 0) {
+          timerEl.classList.remove('flash-rest');
+          startRound();
+        }
+      }
+    }
+
+    // ── Workout control ───────────────────────────────────────────
+    function startWorkout() {
+      unlockSpeech();
+
+      isRunning    = true;
+      mode         = 'delay';
       currentRound = 0;
-      
-      settingsPanel.classList.add('hidden');
-      activeDisplay.classList.remove('hidden');
-      mainBtn.textContent = "Stop Workout";
-      mainBtn.classList.replace('bg-teal-400', 'bg-red-500');
-      mainBtn.classList.replace('text-gray-900', 'text-white');
-      
-      timerEl.textContent = formatTime(timerVal);
-      sequenceEl.textContent = "GET READY";
-      roundEl.textContent = "Round: 0";
-      
+      startPhase(START_DELAY);
+
+      settingsEl.classList.add('hidden');
+      activeEl.classList.remove('hidden');
+      mainBtn.textContent = 'Stop Workout';
+      mainBtn.classList.add('danger');
+
+      timerEl.textContent    = formatTime(START_DELAY);
+      sequenceEl.textContent = 'GET READY';
+      roundEl.textContent    = 'Round 0';
+
+      if (mainInterval) clearInterval(mainInterval);
       mainInterval = setInterval(tick, 1000);
     }
 
     function stopWorkout() {
       isRunning = false;
-      mode = 'idle';
-      clearInterval(mainInterval);
-      clearInterval(comboInterval);
-      window.speechSynthesis.cancel();
+      mode      = 'idle';
 
-      settingsPanel.classList.remove('hidden');
-      activeDisplay.classList.add('hidden');
-      mainBtn.textContent = "Start Workout";
-      mainBtn.classList.replace('bg-red-500', 'bg-teal-400');
-      mainBtn.classList.replace('text-white', 'text-gray-900');
-      
-      timerEl.classList.remove('text-teal-400', 'flash-timer');
-      timerEl.textContent = "00:00";
-      sequenceEl.textContent = "";
-      roundEl.textContent = "Round: 0";
+      clearInterval(mainInterval); mainInterval = null;
+      if (comboInterval) { clearInterval(comboInterval); comboInterval = null; }
+      cancelSequenceSpeech();
+
+      timerEl.classList.remove('timer-teal', 'flash-round', 'flash-rest');
+      timerEl.textContent    = '0:00';
+      sequenceEl.textContent = '';
+      roundEl.textContent    = 'Round 0';
+
+      settingsEl.classList.remove('hidden');
+      activeEl.classList.add('hidden');
+      mainBtn.textContent = 'Start Workout';
+      mainBtn.classList.remove('danger');
     }
 
-    mainBtn.onclick = () => {
+    mainBtn.addEventListener('click', () => {
       if (isRunning) stopWorkout();
       else startWorkout();
-    };
+    });
   </script>
 </body>
 </html>
