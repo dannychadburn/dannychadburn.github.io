@@ -16,9 +16,9 @@
     <a id="skip-to-content" href="#content">Skip to the content.</a>
 
     <header class="page-header" role="banner">
-      <p class="logo">Tidy Swan</p>
-      <h1 class="project-name">Content designer from Sussex</h1>
-      <h2 class="project-tagline">Better words, bigger results</h2>
+      <p class="logo">{{ site.name | default: site.title }}</p>
+      <h1 class="project-name">{{ page.title | default: site.title }}</h1>
+      <h2 class="project-tagline">{{ page.description | default: site.description }}</h2>
       {% if site.github.is_project_page %}
         <a href="{{ site.github.repository_url }}" class="btn">View on GitHub</a>
       {% endif %}
