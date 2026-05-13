@@ -3,20 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Punchabble</title>
+  <title>Tidy Punch</title>
   <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
   <link rel="shortcut icon" href="/assets/images/favicon.svg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../shared/style.css">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
-      font-family: 'Inter', sans-serif;
-      background: #111827;
-      color: #fff;
-      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -25,22 +17,11 @@
     }
 
     /* ── Logo ─────────────────────────────────────────── */
-    .logo {
-      font-size: 3.75rem;
-      font-weight: 900;
-      letter-spacing: -0.05em;
-      line-height: 1;
-      margin-bottom: 1.5rem;
-      user-select: none;
-      background: linear-gradient(90deg, #00ffd0, #009dff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
+    .tidy-logo { margin-bottom: 1.5rem; }
 
     /* ── Card ─────────────────────────────────────────── */
     .card {
-      background: #1f2937;
+      background: var(--surface-bright);
       padding: 2rem;
       border-radius: 1.75rem;
       box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
@@ -50,7 +31,7 @@
       gap: 1.75rem;
       width: 100%;
       max-width: 30rem;
-      border: 1px solid #374151;
+      border: 1px solid var(--border);
     }
 
     @media (min-width: 480px) {
@@ -69,7 +50,7 @@
 
     .setting-label {
       text-align: center;
-      color: #9ca3af;
+      color: var(--muted);
       font-weight: 700;
       font-size: 0.65rem;
       letter-spacing: 0.12em;
@@ -84,7 +65,7 @@
       padding: 0.75rem 0.25rem;
       border-radius: 0.875rem;
       border: 2px solid #4b5563;
-      color: #9ca3af;
+      color: var(--muted);
       font-weight: 700;
       font-size: 0.875rem;
       background: transparent;
@@ -94,9 +75,9 @@
     }
     .toggle-btn:hover:not(.active) { background: #374151; border-color: #6b7280; }
     .toggle-btn.active {
-      border-color: #2dd4bf;
-      color: #2dd4bf;
-      background: rgba(45, 212, 191, 0.1);
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-dim);
     }
 
     /* ── Punch legend ─────────────────────────────────── */
@@ -129,7 +110,7 @@
       margin-top: 0.5rem;
     }
     .legend.open { display: grid; }
-    .legend dt { color: #2dd4bf; font-weight: 800; font-size: 0.8rem; }
+    .legend dt { color: var(--accent); font-weight: 800; font-size: 0.8rem; }
 
     /* ── Active display ───────────────────────────────── */
     #activeDisplay {
@@ -151,7 +132,7 @@
       text-align: center;
       width: 100%;
     }
-    #timer.timer-teal { color: #2dd4bf; }
+    #timer.timer-teal { color: var(--accent); }
 
     .sequence-wrap {
       height: 8rem;
@@ -164,7 +145,7 @@
     #sequenceText {
       font-size: 3.5rem;
       font-weight: 900;
-      color: #2dd4bf;
+      color: var(--accent);
       text-transform: uppercase;
       text-align: center;
       line-height: 1;
@@ -177,8 +158,8 @@
 
     /* ── Main button ──────────────────────────────────── */
     #mainButton {
-      background: #2dd4bf;
-      color: #111827;
+      background: var(--accent);
+      color: var(--bg);
       padding: 1.1rem 2rem;
       font-weight: 900;
       font-size: 0.95rem;
@@ -187,12 +168,12 @@
       text-transform: uppercase;
       border: none;
       border-radius: 9999px;
-      box-shadow: 0 8px 24px rgba(45, 212, 191, 0.25);
+      box-shadow: 0 8px 24px rgba(46, 163, 242, 0.25);
       cursor: pointer;
       transition: transform 0.1s, box-shadow 0.15s;
       width: 100%;
     }
-    #mainButton:hover { transform: scale(1.02); box-shadow: 0 12px 32px rgba(45, 212, 191, 0.35); }
+    #mainButton:hover { transform: scale(1.02); box-shadow: 0 12px 32px rgba(46, 163, 242, 0.35); }
     #mainButton:active { transform: scale(0.97); }
     #mainButton.danger {
       background: #ef4444;
@@ -205,7 +186,7 @@
     #roundCount {
       font-size: 1rem;
       font-weight: 700;
-      color: #60a5fa;
+      color: var(--accent);
     }
 
     /* ── Animations ───────────────────────────────────── */
@@ -222,7 +203,7 @@
 </head>
 <body>
 
-  <h1 class="logo">Punchabble</h1>
+  <h1 class="tidy-logo">Tidy Punch</h1>
 
   <div class="card">
 

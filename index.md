@@ -2,13 +2,13 @@
 layout: default
 ---
 
-## Clients
+Senior-level content design support
 
 [Get in touch](mailto:hello@tidyswan.com) if you'd like to see examples of my work.
 
-### Government services
+## Government services
 
-Senior-level content design for:
+Solving complicated problems for:
 
 - NHS England
 - Department for Education
@@ -32,12 +32,14 @@ Experience in industries such as:
 ## Side projects
 
 - [Decader](/projects/decader/)
-- [Tunabble](/projects/tunabble/)
-- [Punchabble](/projects/punchabble/)
-- [Statabble](/projects/statabble/)
-- [Readabble](/projects/readabble/)
 - [Exclaim Games](http://exclaimgames.com)
 
+### Some other things I've made
+
+- [Tidy Tunes](/projects/tidy-tunes/)
+- [Tidy Punch](/projects/tidy-punch/)
+- [Tidy Guess](/projects/tidy-guess/)
+- [Tidy Reads](/projects/tidy-reads/)
 
 ***
 

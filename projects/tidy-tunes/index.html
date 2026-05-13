@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tidy Tunes</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+  <link rel="shortcut icon" href="/assets/images/favicon.svg">
+  <link rel="stylesheet" href="../shared/style.css">
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .tt-card { width: 100%; max-width: 30rem; }
+
+    /* ── Header ── */
+    .tt-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .tt-shuffle-btn {
+      background: var(--surface-bright);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .tt-shuffle-btn:hover { background: #2d3748; }
+
+    /* ── Station list ── */
+    .station-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      max-height: 60vh;
+      overflow-y: auto;
+      padding-right: 2px;
+      margin-bottom: 1.5rem;
+    }
+
+    .station-list::-webkit-scrollbar { width: 6px; }
+    .station-list::-webkit-scrollbar-track { background: transparent; }
+    .station-list::-webkit-scrollbar-thumb {
+      background: var(--surface-bright);
+      border-radius: 10px;
+    }
+
+    /* ── Station item ── */
+    .station-container {
+      background: var(--surface-bright);
+      border-radius: 1rem;
+      overflow: hidden;
+      transition: background 0.25s;
+    }
+
+    .active-station {
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    }
+
+    .station-row {
+      display: flex;
+      align-items: center;
+      padding: 1rem 1.25rem;
+      gap: 0.5rem;
+      transition: background 0.15s;
+    }
+
+    .station-row:hover { background: rgba(255, 255, 255, 0.04); }
+    .active-station .station-row:hover { background: rgba(255, 255, 255, 0.1); }
+
+    .station-name-btn {
+      flex: 1;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0;
+    }
+
+    .active-station .station-name-btn { color: #fff; }
+
+    .station-exp-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      line-height: 1;
+      transition: color 0.15s;
+      flex-shrink: 0;
+    }
+
+    .station-exp-btn:hover { color: var(--text); }
+    .active-station .station-exp-btn { color: rgba(255, 255, 255, 0.7); }
+
+    .station-info {
+      padding: 0.75rem 1.25rem 1.25rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.2);
+      line-height: 1.65;
+    }
+
+    .active-station .station-info {
+      color: rgba(255, 255, 255, 0.75);
+      border-top-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .station-info a {
+      color: var(--accent);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .active-station .station-info a { color: #fff; text-decoration: underline; }
+
+    /* ── Status indicators ── */
+    .status-spinner {
+      display: none;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+
+    .loading-station .status-spinner { display: inline-block; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .status-eq {
+      display: none;
+      align-items: flex-end;
+      gap: 2px;
+    }
+
+    .active-station:not(.loading-station) .status-eq { display: flex; }
+
+    .eq-bar {
+      width: 3px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 1px;
+      animation: eq-bounce 0.9s ease-in-out infinite;
+    }
+
+    .eq-bar:nth-child(2) { animation-delay: 0.2s; }
+    .eq-bar:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes eq-bounce {
+      0%, 100% { height: 4px; }
+      50% { height: 14px; }
+    }
+
+    /* ── Error ── */
+    .error-tag {
+      display: none;
+      color: #f87171;
+      font-size: 0.75rem;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .error-station .error-tag { display: inline; }
+
+    /* ── Controls ── */
+    .tt-controls { display: flex; gap: 0.75rem; }
+  </style>
+</head>
+<body>
+
+  <h1 class="tidy-logo" style="margin-bottom:1.5rem">Tidy Tunes</h1>
+
+  <div class="tidy-card tt-card">
+    <div class="tt-header">
+      <p style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)">Radio</p>
+      <button id="random-button" class="tt-shuffle-btn">↺ Shuffle</button>
+    </div>
+
+    <audio id="radio-audio" crossorigin="anonymous"></audio>
+
+    <div id="station-buttons" class="station-list"></div>
+
+    <div class="tt-controls">
+      <button id="stop-button" class="tidy-btn tidy-btn-secondary">■ Stop</button>
+      <button id="mute-button" class="tidy-btn tidy-btn-secondary">
+        <span id="mute-icon">🔊</span><span id="mute-text">Mute</span>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const radioStations = [
+      { id: 'rp',   name: 'Radio Paradise', url: 'https://stream.radioparadise.com/aac-128',                     description: 'Legendary eclectic mixes.',                        wiki: 'https://en.wikipedia.org/wiki/Radio_Paradise'    },
+      { id: 'fip',  name: 'FIP',            url: 'https://icecast.radiofrance.fr/fip-hifi.aac?id=radiofrance',  description: 'Minimal talk, maximal musical discovery.',          wiki: 'https://en.wikipedia.org/wiki/FIP_(radio_station)'},
+      { id: 'kcrw', name: 'Eclectic 24',    url: 'https://streams.kcrw.com/e24_mp3',                            description: 'The best of KCRW DJs, streaming 24 hours a day.',  wiki: 'https://en.wikipedia.org/wiki/KCRW'              },
+      { id: 'gs',   name: 'Groove Salad',   url: 'https://ice5.somafm.com/groovesalad-128-aac',                 description: 'A nicely chilled plate of ambient beats and grooves.', wiki: 'https://en.wikipedia.org/wiki/SomaFM'        },
+      { id: 'kexp', name: 'KEXP',           url: 'https://kexp-mp3-128.streamguys1.com/kexp128.mp3',            description: 'Iconic listener-powered radio from Seattle.',       wiki: 'https://en.wikipedia.org/wiki/KEXP-FM'           },
+    ];
+
+    const audio         = document.getElementById('radio-audio');
+    const stationList   = document.getElementById('station-buttons');
+    const muteButton    = document.getElementById('mute-button');
+    const stopButton    = document.getElementById('stop-button');
+    const randomButton  = document.getElementById('random-button');
+    const muteIcon      = document.getElementById('mute-icon');
+    const muteText      = document.getElementById('mute-text');
+
+    let currentStationId = null;
+
+    function setStationState(stationId, state) {
+      document.querySelectorAll('.station-container').forEach(c => {
+        const isTarget = stationId && c.dataset.id === stationId;
+        c.classList.toggle('active-station',  isTarget && (state === 'loading' || state === 'playing'));
+        c.classList.toggle('loading-station', isTarget && state === 'loading');
+        c.classList.toggle('error-station',   isTarget && state === 'error');
+      });
+    }
+
+    function playStation(station) {
+      if (currentStationId === station.id) return;
+      currentStationId = station.id;
+      setStationState(station.id, 'loading');
+      document.title = `Tidy Tunes · ${station.name}`;
+      localStorage.setItem('lastStation', station.id);
+      audio.src = station.url;
+      audio.play().catch(e => {
+        if (currentStationId !== station.id) return;
+        setStationState(station.id, 'error');
+        currentStationId = null;
+        document.title = 'Tidy Tunes';
+        localStorage.removeItem('lastStation');
+      });
+    }
+
+    audio.onplaying = () => { if (currentStationId) setStationState(currentStationId, 'playing'); };
+
+    function stopStation() {
+      audio.pause();
+      audio.src = '';
+      currentStationId = null;
+      setStationState(null, null);
+      document.title = 'Tidy Tunes';
+    }
+
+    radioStations.forEach(station => {
+      const container = document.createElement('div');
+      container.className = 'station-container';
+      container.dataset.id = station.id;
+
+      const row = document.createElement('div');
+      row.className = 'station-row';
+
+      const nameBtn = document.createElement('button');
+      nameBtn.className = 'station-name-btn';
+      nameBtn.onclick = () => playStation(station);
+
+      const nameText  = document.createElement('span');
+      nameText.textContent = station.name;
+
+      const spinner = document.createElement('div');
+      spinner.className = 'status-spinner';
+
+      const eqBars = document.createElement('div');
+      eqBars.className = 'status-eq';
+      eqBars.innerHTML = '<div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>';
+
+      nameBtn.append(nameText, spinner, eqBars);
+
+      const errorTag = document.createElement('span');
+      errorTag.className = 'error-tag';
+      errorTag.textContent = '⚠ Unavailable';
+
+      const expBtn = document.createElement('button');
+      expBtn.className = 'station-exp-btn';
+      expBtn.setAttribute('aria-label', 'More info');
+      expBtn.textContent = '+';
+      expBtn.onclick = e => {
+        e.stopPropagation();
+        const info = container.querySelector('.station-info');
+        const collapsed = info.classList.toggle('hidden');
+        expBtn.textContent = collapsed ? '+' : '−';
+      };
+
+      const info = document.createElement('div');
+      info.className = 'station-info hidden';
+      info.innerHTML = `
+        <p style="margin-bottom:0.6rem">${station.description}</p>
+        <a href="${station.wiki}" target="_blank" rel="noopener noreferrer">↗ Wikipedia</a>
+      `;
+
+      row.append(nameBtn, errorTag, expBtn);
+      container.append(row, info);
+      stationList.appendChild(container);
+    });
+
+    muteButton.onclick = () => {
+      audio.muted = !audio.muted;
+      muteIcon.textContent = audio.muted ? '🔇' : '🔊';
+      muteText.textContent  = audio.muted ? 'Unmute' : 'Mute';
+    };
+
+    stopButton.onclick  = stopStation;
+    randomButton.onclick = () => {
+      const others  = radioStations.filter(s => s.id !== currentStationId);
+      playStation(others[Math.floor(Math.random() * others.length)]);
+    };
+
+    const lastId = localStorage.getItem('lastStation');
+    if (lastId) {
+      const station = radioStations.find(s => s.id === lastId);
+      if (station) {
+        currentStationId = station.id;
+        setStationState(station.id, 'loading');
+        document.title = `Tidy Tunes · ${station.name}`;
+        audio.src = station.url;
+        audio.play().catch(() => {
+          setStationState(station.id, null);
+          currentStationId = null;
+          document.title = 'Tidy Tunes';
+        });
+      }
+    }
+  </script>
+</body>
+</html>

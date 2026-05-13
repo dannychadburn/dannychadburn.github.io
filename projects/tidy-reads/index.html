@@ -3,32 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Readabble | Find live articles in the time you have</title>
+  <title>Tidy Reads</title>
   <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
   <link rel="shortcut icon" href="/assets/images/favicon.svg">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../shared/style.css">
   <style>
-    :root {
-      color-scheme: dark;
-      --bg: #0b1220;
-      --surface: #111827;
-      --surface-bright: #1f2937;
-      --text: #e5e7eb;
-      --muted: #9ca3af;
-      --accent: #2ea3f2;
-      --border: rgba(255,255,255,0.08);
-      --radius: 24px;
-    }
+    :root { --radius: 24px; }
 
-    * { box-sizing: border-box; }
     body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: 'Inter', sans-serif;
       background: radial-gradient(circle at top left, rgba(46,163,242,0.18), transparent 22%),
                   radial-gradient(circle at bottom right, rgba(82,90,110,0.12), transparent 16%),
                   var(--bg);
-      color: var(--text);
     }
 
     .page {
@@ -232,8 +217,8 @@
   <div class="page">
     <section class="hero">
       <div>
-        <p style="font-size:0.95rem; text-transform: uppercase; letter-spacing:0.15em; color: var(--accent); margin-bottom: 1rem;">Readabble</p>
-        <h1>Find live reads in the time you have.</h1>
+        <h1 class="tidy-logo" style="margin-bottom:1.25rem">Tidy Reads</h1>
+        <h2 style="font-size:clamp(1.5rem,3vw,2.5rem);font-weight:900;letter-spacing:-0.03em;margin:0 0 0.75rem">Find live reads in the time you have.</h2>
         <p>Search the web for current longform articles from outlets like Guardian, GQ, ESPN, Rolling Stone, The Atlantic, Salon and Wired.</p>
       </div>
     </section>
@@ -248,7 +233,7 @@
         <div id="actionArea"><button id="goButton">Go read</button></div>
       </div>
       <div id="stopWrapper"><button id="stopButton" class="secondary">Stop search</button></div>
-      <p class="note">Readabble uses a local index of known article URLs for speed, and updates that index periodically from RSS pages.</p>
+      <p class="note">Tidy Reads uses a local index of known article URLs for speed, and updates that index periodically from RSS pages.</p>
     </section>
 
     <div class="status" id="statusMessage"></div>
@@ -335,7 +320,7 @@
     }
 
     function buildQueryString(url) {
-      const ref = 'readabble';
+      const ref = 'tidy-reads';
       return url.includes('?') ? `${url}&ref=${ref}` : `${url}?ref=${ref}`;
     }
 

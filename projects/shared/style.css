@@ -1,0 +1,138 @@
+/* ═══════════════════════════════════════════════════════════
+   Tidy Apps — Shared Design System
+   Link from any project: <link rel="stylesheet" href="../shared/style.css">
+   ═══════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
+
+/* ── Design tokens ─────────────────────────────────────── */
+:root {
+  color-scheme: dark;
+
+  /* backgrounds */
+  --bg:             #0b1220;
+  --surface:        #111827;
+  --surface-bright: #1f2937;
+
+  /* type */
+  --text:  #e5e7eb;
+  --muted: #9ca3af;
+
+  /* borders */
+  --border: rgba(255, 255, 255, 0.08);
+
+  /* brand — blue & dark-blue from tidyswan.com */
+  --accent:      #2ea3f2;
+  --accent-dark: #155799;
+  --accent-dim:  rgba(46, 163, 242, 0.12);
+
+  /* shape */
+  --radius-lg: 1.75rem;
+  --radius-md: 0.875rem;
+  --radius-sm: 0.5rem;
+}
+
+/* ── Reset ─────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Base ──────────────────────────────────────────────── */
+html, body { height: 100%; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Logo — full size ──────────────────────────────────── */
+.tidy-logo {
+  font-size: 3.75rem;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  user-select: none;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Logo — compact, for persistent headers ────────────── */
+.tidy-logo-sm {
+  font-size: 1.75rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  user-select: none;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Card ──────────────────────────────────────────────── */
+.tidy-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+}
+
+@media (min-width: 480px) {
+  .tidy-card { padding: 2.5rem 3rem; }
+}
+
+/* ── Buttons ───────────────────────────────────────────── */
+.tidy-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-md);
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  line-height: 1;
+}
+
+.tidy-btn:active { transform: translateY(1px); }
+
+.tidy-btn-primary {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.tidy-btn-primary:hover { background: #26a1e1; }
+
+.tidy-btn-primary:disabled {
+  background: var(--surface-bright);
+  color: var(--muted);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.tidy-btn-secondary {
+  background: var(--surface-bright);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.tidy-btn-secondary:hover { background: #2d3748; }
+
+/* ── Utility ───────────────────────────────────────────── */
+.hidden { display: none !important; }
