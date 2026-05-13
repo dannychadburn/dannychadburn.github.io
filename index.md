@@ -2,9 +2,7 @@
 layout: default
 ---
 
-Senior-level content design support
-
-[Get in touch](mailto:hello@tidyswan.com) if you'd like to see examples of my work.
+I'm Danny. [Get in touch](mailto:hello@tidyswan.com) if you'd like to see examples of my work.
 
 ## Government services
 
@@ -16,7 +14,7 @@ Solving complicated problems for:
 - Government Security Group
 - Civil Service Policy Profession
 
-### Commercial contracts
+## Commercial contracts
 
 Experience in industries such as:
 
