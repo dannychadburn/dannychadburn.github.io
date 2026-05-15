@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tidy Tunes</title>
+  <title>Listenable</title>
   <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
   <link rel="shortcut icon" href="/assets/images/favicon.svg">
   <link rel="stylesheet" href="../shared/style.css">
@@ -196,7 +196,7 @@
 </head>
 <body>
 
-  <h1 class="tidy-logo" style="margin-bottom:1.5rem">Tidy Tunes</h1>
+  <h1 class="tidy-logo" style="margin-bottom:1.5rem">Listenable</h1>
 
   <div class="tidy-card tt-card">
     <div class="tt-header">
@@ -211,7 +211,7 @@
     <div class="tt-controls">
       <button id="stop-button" class="tidy-btn tidy-btn-secondary">■ Stop</button>
       <button id="mute-button" class="tidy-btn tidy-btn-secondary">
-        <span id="mute-icon">🔊</span><span id="mute-text">Mute</span>
+        <span id="mute-text">Mute</span>
       </button>
     </div>
   </div>
@@ -248,14 +248,14 @@
       if (currentStationId === station.id) return;
       currentStationId = station.id;
       setStationState(station.id, 'loading');
-      document.title = `Tidy Tunes · ${station.name}`;
+      document.title = `Listenable · ${station.name}`;
       localStorage.setItem('lastStation', station.id);
       audio.src = station.url;
       audio.play().catch(e => {
         if (currentStationId !== station.id) return;
         setStationState(station.id, 'error');
         currentStationId = null;
-        document.title = 'Tidy Tunes';
+        document.title = 'Listenable';
         localStorage.removeItem('lastStation');
       });
     }
@@ -267,7 +267,7 @@
       audio.src = '';
       currentStationId = null;
       setStationState(null, null);
-      document.title = 'Tidy Tunes';
+      document.title = 'Listenable';
     }
 
     radioStations.forEach(station => {
@@ -339,12 +339,12 @@
       if (station) {
         currentStationId = station.id;
         setStationState(station.id, 'loading');
-        document.title = `Tidy Tunes · ${station.name}`;
+        document.title = `Listenable · ${station.name}`;
         audio.src = station.url;
         audio.play().catch(() => {
           setStationState(station.id, null);
           currentStationId = null;
-          document.title = 'Tidy Tunes';
+          document.title = 'Listenable';
         });
       }
     }

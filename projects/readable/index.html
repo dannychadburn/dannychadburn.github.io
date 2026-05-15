@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tidy Reads</title>
+  <title>Readable</title>
   <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
   <link rel="shortcut icon" href="/assets/images/favicon.svg">
   <link rel="stylesheet" href="../shared/style.css">
@@ -217,7 +217,7 @@
   <div class="page">
     <section class="hero">
       <div>
-        <h1 class="tidy-logo" style="margin-bottom:1.25rem">Tidy Reads</h1>
+        <h1 class="tidy-logo" style="margin-bottom:1.25rem">Readable</h1>
         <h2 style="font-size:clamp(1.5rem,3vw,2.5rem);font-weight:900;letter-spacing:-0.03em;margin:0 0 0.75rem">Find live reads in the time you have.</h2>
         <p>Search the web for current longform articles from outlets like Guardian, GQ, ESPN, Rolling Stone, The Atlantic, Salon and Wired.</p>
       </div>
@@ -233,7 +233,7 @@
         <div id="actionArea"><button id="goButton">Go read</button></div>
       </div>
       <div id="stopWrapper"><button id="stopButton" class="secondary">Stop search</button></div>
-      <p class="note">Tidy Reads uses a local index of known article URLs for speed, and updates that index periodically from RSS pages.</p>
+      <p class="note">Readable uses a local index of known article URLs for speed, and updates that index periodically from RSS pages.</p>
     </section>
 
     <div class="status" id="statusMessage"></div>
@@ -320,7 +320,7 @@
     }
 
     function buildQueryString(url) {
-      const ref = 'tidy-reads';
+      const ref = 'readable';
       return url.includes('?') ? `${url}&ref=${ref}` : `${url}?ref=${ref}`;
     }
 

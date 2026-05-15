@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tidy Guess</title>
+    <title>Guessable</title>
     <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
     <link rel="shortcut icon" href="/assets/images/favicon.svg">
     <link rel="stylesheet" href="../shared/style.css">
@@ -15,7 +15,7 @@
         <div class="header-left">
             <button id="back-btn" class="back-btn hidden" aria-label="Back to menu">← Menu</button>
         </div>
-        <div class="logo">Tidy Guess</div>
+        <div class="logo">Guessable</div>
         <div class="header-right">
             <button class="icon-btn hidden" id="info-trigger" aria-label="How to play">?</button>
         </div>
@@ -283,7 +283,7 @@
 
             let total = 0;
             let rows  = '';
-            let share = `Tidy Guess — ${gameName}\n`;
+            let share = `Guessable — ${gameName}\n`;
 
             state.guesses.forEach((history, i) => {
                 const finalIdx   = state.lockedIdx[i] !== null ? state.lockedIdx[i] : history.length - 1;
