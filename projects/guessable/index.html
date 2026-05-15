@@ -170,13 +170,16 @@
         const table = doc.querySelector('.wikitable');
         if (!table) return [];
         return Array.from(table.querySelectorAll('tr')).slice(1).flatMap(row => {
-            const cells = row.querySelectorAll('td');
+            const cells = Array.from(row.querySelectorAll('td'));
             if (cells.length < 2) return [];
-            const name = cellText(cells[0]);
-            // Value cell: "17,098,246 (6,601,667)" — take first number only
-            const raw = cellText(cells[1]).split(/[\s(]/)[0].replace(/,/g, '');
+            // If first <td> is a rank number, the name and area are shifted right by 1
+            const c0     = cellText(cells[0]);
+            const offset = /^\d+$/.test(c0) ? 1 : 0;
+            if (cells.length < offset + 2) return [];
+            const name  = cellText(cells[offset]);
+            const raw   = cellText(cells[offset + 1]).split(/[\s(]/)[0].replace(/,/g, '');
             const value = parseInt(raw);
-            if (!name || name.length < 2 || isNaN(value) || value < 1000) return [];
+            if (!name || name.length < 2 || !/[a-zA-Z]/.test(name) || isNaN(value) || value < 1000) return [];
             return [{ name, value, question: `What is the total area of ${name} in km²?` }];
         }).slice(0, 60);
     }
@@ -187,21 +190,38 @@
         const results = [];
         for (const row of table.querySelectorAll('tr')) {
             const cells = Array.from(row.querySelectorAll('td'));
-            if (cells.length < 3) continue;
-            // Find the height cell by matching "NNN m / NNN ft" pattern
-            for (let i = 1; i < Math.min(cells.length, 5); i++) {
-                const txt = cells[i].textContent.trim();
-                const m = txt.match(/^([\d,]+\.?\d*)\s*m(?:[\s\/(]|$)/);
-                if (m) {
-                    const value = parseFloat(m[1].replace(/,/g, ''));
-                    if (value < 200) break;
-                    const name = cellText(cells[i - 1]);
-                    if (name && name.length > 2 && name.length < 80) {
-                        results.push({ name, value, question: `How tall is ${name} in metres?` });
+            if (cells.length < 2) continue;
+            let name = null, value = null;
+            // Pass 1: any cell containing "NNN m" (with unit)
+            for (let i = 0; i < cells.length; i++) {
+                const txt = cellText(cells[i]);
+                const m   = txt.match(/^([\d,]+\.?\d*)\s*m(?:[\s\/(]|$)/);
+                if (!m) continue;
+                const h = parseFloat(m[1].replace(/,/g, ''));
+                if (h < 100 || h > 1500) continue;
+                value = h;
+                for (let j = i - 1; j >= 0; j--) {
+                    const t = cellText(cells[j]);
+                    if (/[a-zA-Z]/.test(t) && t.length > 2 && t.length < 100) { name = t; break; }
+                }
+                break;
+            }
+            // Pass 2: bare 3-digit number in plausible height range (100–999 m)
+            if (!value) {
+                for (let i = 0; i < cells.length; i++) {
+                    const raw = cellText(cells[i]).replace(/,/g, '');
+                    if (!/^\d{3}(\.\d+)?$/.test(raw)) continue;
+                    const h = parseFloat(raw);
+                    if (h < 100 || h > 999) continue;
+                    value = h;
+                    for (let j = i - 1; j >= 0; j--) {
+                        const t = cellText(cells[j]);
+                        if (/[a-zA-Z]/.test(t) && t.length > 2 && t.length < 100) { name = t; break; }
                     }
                     break;
                 }
             }
+            if (name && value) results.push({ name, value, question: `How tall is ${name} in metres?` });
             if (results.length >= 50) break;
         }
         return results;
