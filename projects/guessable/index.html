@@ -191,7 +191,7 @@
             // Find the height cell by matching "NNN m / NNN ft" pattern
             for (let i = 1; i < Math.min(cells.length, 5); i++) {
                 const txt = cells[i].textContent.trim();
-                const m = txt.match(/^([\d,]+\.?\d*)\s*m\s*[/\n]/);
+                const m = txt.match(/^([\d,]+\.?\d*)\s*m(?:[\s\/(]|$)/);
                 if (m) {
                     const value = parseFloat(m[1].replace(/,/g, ''));
                     if (value < 200) break;
@@ -246,16 +246,24 @@
 
     async function fetchWikiPool(source) {
         if (wikiCache[source.title]) return wikiCache[source.title];
-        const url = 'https://en.wikipedia.org/w/api.php?' + new URLSearchParams({
-            action: 'parse', page: source.title,
-            prop: 'text', format: 'json', origin: '*'
-        });
-        const res  = await fetch(url);
-        const json = await res.json();
-        const doc  = new DOMParser().parseFromString(json.parse.text['*'], 'text/html');
-        const pool = source.parse(doc);
-        wikiCache[source.title] = pool;
-        return pool;
+        try {
+            const url = 'https://en.wikipedia.org/w/api.php?' + new URLSearchParams({
+                action: 'parse', page: source.title,
+                prop: 'text', format: 'json', origin: '*'
+            });
+            const res  = await fetch(url);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const json = await res.json();
+            if (!json?.parse?.text?.['*']) throw new Error('Unexpected API shape');
+            const doc  = new DOMParser().parseFromString(json.parse.text['*'], 'text/html');
+            const pool = source.parse(doc);
+            console.log(`[Guessable] ${source.title}: ${pool.length} items`);
+            wikiCache[source.title] = pool;
+            return pool;
+        } catch (err) {
+            console.error(`[Guessable] ${source.title} failed:`, err.message);
+            return [];
+        }
     }
 
     // ─── State ────────────────────────────────────────────────────
@@ -332,7 +340,7 @@
 
         const results = await Promise.allSettled(WORLD_SOURCES.map(fetchWikiPool));
         const pools = results
-            .filter(r => r.status === 'fulfilled' && r.value.length >= 5)
+            .filter(r => r.status === 'fulfilled' && r.value.length >= 3)
             .map(r => r.value);
 
         // Ignore result if user already navigated away
