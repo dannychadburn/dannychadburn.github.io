@@ -1,52 +1,7 @@
 [
-  {
-    "id": "the-world",
-    "name": "The World",
-    "emoji": "🌍",
-    "questions": [
-      { "id": 1, "text": "Depth of the Mariana Trench at its deepest point (metres)?", "answer": 10935 },
-      { "id": 2, "text": "Total length of the Great Wall of China (kilometres)?", "answer": 21196 },
-      { "id": 3, "text": "Member states currently in the United Nations?", "answer": 193 }
-    ]
-  },
-  {
-    "id": "people",
-    "name": "People",
-    "emoji": "👥",
-    "questions": [
-      { "id": 1, "text": "Estimated population of the Tokyo Greater Area?", "answer": 37000000 },
-      { "id": 2, "text": "People globally estimated to speak Spanish?", "answer": 485000000 },
-      { "id": 3, "text": "Words estimated in the current Oxford English Dictionary?", "answer": 171476 }
-    ]
-  },
-  {
-    "id": "animals",
-    "name": "Animals",
-    "emoji": "🐾",
-    "questions": [
-      { "id": 1, "text": "Different species of ants classified globally?", "answer": 13800 },
-      { "id": 2, "text": "Weight of an adult blue whale (kg)?", "answer": 150000 },
-      { "id": 3, "text": "Known spider species worldwide?", "answer": 45000 }
-    ]
-  },
-  {
-    "id": "sport",
-    "name": "Sport",
-    "emoji": "⚽",
-    "questions": [
-      { "id": 1, "text": "Distance of a standard Olympic marathon (metres)?", "answer": 42195 },
-      { "id": 2, "text": "Seating capacity of the Melbourne Cricket Ground?", "answer": 100024 },
-      { "id": 3, "text": "Weight of a standard men's shot put (grams)?", "answer": 7260 }
-    ]
-  },
-  {
-    "id": "entertainment",
-    "name": "Entertainment",
-    "emoji": "🎬",
-    "questions": [
-      { "id": 1, "text": "Total number of episodes across all seasons of Friends?", "answer": 236 },
-      { "id": 2, "text": "Worldwide box office gross of Avatar (2009, USD millions)?", "answer": 2923 },
-      { "id": 3, "text": "Grammy Awards won by Beyoncé as of 2024?", "answer": 32 }
-    ]
-  }
+  { "id": "the-world",      "name": "The World",    "emoji": "🌍", "dynamic": true },
+  { "id": "people",         "name": "People",        "emoji": "👥", "comingSoon": true },
+  { "id": "animals",        "name": "Animals",       "emoji": "🐾", "comingSoon": true },
+  { "id": "sport",          "name": "Sport",         "emoji": "⚽", "comingSoon": true },
+  { "id": "entertainment",  "name": "Entertainment", "emoji": "🎬", "comingSoon": true }
 ]
