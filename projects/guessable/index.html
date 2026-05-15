@@ -465,6 +465,13 @@
     }
 
     function render() {
+        // Preserve any typed-but-not-submitted values across re-renders
+        const savedInputs = {};
+        state.currentGame.questions.forEach((_, i) => {
+            const el = document.getElementById(`input-${i}`);
+            if (el) savedInputs[i] = el.value;
+        });
+
         const board = document.getElementById('game-board');
         board.innerHTML = '';
 
@@ -515,6 +522,12 @@
                 ` : ''}
             `;
             board.appendChild(card);
+        });
+
+        // Restore saved input values
+        state.currentGame.questions.forEach((_, i) => {
+            const el = document.getElementById(`input-${i}`);
+            if (el && savedInputs[i] !== undefined) el.value = savedInputs[i];
         });
 
         updateButtonUI();
