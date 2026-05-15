@@ -1,102 +1,52 @@
 [
   {
-    "id": "the-deep",
-    "name": "The Deep",
-    "emoji": "🌊",
+    "id": "the-world",
+    "name": "The World",
+    "emoji": "🌍",
     "questions": [
       { "id": 1, "text": "Depth of the Mariana Trench at its deepest point (metres)?", "answer": 10935 },
-      { "id": 2, "text": "Average distance from the Earth to the Moon (kilometres)?", "answer": 384400 },
-      { "id": 3, "text": "Stars estimated in the Milky Way (in billions)?", "answer": 100 }
-    ]
-  },
-  {
-    "id": "city-life",
-    "name": "City Life",
-    "emoji": "🏙️",
-    "questions": [
-      { "id": 1, "text": "Estimated population of the Tokyo Greater Area?", "answer": 37000000 },
-      { "id": 2, "text": "People estimated to live in New York City?", "answer": 8300000 },
-      { "id": 3, "text": "People globally estimated to speak Spanish?", "answer": 485000000 }
-    ]
-  },
-  {
-    "id": "natural-world",
-    "name": "Natural World",
-    "emoji": "🌿",
-    "questions": [
-      { "id": 1, "text": "Total length of the Great Wall of China (kilometres)?", "answer": 21196 },
-      { "id": 2, "text": "Different species of ants classified globally?", "answer": 13800 },
-      { "id": 3, "text": "Litres of water a mature Oak tree absorbs in a year?", "answer": 150000 }
-    ]
-  },
-  {
-    "id": "stadium-nation",
-    "name": "Stadiums",
-    "emoji": "🏟️",
-    "questions": [
-      { "id": 1, "text": "Seating capacity of the Silverstone Circuit main grandstands?", "answer": 150000 },
-      { "id": 2, "text": "Seating capacity of the Melbourne Cricket Ground?", "answer": 100024 },
-      { "id": 3, "text": "Capacity of Old Trafford stadium in Manchester?", "answer": 74310 }
-    ]
-  },
-  {
-    "id": "track-and-field",
-    "name": "Track & Field",
-    "emoji": "🏃",
-    "questions": [
-      { "id": 1, "text": "Height of the world record high jump (centimetres)?", "answer": 245 },
-      { "id": 2, "text": "Weight of a standard men's shot put (grams)?", "answer": 7260 },
-      { "id": 3, "text": "Weight of a standard Olympic men's discus (grams)?", "answer": 2000 }
-    ]
-  },
-  {
-    "id": "human-body",
-    "name": "Human Body",
-    "emoji": "🧬",
-    "questions": [
-      { "id": 1, "text": "Heartbeats the average human has in a single day?", "answer": 100000 },
-      { "id": 2, "text": "Base pairs in the human genome (in millions)?", "answer": 3200 },
-      { "id": 3, "text": "Islands estimated to make up Indonesia?", "answer": 17508 }
-    ]
-  },
-  {
-    "id": "words-and-numbers",
-    "name": "Words & Numbers",
-    "emoji": "📚",
-    "questions": [
-      { "id": 1, "text": "Words estimated in the current Oxford English Dictionary?", "answer": 171476 },
-      { "id": 2, "text": "Number of tiles in a standard Scrabble set?", "answer": 100 },
-      { "id": 3, "text": "Stitches on a standard MLB baseball?", "answer": 108 }
-    ]
-  },
-  {
-    "id": "epic-journeys",
-    "name": "Epic Journeys",
-    "emoji": "🚴",
-    "questions": [
-      { "id": 1, "text": "Total approximate length of the Tour de France (kilometres)?", "answer": 3500 },
-      { "id": 2, "text": "Distance of the Ironman triathlon cycle leg (kilometres)?", "answer": 180 },
-      { "id": 3, "text": "Total height of the Burj Khalifa in Dubai (metres)?", "answer": 828 }
-    ]
-  },
-  {
-    "id": "ancient-giants",
-    "name": "Ancient Giants",
-    "emoji": "🦕",
-    "questions": [
-      { "id": 1, "text": "Years ago the Cretaceous–Paleogene extinction event occurred?", "answer": 66000000 },
-      { "id": 2, "text": "Diameter of the Earth at the equator (kilometres)?", "answer": 12756 },
+      { "id": 2, "text": "Total length of the Great Wall of China (kilometres)?", "answer": 21196 },
       { "id": 3, "text": "Member states currently in the United Nations?", "answer": 193 }
     ]
   },
   {
-    "id": "game-on",
-    "name": "Game On",
+    "id": "people",
+    "name": "People",
+    "emoji": "👥",
+    "questions": [
+      { "id": 1, "text": "Estimated population of the Tokyo Greater Area?", "answer": 37000000 },
+      { "id": 2, "text": "People globally estimated to speak Spanish?", "answer": 485000000 },
+      { "id": 3, "text": "Words estimated in the current Oxford English Dictionary?", "answer": 171476 }
+    ]
+  },
+  {
+    "id": "animals",
+    "name": "Animals",
+    "emoji": "🐾",
+    "questions": [
+      { "id": 1, "text": "Different species of ants classified globally?", "answer": 13800 },
+      { "id": 2, "text": "Weight of an adult blue whale (kg)?", "answer": 150000 },
+      { "id": 3, "text": "Known spider species worldwide?", "answer": 45000 }
+    ]
+  },
+  {
+    "id": "sport",
+    "name": "Sport",
     "emoji": "⚽",
     "questions": [
-      { "id": 1, "text": "Global television viewers for the 2022 World Cup Final?", "answer": 1500000000 },
-      { "id": 2, "text": "Professional goals scored by Cristiano Ronaldo (career total)?", "answer": 900 },
-      { "id": 3, "text": "Seating capacity of the Indianapolis Motor Speedway?", "answer": 257325 }
+      { "id": 1, "text": "Distance of a standard Olympic marathon (metres)?", "answer": 42195 },
+      { "id": 2, "text": "Seating capacity of the Melbourne Cricket Ground?", "answer": 100024 },
+      { "id": 3, "text": "Weight of a standard men's shot put (grams)?", "answer": 7260 }
+    ]
+  },
+  {
+    "id": "entertainment",
+    "name": "Entertainment",
+    "emoji": "🎬",
+    "questions": [
+      { "id": 1, "text": "Total number of episodes across all seasons of Friends?", "answer": 236 },
+      { "id": 2, "text": "Worldwide box office gross of Avatar (2009, USD millions)?", "answer": 2923 },
+      { "id": 3, "text": "Grammy Awards won by Beyoncé as of 2024?", "answer": 32 }
     ]
   }
 ]
