@@ -575,7 +575,7 @@
                     <div class="breakdown-ans">Answer: ${answer}</div>
                 </td>
                 <td class="breakdown-pts">
-                    ${finalGuess.pct.toFixed(1)}% off
+                    ${Math.round(finalGuess.pct)}% off
                     <strong>${pts} pts</strong>
                 </td>
             </tr>`;
@@ -589,7 +589,7 @@
             total > 300 ? '🥇 Gold Expert'       :
             total > 200 ? '🥈 Silver Pro'        :
                           '🥉 Bronze Rookie';
-        document.getElementById('share-text').textContent = share + `\nScore: ${total}`;
+        document.getElementById('share-text').textContent = share + `\nScore: ${total}\nPlay at tidyswan.com/projects/guessable`;
         showOverlay('results-overlay');
     }
 
