@@ -435,6 +435,17 @@
             hideOverlay('results-overlay');
             goToMenu();
         });
+
+        // Keep action bar above the on-screen keyboard on iOS Safari
+        if (window.visualViewport) {
+            const bar = document.getElementById('action-bar');
+            const reposition = () => {
+                const offset = window.innerHeight - window.visualViewport.offsetTop - window.visualViewport.height;
+                bar.style.bottom = Math.max(0, offset) + 'px';
+            };
+            window.visualViewport.addEventListener('resize', reposition);
+            window.visualViewport.addEventListener('scroll', reposition);
+        }
     }
 
     // ─── Navigation ───────────────────────────────────────────────
