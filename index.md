@@ -28,8 +28,9 @@ Experience in industries such as:
 
 ## Side projects
 
-- [Decader](/projects/decader/)
-- [Exclaim Games](http://exclaimgames.com)
+- [Decader](/projects/decader/) (slow-burn life advice)
+- [Pheemee](/projects/pheemee/) (phonics grapheme translator)
+- [Exclaim Games](http://exclaimgames.com) (card game design studio)
 
 ### Some other things I've made
 

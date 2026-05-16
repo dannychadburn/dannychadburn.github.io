@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pheemee — phonics grapheme translator</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+  <link rel="shortcut icon" href="/assets/images/favicon.svg">
+  <link rel="stylesheet" href="/projects/shared/style.css">
+  <style>
+    html { height: 100%; }
+
+    body {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 1.25rem 1rem 1.5rem;
+      gap: 1rem;
+    }
+
+    /* ── Header ──────────────────────────────────────────── */
+    header { text-align: center; flex-shrink: 0; }
+
+    .tagline {
+      color: var(--muted);
+      font-size: 0.875rem;
+      margin-top: 0.3rem;
+    }
+
+    /* ── Translator ──────────────────────────────────────── */
+    .translator {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .panel {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .panel + .panel {
+      border-left: 1px solid var(--border);
+    }
+
+    /* ── Panel header ────────────────────────────────────── */
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.6rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-bright);
+      flex-shrink: 0;
+    }
+
+    .panel-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    /* ── Clear button ────────────────────────────────────── */
+    .clear-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 0.9rem;
+      line-height: 1;
+      padding: 0.2rem 0.35rem;
+      border-radius: 0.3rem;
+      transition: color 0.15s, background 0.15s;
+      flex-shrink: 0;
+    }
+    .clear-btn:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+
+    /* ── Legend ──────────────────────────────────────────── */
+    .legend {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.28rem;
+      font-size: 0.62rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .legend-pip {
+      width: 0.45rem;
+      height: 0.45rem;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── Input textarea ──────────────────────────────────── */
+    #input {
+      flex: 1;
+      min-height: 0;
+      border: none;
+      outline: none;
+      resize: none;
+      background: var(--surface);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 1.15rem;
+      line-height: 1.8;
+      padding: 1.25rem 1.5rem;
+    }
+
+    #input::placeholder { color: #374151; }
+
+    /* ── Output pane ─────────────────────────────────────── */
+    #output {
+      flex: 1;
+      min-height: 0;
+      padding: 1.25rem 1.5rem;
+      font-size: 1.15rem;
+      line-height: 1.8;
+      background: var(--surface-bright);
+      overflow-y: auto;
+      word-break: break-word;
+      color: #374151;
+    }
+
+    #output.live { color: var(--text); }
+
+    /* ── Grapheme colours ────────────────────────────────── */
+    .gd { color: #38bdf8; }   /* digraph / trigraph   — cyan   */
+    .gs { color: #a78bfa; }   /* split-e (vowel + e)  — purple */
+    .gi { color: #fb7185; }   /* irregular / exception — coral */
+
+    /* ── Word spacing ────────────────────────────────────── */
+    .word {
+      display: inline-block;
+      margin-right: 1.4em;
+    }
+
+    /* ── Mobile: stack panels ────────────────────────────── */
+    @media (max-width: 640px) {
+      body { padding-bottom: 1rem; }
+
+      .translator {
+        grid-template-columns: 1fr;
+        flex: none;
+        height: auto;
+      }
+
+      .panel { min-height: 11rem; }
+
+      .panel + .panel {
+        border-left: none;
+        border-top: 1px solid var(--border);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1 class="tidy-logo">Pheemee</h1>
+    <p class="tagline">UK phonics grapheme translator</p>
+  </header>
+
+  <div class="translator">
+
+    <!-- ── Left: text input ─────────────────────────────── -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-label">English text</span>
+        <button class="clear-btn" id="clearBtn" title="Clear">✕</button>
+      </div>
+      <textarea
+        id="input"
+        placeholder="Type or paste text here…"
+        spellcheck="false"
+        autocorrect="off"
+        autocapitalize="off"
+        autofocus
+      ></textarea>
+    </div>
+
+    <!-- ── Right: phoneme output ────────────────────────── -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-label">Phoneme split</span>
+        <div class="legend">
+          <span class="legend-item">
+            <span class="legend-pip" style="background:#38bdf8"></span>digraph
+          </span>
+          <span class="legend-item">
+            <span class="legend-pip" style="background:#a78bfa"></span>split e
+          </span>
+          <span class="legend-item">
+            <span class="legend-pip" style="background:#fb7185"></span>irregular
+          </span>
+        </div>
+      </div>
+      <div id="output">Start typing to see the phoneme breakdown…</div>
+    </div>
+
+  </div>
+
+  <script>
+    // ── Grapheme data: UK Letters and Sounds framework ─────────────────
+    const TRIGRAPHS = ['igh', 'ear', 'air', 'ure', 'dge', 'eau', 'tch'];
+
+    const DIGRAPHS = [
+      'ch', 'sh', 'th', 'ng', 'wh', 'ph', 'qu', 'ck',
+      'ai', 'ay', 'ee', 'ea', 'oa', 'oo', 'ou', 'ow',
+      'oi', 'oy', 'ie', 'ue', 'ew', 'oe', 'ey', 'au', 'aw',
+      'ar', 'or', 'ur', 'er', 'ir',
+    ];
+
+    const VOWELS     = new Set(['a', 'e', 'i', 'o', 'u']);
+    const CONSONANTS = new Set([...'bcdfghjklmnpqrstvwxyz']);
+
+    // Exception words — irregular spellings the rule engine can't derive.
+    // k: 'r'=regular  'd'=digraph/trigraph  'i'=irregular  'sv'/'ss'=split vowel/silent-e
+    const EX = {
+      people:     [{t:'p',k:'r'},{t:'eo',k:'i'},{t:'p',k:'r'},{t:'le',k:'i'}],
+      cheese:     [{t:'ch',k:'d'},{t:'ee',k:'d'},{t:'se',k:'i'}],
+      through:    [{t:'th',k:'d'},{t:'r',k:'r'},{t:'ough',k:'i'}],
+      bread:      [{t:'b',k:'r'},{t:'r',k:'r'},{t:'ea',k:'i'},{t:'d',k:'r'}],
+      mozzarella: [{t:'m',k:'r'},{t:'o',k:'r'},{t:'zz',k:'d'},{t:'a',k:'r'},{t:'r',k:'r'},{t:'e',k:'r'},{t:'ll',k:'d'},{t:'a',k:'r'}],
+      the:        [{t:'th',k:'d'},{t:'e',k:'i'}],
+      said:       [{t:'s',k:'r'},{t:'ai',k:'i'},{t:'d',k:'r'}],
+      are:        [{t:'are',k:'i'}],
+      one:        [{t:'o',k:'i'},{t:'n',k:'r'},{t:'e',k:'i'}],
+      come:       [{t:'c',k:'r'},{t:'o',k:'i'},{t:'m',k:'r'},{t:'e',k:'i'}],
+      some:       [{t:'s',k:'r'},{t:'o',k:'i'},{t:'m',k:'r'},{t:'e',k:'i'}],
+      have:       [{t:'h',k:'r'},{t:'a',k:'r'},{t:'v',k:'r'},{t:'e',k:'i'}],
+      give:       [{t:'g',k:'r'},{t:'i',k:'r'},{t:'v',k:'r'},{t:'e',k:'i'}],
+      live:       [{t:'l',k:'r'},{t:'i',k:'r'},{t:'v',k:'r'},{t:'e',k:'i'}],
+      love:       [{t:'l',k:'r'},{t:'o',k:'i'},{t:'v',k:'r'},{t:'e',k:'i'}],
+      move:       [{t:'m',k:'r'},{t:'o',k:'i'},{t:'v',k:'r'},{t:'e',k:'i'}],
+      were:       [{t:'w',k:'r'},{t:'ere',k:'i'}],
+      here:       [{t:'h',k:'r'},{t:'ere',k:'i'}],
+      there:      [{t:'th',k:'d'},{t:'ere',k:'i'}],
+      their:      [{t:'th',k:'d'},{t:'eir',k:'i'}],
+      who:        [{t:'wh',k:'d'},{t:'o',k:'i'}],
+      where:      [{t:'wh',k:'d'},{t:'ere',k:'i'}],
+      once:       [{t:'on',k:'i'},{t:'ce',k:'i'}],
+      of:         [{t:'o',k:'i'},{t:'f',k:'i'}],
+      to:         [{t:'t',k:'r'},{t:'o',k:'i'}],
+      do:         [{t:'d',k:'r'},{t:'o',k:'i'}],
+      you:        [{t:'y',k:'r'},{t:'ou',k:'i'}],
+    };
+
+    // ── Converter ──────────────────────────────────────────────────────
+
+    // Detect split digraph (magic e): vowel + exactly one consonant + final 'e'
+    function findSplit(w) {
+      if (w.length < 3 || w[w.length - 1] !== 'e') return null;
+      let i = w.length - 2, cons = 0;
+      while (i >= 0 && CONSONANTS.has(w[i])) {
+        if (++cons > 1) return null;
+        i--;
+      }
+      if (cons === 0 || i < 0 || !VOWELS.has(w[i])) return null;
+      return { vi: i, ei: w.length - 1 };
+    }
+
+    function convertWord(word) {
+      const w = word.toLowerCase();
+      if (EX[w]) return EX[w].map(g => ({ text: g.t, kind: g.k }));
+
+      const split = findSplit(w);
+      const out = [];
+      let i = 0;
+
+      while (i < w.length) {
+        // Split digraph: emit vowel and silent-e before any digraph matching
+        if (split && i === split.vi) { out.push({ text: w[i], kind: 'sv' }); i++; continue; }
+        if (split && i === split.ei) { out.push({ text: w[i], kind: 'ss' }); i++; continue; }
+
+        // Trigraph (3 letters → 1 phoneme)
+        if (i + 2 < w.length && TRIGRAPHS.includes(w.slice(i, i + 3))) {
+          out.push({ text: w.slice(i, i + 3), kind: 'd' }); i += 3; continue;
+        }
+        // Digraph (2 letters → 1 phoneme)
+        if (i + 1 < w.length && DIGRAPHS.includes(w.slice(i, i + 2))) {
+          out.push({ text: w.slice(i, i + 2), kind: 'd' }); i += 2; continue;
+        }
+        // Doubled letter (tt, ll, zz … → 1 phoneme)
+        if (i + 1 < w.length && w[i] === w[i + 1]) {
+          out.push({ text: w.slice(i, i + 2), kind: 'd' }); i += 2; continue;
+        }
+
+        out.push({ text: w[i], kind: 'r' }); i++;
+      }
+
+      return out;
+    }
+
+    // ── Renderer ───────────────────────────────────────────────────────
+
+    const CLS = { d: 'gd', sv: 'gs', ss: 'gs', i: 'gi' };
+
+    function esc(s) {
+      return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function renderWord(word) {
+      return convertWord(word)
+        .map(g => {
+          const cls = CLS[g.kind];
+          return cls ? `<span class="${cls}">${g.text}</span>` : g.text;
+        })
+        .join('·');
+    }
+
+    function renderText(text) {
+      // Match a word (letters/apostrophes/hyphens) + any trailing punctuation as one unit,
+      // OR a run of non-alpha chars (spaces, newlines, leading punctuation).
+      const parts = text.match(/[a-zA-Z][a-zA-Z'-]*[^\sa-zA-Z]*|[^a-zA-Z]+/g) || [];
+      return parts.map(part => {
+        if (/^[a-zA-Z]/.test(part)) {
+          const m = part.match(/^([a-zA-Z][a-zA-Z'-]*)([^\sa-zA-Z]*)$/);
+          const word  = m ? m[1] : part;
+          const trail = m ? esc(m[2]) : '';
+          // Trailing punctuation goes inside the span so it sits before the word gap
+          return `<span class="word">${renderWord(word)}${trail}</span>`;
+        }
+        // Non-alpha run: convert newlines to <br>, drop spaces (word margins handle gaps)
+        return esc(part).replace(/\n/g, '<br>').replace(/ +/g, '');
+      }).join('');
+    }
+
+    // ── UI ─────────────────────────────────────────────────────────────
+
+    const inputEl  = document.getElementById('input');
+    const outputEl = document.getElementById('output');
+
+    document.getElementById('clearBtn').addEventListener('click', () => {
+      inputEl.value = '';
+      inputEl.focus();
+      update();
+    });
+
+    inputEl.addEventListener('input', update);
+
+    function update() {
+      const val = inputEl.value;
+      if (!val.trim()) {
+        outputEl.innerHTML = 'Start typing to see the phoneme breakdown…';
+        outputEl.classList.remove('live');
+      } else {
+        outputEl.innerHTML = renderText(val);
+        outputEl.classList.add('live');
+      }
+    }
+  </script>
+</body>
+</html>
