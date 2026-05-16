@@ -200,7 +200,7 @@
 
   <div class="tidy-card tt-card">
     <div class="tt-header">
-      <p style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)">Radio</p>
+      <p style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)">Low-disruption radio</p>
       <button id="random-button" class="tt-shuffle-btn">↺ Shuffle</button>
     </div>
 
@@ -211,7 +211,7 @@
     <div class="tt-controls">
       <button id="stop-button" class="tidy-btn tidy-btn-secondary">■ Stop</button>
       <button id="mute-button" class="tidy-btn tidy-btn-secondary">
-        <span id="mute-text">Mute</span>
+        <span id="mute-icon"></span><span id="mute-text">Mute</span>
       </button>
     </div>
   </div>
@@ -323,7 +323,7 @@
 
     muteButton.onclick = () => {
       audio.muted = !audio.muted;
-      muteIcon.textContent = audio.muted ? '🔇' : '🔊';
+      muteIcon.textContent = audio.muted ? '🔇 ' : '';
       muteText.textContent  = audio.muted ? 'Unmute' : 'Mute';
     };
 

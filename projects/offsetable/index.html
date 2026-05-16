@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offsetable</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+  <link rel="shortcut icon" href="/assets/images/favicon.svg">
+  <link rel="stylesheet" href="../shared/style.css">
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem 1rem 3rem;
+    }
+
+    .tidy-logo { margin-bottom: 1.5rem; }
+
+    .tagline {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    /* ── Card ─────────────────────────────────────────────── */
+    .card {
+      background: var(--surface-bright);
+      padding: 2rem;
+      border-radius: 1.75rem;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.75rem;
+      width: 100%;
+      max-width: 30rem;
+      border: 1px solid var(--border);
+    }
+
+    @media (min-width: 480px) {
+      .card { padding: 2.5rem 3rem; }
+    }
+
+    /* ── Settings ─────────────────────────────────────────── */
+    .settings {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .setting-section { width: 100%; }
+
+    .setting-label {
+      text-align: center;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+
+    .btn-group { display: flex; gap: 0.5rem; }
+
+    .toggle-btn {
+      flex: 1;
+      padding: 0.65rem 0.25rem;
+      border-radius: 0.875rem;
+      border: 2px solid #4b5563;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 0.875rem;
+      background: transparent;
+      cursor: pointer;
+      line-height: 1.3;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+      font-family: 'Inter', sans-serif;
+    }
+    .toggle-btn small {
+      display: block;
+      font-size: 0.62rem;
+      font-weight: 500;
+      opacity: 0.7;
+      margin-top: 0.2rem;
+    }
+    .toggle-btn:hover:not(.active) { background: #374151; border-color: #6b7280; }
+    .toggle-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-dim);
+    }
+
+    /* ── Postcode inputs ──────────────────────────────────── */
+    .postcode-row {
+      display: flex;
+      gap: 0.75rem;
+      width: 100%;
+      align-items: center;
+    }
+
+    .postcode-input {
+      flex: 1;
+      padding: 0.75rem 0.75rem;
+      border-radius: 0.875rem;
+      border: 2px solid #4b5563;
+      background: var(--surface);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      text-align: center;
+      letter-spacing: 0.05em;
+      transition: border-color 0.15s;
+      min-width: 0;
+    }
+    .postcode-input::placeholder {
+      color: #4b5563;
+      font-weight: 500;
+      letter-spacing: 0;
+    }
+    .postcode-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .postcode-input.error { border-color: #ef4444; }
+
+    .postcode-arrow {
+      color: var(--muted);
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      user-select: none;
+    }
+
+    .error-msg {
+      color: #ef4444;
+      font-size: 0.8rem;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+
+    /* ── Calculate button ─────────────────────────────────── */
+    #calcButton {
+      background: var(--accent);
+      color: var(--bg);
+      padding: 1.1rem 2rem;
+      font-weight: 900;
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 9999px;
+      box-shadow: 0 8px 24px rgba(46, 163, 242, 0.25);
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.15s, background 0.15s;
+      width: 100%;
+    }
+    #calcButton:hover:not(:disabled) { transform: scale(1.02); box-shadow: 0 12px 32px rgba(46, 163, 242, 0.35); }
+    #calcButton:active:not(:disabled) { transform: scale(0.97); }
+    #calcButton:disabled {
+      background: var(--surface);
+      color: var(--muted);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* ── Results ──────────────────────────────────────────── */
+    #results { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+
+    .result-divider {
+      width: 100%;
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    .result-number {
+      font-size: 4.5rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .result-unit {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-top: 0.3rem;
+      text-align: center;
+    }
+
+    .result-context {
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .result-meta {
+      font-size: 0.72rem;
+      color: #6b7280;
+      text-align: center;
+    }
+
+    /* ── Offset button ────────────────────────────────────── */
+    .offset-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 1.1rem 2rem;
+      border-radius: 9999px;
+      background: #16a34a;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      font-size: 0.95rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      box-shadow: 0 8px 24px rgba(22, 163, 74, 0.3);
+      transition: transform 0.1s, box-shadow 0.15s;
+    }
+    .offset-btn:hover { transform: scale(1.02); box-shadow: 0 12px 32px rgba(22, 163, 74, 0.4); }
+    .offset-btn:active { transform: scale(0.97); }
+
+    .offset-note {
+      font-size: 0.72rem;
+      color: #6b7280;
+      text-align: center;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 class="tidy-logo">Offsetable</h1>
+  <p class="tagline">Calculate the carbon cost of your house move</p>
+
+  <div class="card">
+
+    <div class="settings">
+
+      <!-- House size -->
+      <div class="setting-section">
+        <p class="setting-label">House Size</p>
+        <div class="btn-group">
+          <button class="toggle-btn size-btn active" data-value="small">
+            Small
+            <small>&lt; 80 m²</small>
+          </button>
+          <button class="toggle-btn size-btn" data-value="medium">
+            Medium
+            <small>80–130 m²</small>
+          </button>
+          <button class="toggle-btn size-btn" data-value="large">
+            Large
+            <small>&gt; 130 m²</small>
+          </button>
+        </div>
+      </div>
+
+      <!-- Move type -->
+      <div class="setting-section">
+        <p class="setting-label">Type of Move</p>
+        <div class="btn-group">
+          <button class="toggle-btn move-btn active" data-value="self">
+            Self
+            <small>DIY / van hire</small>
+          </button>
+          <button class="toggle-btn move-btn" data-value="van">
+            Man &amp; Van
+            <small>Local hire</small>
+          </button>
+          <button class="toggle-btn move-btn" data-value="company">
+            Removals
+            <small>Full company</small>
+          </button>
+        </div>
+      </div>
+
+      <!-- Postcodes -->
+      <div class="setting-section">
+        <p class="setting-label">UK Postcodes</p>
+        <div class="postcode-row">
+          <input type="text" id="postcodeFrom" class="postcode-input"
+                 placeholder="From" maxlength="8" autocomplete="postal-code"
+                 inputmode="text">
+          <span class="postcode-arrow">→</span>
+          <input type="text" id="postcodeTo" class="postcode-input"
+                 placeholder="To" maxlength="8" autocomplete="off"
+                 inputmode="text">
+        </div>
+        <p id="errorMsg" class="error-msg hidden"></p>
+      </div>
+
+    </div>
+
+    <!-- CTA -->
+    <button id="calcButton">Calculate Impact</button>
+
+    <!-- Results -->
+    <div id="results" class="hidden">
+      <hr class="result-divider">
+
+      <div style="text-align:center">
+        <p class="result-number" id="co2Val">—</p>
+        <p class="result-unit">kg of CO₂</p>
+      </div>
+
+      <p class="result-context" id="resultContext"></p>
+      <p class="result-meta" id="resultMeta"></p>
+
+      <a id="offsetLink" class="offset-btn"
+         href="https://ecologi.com/" target="_blank" rel="noopener noreferrer">
+        Offset This Move 🌱
+      </a>
+
+      <p class="offset-note" id="offsetNote"></p>
+    </div>
+
+  </div>
+
+  <script>
+    // ── Emissions lookup: total kg CO₂ per km of move distance ────
+    // Accounts for vehicle type, load trips, and return journeys.
+    //
+    // Self (hired small van):  ~0.25 kg/km per trip × round trips
+    //   small=2 legs, medium=4 legs, large=6 legs
+    //
+    // Man & van (Transit):    ~0.35 kg/km per trip × one-way trips + return
+    //   small=2 legs, medium=4 legs, large=6 legs
+    //
+    // Removals (lorry):       vehicle size scales with house
+    //   small lorry ~1.0 kg/km, medium ~1.3, large ~1.6 — single round trip
+
+    const KG_PER_KM = {
+      self:    { small: 0.50, medium: 1.00, large: 1.50 },
+      van:     { small: 0.70, medium: 1.40, large: 2.10 },
+      company: { small: 2.00, medium: 2.60, large: 3.20 },
+    };
+
+    // ── State ─────────────────────────────────────────────────────
+    let houseSize = 'small';
+    let moveType  = 'self';
+
+    // ── DOM refs ──────────────────────────────────────────────────
+    const calcBtn    = document.getElementById('calcButton');
+    const errorMsg   = document.getElementById('errorMsg');
+    const resultsEl  = document.getElementById('results');
+    const co2Val     = document.getElementById('co2Val');
+    const resultCtx  = document.getElementById('resultContext');
+    const resultMeta = document.getElementById('resultMeta');
+    const offsetLink = document.getElementById('offsetLink');
+    const offsetNote = document.getElementById('offsetNote');
+    const fromInput  = document.getElementById('postcodeFrom');
+    const toInput    = document.getElementById('postcodeTo');
+
+    // ── Toggle buttons ────────────────────────────────────────────
+    document.querySelectorAll('.size-btn').forEach(btn =>
+      btn.addEventListener('click', () => {
+        houseSize = btn.dataset.value;
+        document.querySelectorAll('.size-btn').forEach(b =>
+          b.classList.toggle('active', b === btn)
+        );
+      })
+    );
+
+    document.querySelectorAll('.move-btn').forEach(btn =>
+      btn.addEventListener('click', () => {
+        moveType = btn.dataset.value;
+        document.querySelectorAll('.move-btn').forEach(b =>
+          b.classList.toggle('active', b === btn)
+        );
+      })
+    );
+
+    // Clear errors on typing
+    [fromInput, toInput].forEach(el =>
+      el.addEventListener('input', () => {
+        el.classList.remove('error');
+        errorMsg.classList.add('hidden');
+      })
+    );
+
+    // ── Haversine distance (km) ───────────────────────────────────
+    function haversine(lat1, lon1, lat2, lon2) {
+      const R    = 6371;
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a    = Math.sin(dLat / 2) ** 2
+                 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180)
+                 * Math.sin(dLon / 2) ** 2;
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
+    // ── Postcode → lat/lon via postcodes.io ───────────────────────
+    async function lookupPostcode(raw) {
+      const clean = raw.replace(/\s+/g, '').toUpperCase();
+      const res   = await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(clean)}`);
+      const json  = await res.json();
+      if (!res.ok || json.status !== 200) throw new Error(`Postcode not found: ${raw}`);
+      return { lat: json.result.latitude, lon: json.result.longitude };
+    }
+
+    // ── Calculate ─────────────────────────────────────────────────
+    calcBtn.addEventListener('click', async () => {
+      const from = fromInput.value.trim();
+      const to   = toInput.value.trim();
+
+      if (!from || !to) {
+        if (!from) fromInput.classList.add('error');
+        if (!to)   toInput.classList.add('error');
+        showError('Please enter both postcodes.');
+        return;
+      }
+
+      setLoading(true);
+      resultsEl.classList.add('hidden');
+      errorMsg.classList.add('hidden');
+      fromInput.classList.remove('error');
+      toInput.classList.remove('error');
+
+      try {
+        const [locA, locB] = await Promise.all([
+          lookupPostcode(from),
+          lookupPostcode(to),
+        ]);
+
+        const distKm = haversine(locA.lat, locA.lon, locB.lat, locB.lon);
+        const co2kg  = Math.round(distKm * KG_PER_KM[moveType][houseSize]);
+
+        renderResults(co2kg, distKm);
+      } catch (_) {
+        fromInput.classList.add('error');
+        toInput.classList.add('error');
+        showError("Couldn't find one or both postcodes — please check and try again.");
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    function renderResults(co2kg, distKm) {
+      co2Val.textContent = co2kg.toLocaleString();
+
+      // Context comparisons
+      const flights = (co2kg / 97).toFixed(1);  // ~97 kg CO₂ per London–Edinburgh economy flight
+      const trees   = Math.ceil(co2kg / 21);     // a young tree absorbs ~21 kg CO₂/year
+      resultCtx.textContent =
+        `That's roughly equivalent to ${flights} London–Edinburgh flight${parseFloat(flights) !== 1 ? 's' : ''}. `
+        + `It would take ${trees} tree${trees !== 1 ? 's' : ''} a full year to absorb this.`;
+
+      const distDisplay = distKm < 1 ? 'less than 1' : Math.round(distKm).toLocaleString();
+      resultMeta.textContent = `Based on ${distDisplay} km straight-line distance between postcodes`;
+
+      // Estimated offset cost at ~£12/tonne CO₂ (Ecologi rate)
+      const costPence = Math.max(50, Math.round((co2kg / 1000) * 1200));
+      const costStr   = costPence < 100
+        ? `${costPence}p`
+        : `£${(costPence / 100).toFixed(2).replace(/\.00$/, '')}`;
+      offsetNote.textContent =
+        `Estimated offset cost: ~${costStr} at current carbon credit prices.`;
+
+      resultsEl.classList.remove('hidden');
+    }
+
+    function setLoading(on) {
+      calcBtn.textContent = on ? 'Looking up…' : 'Calculate Impact';
+      calcBtn.disabled    = on;
+    }
+
+    function showError(msg) {
+      errorMsg.textContent = msg;
+      errorMsg.classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
