@@ -136,3 +136,17 @@ body {
 
 /* ── Utility ───────────────────────────────────────────── */
 .hidden { display: none !important; }
+
+/* ── Site credit footer ────────────────────────────────── */
+.site-credit {
+  text-align: center;
+  padding: 2rem 1rem 1rem;
+  font-size: 0.78rem;
+  color: #6b7280;
+}
+.site-credit a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.site-credit a:hover { color: var(--muted); }

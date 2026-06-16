@@ -2,7 +2,7 @@
 layout: default
 ---
 
-I'm Danny. I provide senior-level content design services for digital products and services.
+I provide senior-level content design services for digital products and services.
 
 [Get in touch](mailto:hello@tidyswan.com) if you'd like to see examples of my work.
 
