@@ -2,7 +2,7 @@
 layout: default
 ---
 
-I'm Danny. [Get in touch](mailto:hello@tidyswan.com) if you'd like to see examples of my work.
+I'm Danny. I can provide you with senior-level content  [Get in touch](mailto:hello@tidyswan.com) if you'd like to see examples of my work.
 
 ## Government services
 
@@ -11,7 +11,7 @@ Solving complicated problems for:
 - **NHS England**
 - **Department for Education**
 - **Department for International Trade**
-- **Government Security Group**
+- **Government Security Group** (part of the Cabinet Office)
 
 ## Commercial contracts
 
@@ -19,7 +19,7 @@ Experience in industries such as:
 
 - **Education:** Open University
 - **Pharma:** Bayer, Pfizer, Schiff Vitamins
-- **Finance:** KPMG, FXCM, ABN AMRO
+- **Finance:** KPMG, ABN AMRO, FXCM
 - **Recruitment:** LinkedIn, Monster, Totaljobs
 - **Gaming:** Betfair, Bwin, Gala Bingo
 - and many more - Audible, Rolls-Royce, EDF Energy
@@ -29,16 +29,16 @@ Experience in industries such as:
 ## Side projects
 
 - [Decader](/projects/decader/) (slow-burn life advice)
-- [Pheemee](/projects/pheemee/) (phonics grapheme translator)
 - [Exclaim Games](http://exclaimgames.com) (card game design studio)
+- [Pheemee](/projects/pheemee/) (phonics grapheme translator)
 
 ### Some other things I've made
 
-- [Listenable](/projects/listenable/) (low-disruption radio player)
-- [Punchable](/projects/punchable/) (shadow boxing web app)
 - [Guessable](/projects/guessable/) (an estimating game)
-- [Readable](/projects/readable/) (discover articles by reading time)
+- [Listenable](/projects/listenable/) (low-disruption radio player)
 - [Offsetable](/projects/offsetable/) (house move carbon cost calculator)
+- [Punchable](/projects/punchable/) (shadow boxing web app)
+- [Readable](/projects/readable/) (discover articles by reading time)
 
 ***
 

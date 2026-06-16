@@ -142,11 +142,42 @@
       margin-top: 0.5rem;
     }
 
+    /* ── Action row ───────────────────────────────────────── */
+    .action-row {
+      display: flex;
+      gap: 0.75rem;
+      width: 100%;
+    }
+
+    #addBtn {
+      flex-shrink: 0;
+      padding: 1.1rem 1.1rem;
+      border-radius: 9999px;
+      border: 2px solid #4b5563;
+      background: transparent;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+    }
+    #addBtn:hover:not(:disabled) {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-dim);
+    }
+    #addBtn:active:not(:disabled) { transform: scale(0.97); }
+    #addBtn:disabled { opacity: 0.45; cursor: not-allowed; }
+
     /* ── Calculate button ─────────────────────────────────── */
     #calcButton {
+      flex: 1;
       background: var(--accent);
       color: var(--bg);
-      padding: 1.1rem 2rem;
+      padding: 1.1rem 1.25rem;
       font-weight: 900;
       font-size: 0.95rem;
       font-family: 'Inter', sans-serif;
@@ -157,7 +188,6 @@
       box-shadow: 0 8px 24px rgba(46, 163, 242, 0.25);
       cursor: pointer;
       transition: transform 0.1s, box-shadow 0.15s, background 0.15s;
-      width: 100%;
     }
     #calcButton:hover:not(:disabled) { transform: scale(1.02); box-shadow: 0 12px 32px rgba(46, 163, 242, 0.35); }
     #calcButton:active:not(:disabled) { transform: scale(0.97); }
@@ -167,6 +197,64 @@
       cursor: not-allowed;
       box-shadow: none;
     }
+
+    /* ── Move log ─────────────────────────────────────────── */
+    #moveLog { width: 100%; }
+
+    .move-log-label {
+      text-align: center;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+
+    .move-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.65rem 0.85rem;
+      background: var(--surface);
+      border-radius: 0.875rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .move-item-info { flex: 1; min-width: 0; }
+
+    .move-item-postcodes {
+      font-weight: 700;
+      font-size: 0.875rem;
+      color: var(--text);
+    }
+
+    .move-item-detail {
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 0.15rem;
+    }
+
+    .move-item-co2 {
+      font-weight: 700;
+      font-size: 0.875rem;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .move-remove-btn {
+      background: none;
+      border: none;
+      color: #6b7280;
+      cursor: pointer;
+      font-size: 0.9rem;
+      line-height: 1;
+      padding: 0.25rem;
+      border-radius: 50%;
+      flex-shrink: 0;
+      transition: color 0.15s;
+    }
+    .move-remove-btn:hover { color: #ef4444; }
 
     /* ── Results ──────────────────────────────────────────── */
     #results { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
@@ -207,27 +295,92 @@
       text-align: center;
     }
 
-    /* ── Offset button ────────────────────────────────────── */
-    .offset-btn {
+    /* ── Breakdown ────────────────────────────────────────── */
+    #breakdown { width: 100%; }
+
+    .breakdown-label {
+      text-align: center;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+
+    .breakdown-item {
       display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 0.6rem;
+      padding: 0.6rem 0.85rem;
+      background: var(--surface);
+      border-radius: 0.875rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .breakdown-item-info { flex: 1; min-width: 0; }
+
+    .breakdown-postcodes {
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: var(--text);
+    }
+
+    .breakdown-detail {
+      font-size: 0.68rem;
+      color: var(--muted);
+      margin-top: 0.1rem;
+    }
+
+    .breakdown-co2 {
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* ── Offset options ───────────────────────────────────── */
+    .offset-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
       width: 100%;
-      padding: 1.1rem 2rem;
+    }
+
+    .offset-opt {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      width: 100%;
+      padding: 0.875rem 1.25rem;
       border-radius: 9999px;
-      background: #16a34a;
       color: #fff;
       font-family: 'Inter', sans-serif;
-      font-weight: 900;
-      font-size: 0.95rem;
+      text-decoration: none;
+      transition: transform 0.1s, box-shadow 0.15s, filter 0.15s;
+    }
+    .offset-opt:hover { transform: scale(1.02); filter: brightness(1.1); }
+    .offset-opt:active { transform: scale(0.97); }
+
+    .offset-opt.credits  { background: #0e7490; box-shadow: 0 6px 20px rgba(14, 116, 144, 0.3); }
+    .offset-opt.trees    { background: #16a34a; box-shadow: 0 6px 20px rgba(22, 163, 74, 0.3); }
+    .offset-opt.donate   { background: #b45309; box-shadow: 0 6px 20px rgba(180, 83, 9, 0.3); }
+
+    .offset-opt-icon { font-size: 1.35rem; flex-shrink: 0; }
+
+    .offset-opt-label {
+      font-weight: 800;
+      font-size: 0.82rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      text-decoration: none;
-      box-shadow: 0 8px 24px rgba(22, 163, 74, 0.3);
-      transition: transform 0.1s, box-shadow 0.15s;
     }
-    .offset-btn:hover { transform: scale(1.02); box-shadow: 0 12px 32px rgba(22, 163, 74, 0.4); }
-    .offset-btn:active { transform: scale(0.97); }
+
+    .offset-opt-sub {
+      font-size: 0.68rem;
+      font-weight: 500;
+      opacity: 0.8;
+      margin-top: 0.1rem;
+    }
 
     .offset-note {
       font-size: 0.72rem;
@@ -301,8 +454,18 @@
 
     </div>
 
+    <!-- Move log -->
+    <div id="moveLog" class="hidden">
+      <hr class="result-divider" style="margin-bottom:1rem">
+      <p class="move-log-label">Moves added</p>
+      <div id="moveList"></div>
+    </div>
+
     <!-- CTA -->
-    <button id="calcButton">Calculate Impact</button>
+    <div class="action-row">
+      <button id="addBtn">+ Add another</button>
+      <button id="calcButton">Calculate Impact</button>
+    </div>
 
     <!-- Results -->
     <div id="results" class="hidden">
@@ -310,16 +473,49 @@
 
       <div style="text-align:center">
         <p class="result-number" id="co2Val">—</p>
-        <p class="result-unit">kg of CO₂</p>
+        <p class="result-unit" id="co2Unit">kg of CO₂</p>
       </div>
 
       <p class="result-context" id="resultContext"></p>
+
+      <!-- Per-move breakdown -->
+      <div id="breakdown" class="hidden">
+        <p class="breakdown-label">Breakdown</p>
+        <div id="breakdownList"></div>
+      </div>
+
       <p class="result-meta" id="resultMeta"></p>
 
-      <a id="offsetLink" class="offset-btn"
-         href="https://ecologi.com/" target="_blank" rel="noopener noreferrer">
-        Offset This Move 🌱
-      </a>
+      <!-- Offset options -->
+      <div class="offset-options">
+        <a class="offset-opt credits"
+           href="https://www.goldstandard.org/take-action/offset-your-emissions"
+           target="_blank" rel="noopener noreferrer">
+          <span class="offset-opt-icon">♻️</span>
+          <div>
+            <div class="offset-opt-label">Buy Carbon Credits</div>
+            <div class="offset-opt-sub">Gold Standard marketplace</div>
+          </div>
+        </a>
+        <a class="offset-opt trees"
+           href="https://ecologi.com/"
+           target="_blank" rel="noopener noreferrer">
+          <span class="offset-opt-icon">🌲</span>
+          <div>
+            <div class="offset-opt-label">Plant Trees</div>
+            <div class="offset-opt-sub">Fund reforestation via Ecologi</div>
+          </div>
+        </a>
+        <a class="offset-opt donate"
+           href="https://www.coolearth.org/"
+           target="_blank" rel="noopener noreferrer">
+          <span class="offset-opt-icon">🤝</span>
+          <div>
+            <div class="offset-opt-label">Donate to Climate Projects</div>
+            <div class="offset-opt-sub">Support Cool Earth's rainforest work</div>
+          </div>
+        </a>
+      </div>
 
       <p class="offset-note" id="offsetNote"></p>
     </div>
@@ -327,39 +523,36 @@
   </div>
 
   <script>
-    // ── Emissions lookup: total kg CO₂ per km of move distance ────
-    // Accounts for vehicle type, load trips, and return journeys.
-    //
-    // Self (hired small van):  ~0.25 kg/km per trip × round trips
-    //   small=2 legs, medium=4 legs, large=6 legs
-    //
-    // Man & van (Transit):    ~0.35 kg/km per trip × one-way trips + return
-    //   small=2 legs, medium=4 legs, large=6 legs
-    //
-    // Removals (lorry):       vehicle size scales with house
-    //   small lorry ~1.0 kg/km, medium ~1.3, large ~1.6 — single round trip
-
     const KG_PER_KM = {
       self:    { small: 0.50, medium: 1.00, large: 1.50 },
       van:     { small: 0.70, medium: 1.40, large: 2.10 },
       company: { small: 2.00, medium: 2.60, large: 3.20 },
     };
 
+    const SIZE_LABELS = { small: 'Small house', medium: 'Medium house', large: 'Large house' };
+    const TYPE_LABELS = { self: 'Self move', van: 'Man & van', company: 'Removals co.' };
+
     // ── State ─────────────────────────────────────────────────────
     let houseSize = 'small';
     let moveType  = 'self';
+    const moves   = []; // { houseSize, moveType, from, to, distKm, co2kg }
 
     // ── DOM refs ──────────────────────────────────────────────────
-    const calcBtn    = document.getElementById('calcButton');
-    const errorMsg   = document.getElementById('errorMsg');
-    const resultsEl  = document.getElementById('results');
-    const co2Val     = document.getElementById('co2Val');
-    const resultCtx  = document.getElementById('resultContext');
-    const resultMeta = document.getElementById('resultMeta');
-    const offsetLink = document.getElementById('offsetLink');
-    const offsetNote = document.getElementById('offsetNote');
-    const fromInput  = document.getElementById('postcodeFrom');
-    const toInput    = document.getElementById('postcodeTo');
+    const addBtn       = document.getElementById('addBtn');
+    const calcBtn      = document.getElementById('calcButton');
+    const errorMsg     = document.getElementById('errorMsg');
+    const resultsEl    = document.getElementById('results');
+    const co2Val       = document.getElementById('co2Val');
+    const co2Unit      = document.getElementById('co2Unit');
+    const resultCtx    = document.getElementById('resultContext');
+    const resultMeta   = document.getElementById('resultMeta');
+    const offsetNote   = document.getElementById('offsetNote');
+    const fromInput    = document.getElementById('postcodeFrom');
+    const toInput      = document.getElementById('postcodeTo');
+    const moveLogEl    = document.getElementById('moveLog');
+    const moveListEl   = document.getElementById('moveList');
+    const breakdownEl  = document.getElementById('breakdown');
+    const breakdownList = document.getElementById('breakdownList');
 
     // ── Toggle buttons ────────────────────────────────────────────
     document.querySelectorAll('.size-btn').forEach(btn =>
@@ -380,7 +573,6 @@
       })
     );
 
-    // Clear errors on typing
     [fromInput, toInput].forEach(el =>
       el.addEventListener('input', () => {
         el.classList.remove('error');
@@ -399,7 +591,6 @@
       return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     }
 
-    // ── Postcode → lat/lon via postcodes.io ───────────────────────
     async function lookupPostcode(raw) {
       const clean = raw.replace(/\s+/g, '').toUpperCase();
       const res   = await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(clean)}`);
@@ -408,58 +599,166 @@
       return { lat: json.result.latitude, lon: json.result.longitude };
     }
 
-    // ── Calculate ─────────────────────────────────────────────────
-    calcBtn.addEventListener('click', async () => {
+    // ── Move log ──────────────────────────────────────────────────
+    function renderMoveLog() {
+      if (moves.length === 0) {
+        moveLogEl.classList.add('hidden');
+        return;
+      }
+      moveLogEl.classList.remove('hidden');
+      moveListEl.innerHTML = moves.map((m, i) => `
+        <div class="move-item">
+          <div class="move-item-info">
+            <div class="move-item-postcodes">${m.from} → ${m.to}</div>
+            <div class="move-item-detail">${SIZE_LABELS[m.houseSize]} · ${TYPE_LABELS[m.moveType]} · ${Math.round(m.distKm)} km</div>
+          </div>
+          <span class="move-item-co2">${m.co2kg.toLocaleString()} kg</span>
+          <button class="move-remove-btn" data-index="${i}" title="Remove">✕</button>
+        </div>
+      `).join('');
+
+      moveListEl.querySelectorAll('.move-remove-btn').forEach(btn =>
+        btn.addEventListener('click', () => {
+          moves.splice(parseInt(btn.dataset.index), 1);
+          renderMoveLog();
+        })
+      );
+    }
+
+    // ── Add another ───────────────────────────────────────────────
+    addBtn.addEventListener('click', async () => {
       const from = fromInput.value.trim();
       const to   = toInput.value.trim();
 
       if (!from || !to) {
         if (!from) fromInput.classList.add('error');
         if (!to)   toInput.classList.add('error');
-        showError('Please enter both postcodes.');
+        showError('Please enter both postcodes to add this move.');
         return;
       }
 
-      setLoading(true);
-      resultsEl.classList.add('hidden');
-      errorMsg.classList.add('hidden');
+      setBusy(true, 'adding');
       fromInput.classList.remove('error');
       toInput.classList.remove('error');
+      errorMsg.classList.add('hidden');
 
       try {
         const [locA, locB] = await Promise.all([
           lookupPostcode(from),
           lookupPostcode(to),
         ]);
-
         const distKm = haversine(locA.lat, locA.lon, locB.lat, locB.lon);
         const co2kg  = Math.round(distKm * KG_PER_KM[moveType][houseSize]);
 
-        renderResults(co2kg, distKm);
+        moves.push({
+          houseSize, moveType,
+          from: from.replace(/\s+/g, '').toUpperCase(),
+          to:   to.replace(/\s+/g, '').toUpperCase(),
+          distKm, co2kg,
+        });
+
+        renderMoveLog();
+        fromInput.value = '';
+        toInput.value   = '';
+        resultsEl.classList.add('hidden');
+        fromInput.focus();
       } catch (_) {
         fromInput.classList.add('error');
         toInput.classList.add('error');
         showError("Couldn't find one or both postcodes — please check and try again.");
       } finally {
-        setLoading(false);
+        setBusy(false, 'adding');
       }
     });
 
-    function renderResults(co2kg, distKm) {
-      co2Val.textContent = co2kg.toLocaleString();
+    // ── Calculate ─────────────────────────────────────────────────
+    calcBtn.addEventListener('click', async () => {
+      const from = fromInput.value.trim();
+      const to   = toInput.value.trim();
 
-      // Context comparisons
-      const flights = (co2kg / 97).toFixed(1);  // ~97 kg CO₂ per London–Edinburgh economy flight
-      const trees   = Math.ceil(co2kg / 21);     // a young tree absorbs ~21 kg CO₂/year
+      const hasCurrentForm = from || to;
+
+      if (hasCurrentForm && (!from || !to)) {
+        if (!from) fromInput.classList.add('error');
+        if (!to)   toInput.classList.add('error');
+        showError('Please enter both postcodes.');
+        return;
+      }
+
+      if (!hasCurrentForm && moves.length === 0) {
+        fromInput.classList.add('error');
+        toInput.classList.add('error');
+        showError('Please enter postcodes for at least one move.');
+        return;
+      }
+
+      setBusy(true, 'calculating');
+      resultsEl.classList.add('hidden');
+      errorMsg.classList.add('hidden');
+      fromInput.classList.remove('error');
+      toInput.classList.remove('error');
+
+      try {
+        const allMoves = [...moves];
+
+        if (hasCurrentForm) {
+          const [locA, locB] = await Promise.all([
+            lookupPostcode(from),
+            lookupPostcode(to),
+          ]);
+          const distKm = haversine(locA.lat, locA.lon, locB.lat, locB.lon);
+          const co2kg  = Math.round(distKm * KG_PER_KM[moveType][houseSize]);
+          allMoves.push({
+            houseSize, moveType,
+            from: from.replace(/\s+/g, '').toUpperCase(),
+            to:   to.replace(/\s+/g, '').toUpperCase(),
+            distKm, co2kg,
+          });
+        }
+
+        const totalCo2 = allMoves.reduce((sum, m) => sum + m.co2kg, 0);
+        renderResults(totalCo2, allMoves);
+      } catch (_) {
+        fromInput.classList.add('error');
+        toInput.classList.add('error');
+        showError("Couldn't find one or both postcodes — please check and try again.");
+      } finally {
+        setBusy(false, 'calculating');
+      }
+    });
+
+    function renderResults(totalCo2, allMoves) {
+      co2Val.textContent  = totalCo2.toLocaleString();
+      co2Unit.textContent = allMoves.length > 1
+        ? `kg of CO₂ across ${allMoves.length} moves`
+        : 'kg of CO₂';
+
+      const flights = (totalCo2 / 97).toFixed(1);
+      const trees   = Math.ceil(totalCo2 / 21);
       resultCtx.textContent =
         `That's roughly equivalent to ${flights} London–Edinburgh flight${parseFloat(flights) !== 1 ? 's' : ''}. `
         + `It would take ${trees} tree${trees !== 1 ? 's' : ''} a full year to absorb this.`;
 
-      const distDisplay = distKm < 1 ? 'less than 1' : Math.round(distKm).toLocaleString();
-      resultMeta.textContent = `Based on ${distDisplay} km straight-line distance between postcodes`;
+      if (allMoves.length > 1) {
+        breakdownList.innerHTML = allMoves.map(m => `
+          <div class="breakdown-item">
+            <div class="breakdown-item-info">
+              <div class="breakdown-postcodes">${m.from} → ${m.to}</div>
+              <div class="breakdown-detail">${SIZE_LABELS[m.houseSize]} · ${TYPE_LABELS[m.moveType]} · ${Math.round(m.distKm)} km</div>
+            </div>
+            <span class="breakdown-co2">${m.co2kg.toLocaleString()} kg</span>
+          </div>
+        `).join('');
+        breakdownEl.classList.remove('hidden');
+        resultMeta.textContent = '';
+      } else {
+        breakdownEl.classList.add('hidden');
+        const d = allMoves[0].distKm;
+        const distDisplay = d < 1 ? 'less than 1' : Math.round(d).toLocaleString();
+        resultMeta.textContent = `Based on ${distDisplay} km straight-line distance between postcodes`;
+      }
 
-      // Estimated offset cost at ~£12/tonne CO₂ (Ecologi rate)
-      const costPence = Math.max(50, Math.round((co2kg / 1000) * 1200));
+      const costPence = Math.max(50, Math.round((totalCo2 / 1000) * 1200));
       const costStr   = costPence < 100
         ? `${costPence}p`
         : `£${(costPence / 100).toFixed(2).replace(/\.00$/, '')}`;
@@ -469,9 +768,14 @@
       resultsEl.classList.remove('hidden');
     }
 
-    function setLoading(on) {
-      calcBtn.textContent = on ? 'Looking up…' : 'Calculate Impact';
-      calcBtn.disabled    = on;
+    function setBusy(on, mode) {
+      addBtn.disabled  = on;
+      calcBtn.disabled = on;
+      if (mode === 'adding') {
+        addBtn.textContent = on ? 'Adding…' : '+ Add another';
+      } else {
+        calcBtn.textContent = on ? 'Looking up…' : 'Calculate Impact';
+      }
     }
 
     function showError(msg) {
