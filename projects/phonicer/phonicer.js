@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-// pheemee.js — CLI entry point
+// phonicer.js - CLI entry point
 // Usage:
-//   node pheemee.js "the cat sat on the mat"
-//   echo "some text" | node pheemee.js
-//   node pheemee.js --plain "night"
-//   node pheemee.js --debug "people"
+//   node phonicer.js "the cat sat on the mat"
+//   echo "some text" | node phonicer.js
+//   node phonicer.js --plain "night"
+//   node phonicer.js --debug "people"
 
 const { convertText } = require('./converter');
 const { formatTokens } = require('./formatter');

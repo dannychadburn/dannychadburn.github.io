@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Listenable</title>
+  <title>Just Tunes FM</title>
   <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
   <link rel="shortcut icon" href="/assets/images/favicon.svg">
   <link rel="stylesheet" href="../shared/style.css">
@@ -196,7 +196,7 @@
 </head>
 <body>
 
-  <h1 class="tidy-logo" style="margin-bottom:1.5rem">Listenable</h1>
+  <h1 class="tidy-logo" style="margin-bottom:1.5rem">Just Tunes FM</h1>
 
   <div class="tidy-card tt-card">
     <div class="tt-header">
@@ -248,14 +248,14 @@
       if (currentStationId === station.id) return;
       currentStationId = station.id;
       setStationState(station.id, 'loading');
-      document.title = `Listenable · ${station.name}`;
+      document.title = `Just Tunes FM · ${station.name}`;
       localStorage.setItem('lastStation', station.id);
       audio.src = station.url;
       audio.play().catch(e => {
         if (currentStationId !== station.id) return;
         setStationState(station.id, 'error');
         currentStationId = null;
-        document.title = 'Listenable';
+        document.title = 'Just Tunes FM';
         localStorage.removeItem('lastStation');
       });
     }
@@ -267,7 +267,7 @@
       audio.src = '';
       currentStationId = null;
       setStationState(null, null);
-      document.title = 'Listenable';
+      document.title = 'Just Tunes FM';
     }
 
     radioStations.forEach(station => {
@@ -339,17 +339,17 @@
       if (station) {
         currentStationId = station.id;
         setStationState(station.id, 'loading');
-        document.title = `Listenable · ${station.name}`;
+        document.title = `Just Tunes FM · ${station.name}`;
         audio.src = station.url;
         audio.play().catch(() => {
           setStationState(station.id, null);
           currentStationId = null;
-          document.title = 'Listenable';
+          document.title = 'Just Tunes FM';
         });
       }
     }
   </script>
 
-  <p class="site-credit">Made with ♥ by <a href="/">Tidy Swan</a></p>
+  <footer class="tidy-footer"><a href="/">See more projects at Tidy Swan</a></footer>
 </body>
 </html>

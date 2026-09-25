@@ -1,14 +1,14 @@
 {
-  "name": "pheemee",
+  "name": "phonicer",
   "version": "1.0.0",
   "description": "UK phonics grapheme translator — splits English words into colour-coded sound units",
-  "main": "pheemee.js",
+  "main": "phonicer.js",
   "bin": {
-    "pheemee": "./pheemee.js"
+    "phonicer": "./phonicer.js"
   },
   "scripts": {
     "test": "node test.js",
-    "start": "node pheemee.js"
+    "start": "node phonicer.js"
   },
   "engines": {
     "node": ">=14"

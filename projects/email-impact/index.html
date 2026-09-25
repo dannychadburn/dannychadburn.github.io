@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Estimate the carbon impact of your emails and make it visible without adding noise.">
+  <title>Email Impact | A lighter email signature</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="wordmark" href="/">Email <span>Impact</span></a>
+      <span class="header-tag">A small signal for a big system</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-inner">
+        <p class="eyebrow">A Gmail experiment</p>
+        <h1>Every email leaves a trace.</h1>
+        <p class="lede">Email Impact turns the size and audience of a message into a quiet line in your signature, so the cost of digital work stays visible.</p>
+        <a class="button button--light" href="#try-it">Try the estimator <span aria-hidden="true">&#8595;</span></a>
+      </div>
+      <div class="hero-stamp" aria-hidden="true"><strong>CO<sub>2</sub></strong><span>without the guilt trip</span></div>
+    </section>
+
+    <section class="section section--calculator" id="try-it" aria-labelledby="calculator-title">
+      <div class="section-heading">
+        <p class="eyebrow">Make it concrete</p>
+        <h2 id="calculator-title">What did this email cost?</h2>
+        <p>Try a rough estimate using the number of people receiving your email and the total size of its attachments.</p>
+      </div>
+      <div class="calculator-layout">
+        <form class="calculator" id="impact-form">
+          <label for="recipients">Recipients <span>including people in CC</span></label>
+          <input id="recipients" name="recipients" type="number" min="1" max="10000" value="3" inputmode="numeric">
+          <label for="attachment-size">Attachments <span>total size in MB</span></label>
+          <input id="attachment-size" name="attachment-size" type="number" min="0" max="100000" step="0.1" value="2" inputmode="decimal">
+          <button class="button button--dark" type="submit">Calculate impact <span aria-hidden="true">&#8594;</span></button>
+        </form>
+        <aside class="result" aria-live="polite">
+          <p class="result-label">Estimated impact</p>
+          <p class="result-number"><strong id="co2-value">40.0</strong> <span>g CO<sub>2</sub>e</span></p>
+          <p class="result-copy" id="result-copy">About the same as driving 0.10 miles, charging a smartphone for 1.30 hours, or producing 4 single-use plastic bags.</p>
+          <p class="result-note">A transparent estimate, not a lab measurement.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section section--explain" aria-labelledby="explain-title">
+      <div class="section-heading">
+        <p class="eyebrow">The idea</p>
+        <h2 id="explain-title">Useful, not accusatory</h2>
+      </div>
+      <div class="explain-grid">
+        <article><span class="step">01</span><h3>Estimate</h3><p>Count recipients and attachment weight. Email Impact uses a deliberately modest model that accounts for the cost of sending a message plus the extra load of large attachments.</p></article>
+        <article><span class="step">02</span><h3>Translate</h3><p>Show the result as CO<sub>2</sub>e, then make it relatable: a short car journey, a few hours of TV, or a phone charge.</p></article>
+        <article><span class="step">03</span><h3>Share softly</h3><p>Add a small byline to the signature. It is a prompt to make the next email lighter, not a score for the person who sent it.</p></article>
+      </div>
+    </section>
+
+    <section class="section section--install" aria-labelledby="install-title">
+      <div class="section-heading">
+        <p class="eyebrow">Use it today</p>
+        <h2 id="install-title">Start with a signature line</h2>
+        <p>Gmail signatures do not run JavaScript and cannot inspect the email currently being composed. This copy/paste version is a static example; automatic per-email values need a browser extension or Gmail add-on with permission to read the draft.</p>
+      </div>
+      <div class="code-card">
+        <div class="code-card__top"><span>Paste into your signature editor</span><button class="copy-button" type="button" id="copy-button">Copy code</button></div>
+        <pre id="signature-code"><code>&lt;span style=&quot;color:#697586;font:12px/1.4 Arial,sans-serif&quot;&gt;Email impact: ~40g CO2e&lt;/span&gt;</code></pre>
+        <p class="copy-status" id="copy-status" role="status"></p>
+      </div>
+      <div class="download-row">
+        <div><strong>Building a smarter version?</strong><span>Use the helper as the calculation layer for an extension, add-on or mail client.</span></div>
+        <a class="button button--outline" href="email-impact.js" download>Download email-impact.js <span aria-hidden="true">&#8595;</span></a>
+      </div>
+    </section>
+
+    <section class="section section--method" aria-labelledby="method-title">
+      <div class="method-copy"><p class="eyebrow">Show your working</p><h2 id="method-title">A deliberately modest model</h2><p>The demo starts with a 4g baseline, then adds 2g per recipient and 5g per recipient for each MB of attachment data. The figures are intentionally visible in the downloaded script, so a team can replace them with a better model as evidence improves.</p></div>
+      <div class="method-stats"><div><strong>4g</strong><span>message baseline</span></div><div><strong>2g</strong><span>per recipient</span></div><div><strong>5g</strong><span>per recipient / MB</span></div></div>
+    </section>
+  </main>
+
+  <footer class="tidy-footer"><a href="/">See more projects at Tidy Swan</a></footer>
+
+  <script src="email-impact.js"></script>
+  <script>
+    const form = document.getElementById('impact-form');
+    const co2Value = document.getElementById('co2-value');
+    const resultCopy = document.getElementById('result-copy');
+    const copyButton = document.getElementById('copy-button');
+    const copyStatus = document.getElementById('copy-status');
+    const signatureCode = '<span style="color:#697586;font:12px/1.4 Arial,sans-serif">Email impact: ~40g CO2e</span>';
+
+    function updateResult(event) {
+      if (event) event.preventDefault();
+      const impact = EmailImpact.estimate({
+        recipients: Number(document.getElementById('recipients').value),
+        attachmentMB: Number(document.getElementById('attachment-size').value)
+      });
+      co2Value.textContent = impact.grams.toFixed(1);
+      resultCopy.textContent = impact.comparison;
+    }
+
+    form.addEventListener('submit', updateResult);
+    form.addEventListener('input', updateResult);
+    copyButton.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(signatureCode);
+      copyStatus.textContent = 'Code copied.';
+      copyButton.textContent = 'Copied';
+    });
+    updateResult();
+  </script>
+</body>
+</html>

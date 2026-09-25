@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Generate track interval sessions for mile training, with distance and pace estimates.">
+  <title>Track Planner | Mile training sessions</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="wordmark" href="/">Track Planner</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <p class="eyebrow">400m track session generator</p>
+      <h1 id="page-title">Improve your mile times</h1>
+      <button class="button button--accent" id="generate-button" type="button">Generate session <span aria-hidden="true">&#8635;</span></button>
+    </section>
+
+    <section class="session-shell" aria-live="polite" aria-labelledby="session-name">
+      <div class="session-heading"><div><h2 id="session-name">The Pyramid</h2><p id="session-focus">Build strength and control while the reps get longer, then bring it home.</p><p class="source-note" id="source-note">A classic ladder-inspired session, adapted for a 400m track.</p></div><div class="distance-badge"><strong id="total-distance">4,800m</strong><span id="distance-mile">about 3 miles</span></div></div>
+      <div class="rep-table-head"><span>Rep details</span><span>Block distance</span></div>
+      <div class="block-list" id="block-list"></div>
+      <div class="session-footer"><p><strong>Every recovery:</strong> walk for 60 to 90 seconds to the next 100m point on the track.</p></div>
+    </section>
+
+  <footer class="tidy-footer"><a href="/">See more projects at Tidy Swan</a></footer>
+
+  <script src="track-planner.js"></script>
+</body>
+</html>
