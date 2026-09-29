@@ -13,11 +13,11 @@ I've solved high-profile problems for:
 - **NHS England**
 - **Department for Education**
 - **Department for International Trade**
-- **Government Security Group** (part of teh Cabinet Office)
+- **Government Security Group** (part of the Cabinet Office)
 
 ## Commercial contracts
 
-I've delivered content and developed strategies for many household name brands (such as Audible, Rolls-Royce, Open University, Pfizer and LinkedIn) gaining valuable experience across industries including:
+I've developed strategies and delivered content for brands such as Audible, Rolls-Royce and LinkedIn, and across industries including:
 
 - **Education** 
 - **Pharma**
@@ -34,54 +34,34 @@ I've delivered content and developed strategies for many household name brands (
 ## Side projects
 
 <div class="project-grid">
-	<a class="project-card" href="/projects/longer-leave/">
-		<span class="project-card__body">
-			<strong>Longer Leave</strong>
-			<span>Find the best holiday dates for more time off.</span>
-		</span>
-	</a>
-	<a class="project-card" href="/projects/track-planner/">
-		<span class="project-card__body">
-			<strong>Track Planner</strong>
-			<span>Generate smart interval sessions for the 400m track.</span>
-		</span>
-	</a>
-	<a class="project-card" href="/projects/email-impact/">
-		<span class="project-card__body">
-			<strong>Email Impact</strong>
-			<span>A quieter way to see what an email costs.</span>
-		</span>
-	</a>
 	<a class="project-card" href="/projects/decader/">
 		<span class="project-card__body">
 			<strong>Decader</strong>
-			<span>Slow-burn life advice for the landmark years.</span>
+			<span>Slow-burn life advice</span>
 		</span>
 	</a>
 	<a class="project-card" href="/projects/phonicer/">
 		<span class="project-card__body">
 			<strong>Phonicer</strong>
-			<span>A phonics grapheme translator for clearer reading.</span>
+			<span>A phonics grapheme translator</span>
 		</span>
 	</a>
-	<a class="project-card" href="/projects/just-tunes-fm/">
+	<a class="project-card" href="/projects/listenable/">
 		<span class="project-card__body">
-			<strong>Just Tunes FM</strong>
-			<span>A low-disruption radio player.</span>
-		</span>
-	</a>
-	<a class="project-card" href="/projects/offset-my-move/">
-		<span class="project-card__body">
-			<strong>Offset My Move</strong>
-			<span>A house move carbon cost calculator.</span>
+			<strong>Listenable</strong>
+			<span>A low-disruption radio player</span>
 		</span>
 	</a>
 	<a class="project-card" href="/projects/hittable/">
 		<span class="project-card__body">
 			<strong>Hittable</strong>
-			<span>A shadow boxing web app.</span>
+			<span>A shadow boxing app</span>
+		</span>
+	</a>
+	<a class="project-card" href="/projects/movemissions/">
+		<span class="project-card__body">
+			<strong>Movemissions</strong>
+			<span>Calculate the carbon cost moving house</span>
 		</span>
 	</a>
 </div>
-
-***

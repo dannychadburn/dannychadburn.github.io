@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Just Tunes FM</title>
+  <title>Listenable</title>
   <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
   <link rel="shortcut icon" href="/assets/images/favicon.svg">
   <link rel="stylesheet" href="../shared/style.css">
@@ -62,14 +62,16 @@
 
     /* ── Station item ── */
     .station-container {
-      background: var(--surface-bright);
-      border-radius: 1rem;
+      background: var(--accent);
+      border: 2px solid transparent;
+      border-radius: 0.875rem;
       overflow: hidden;
-      transition: background 0.25s;
+      transition: background 0.15s, border-color 0.15s;
     }
 
     .active-station {
-      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      background: var(--accent-dim);
+      border-color: var(--accent);
     }
 
     .station-row {
@@ -87,7 +89,7 @@
       flex: 1;
       background: none;
       border: none;
-      color: var(--text);
+      color: var(--bg);
       font-family: 'Inter', sans-serif;
       font-size: 1.05rem;
       font-weight: 700;
@@ -99,12 +101,12 @@
       padding: 0;
     }
 
-    .active-station .station-name-btn { color: #fff; }
+    .active-station .station-name-btn { color: var(--accent); }
 
     .station-exp-btn {
       background: none;
       border: none;
-      color: var(--muted);
+      color: var(--bg);
       font-size: 1rem;
       font-weight: 700;
       cursor: pointer;
@@ -115,14 +117,14 @@
     }
 
     .station-exp-btn:hover { color: var(--text); }
-    .active-station .station-exp-btn { color: rgba(255, 255, 255, 0.7); }
+    .active-station .station-exp-btn { color: var(--accent); }
 
     .station-info {
       padding: 0.75rem 1.25rem 1.25rem;
       font-size: 0.82rem;
       color: var(--muted);
       border-top: 1px solid var(--border);
-      background: rgba(0, 0, 0, 0.2);
+      background: var(--bg);
       line-height: 1.65;
     }
 
@@ -196,7 +198,7 @@
 </head>
 <body>
 
-  <h1 class="tidy-logo" style="margin-bottom:1.5rem">Just Tunes FM</h1>
+  <h1 class="tidy-logo" style="margin-bottom:1.5rem">Listenable</h1>
 
   <div class="tidy-card tt-card">
     <div class="tt-header">
@@ -248,14 +250,14 @@
       if (currentStationId === station.id) return;
       currentStationId = station.id;
       setStationState(station.id, 'loading');
-      document.title = `Just Tunes FM · ${station.name}`;
+      document.title = `Listenable · ${station.name}`;
       localStorage.setItem('lastStation', station.id);
       audio.src = station.url;
       audio.play().catch(e => {
         if (currentStationId !== station.id) return;
         setStationState(station.id, 'error');
         currentStationId = null;
-        document.title = 'Just Tunes FM';
+        document.title = 'Listenable';
         localStorage.removeItem('lastStation');
       });
     }
@@ -267,7 +269,7 @@
       audio.src = '';
       currentStationId = null;
       setStationState(null, null);
-      document.title = 'Just Tunes FM';
+      document.title = 'Listenable';
     }
 
     radioStations.forEach(station => {
@@ -339,12 +341,12 @@
       if (station) {
         currentStationId = station.id;
         setStationState(station.id, 'loading');
-        document.title = `Just Tunes FM · ${station.name}`;
+        document.title = `Listenable · ${station.name}`;
         audio.src = station.url;
         audio.play().catch(() => {
           setStationState(station.id, null);
           currentStationId = null;
-          document.title = 'Just Tunes FM';
+          document.title = 'Listenable';
         });
       }
     }

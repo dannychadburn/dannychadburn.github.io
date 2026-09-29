@@ -3,31 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Decader | The Manual</title>
+    <title>Decader | Slow-burn life advice</title>
     <link rel="stylesheet" href="../shared/style.css">
     <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
     <link rel="shortcut icon" href="/assets/images/favicon.svg">
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <main class="main-content">
+        <header class="brand">
+            <h1 class="tidy-logo">Decader</h1>
+            <p class="hero-tagline">A manual for your landmark years.</p>
+        </header>
         <div class="container">
-            <h1>D E C A D E R (P W E V O O O)</h1>
-            <p class="hero-tagline">The manual for the landmark years.</p>
             <p class="hero-pitch">Every ten years, your life, body, and finances change. We provide the precise, long-term briefing you need—once a decade.</p>
 
-            <div id="errorSummary" class="error-summary">Please correct the errors below.</div>
+            <div id="errorSummary" class="error-summary" role="alert" tabindex="-1">Please correct the errors below.</div>
             
             <form id="signupForm" novalidate>
                 <label class="gov-label" for="email">Email address</label>
                 <div id="emailError" class="error-message">Enter a valid email address</div>
-                <input type="email" id="email" name="email" spellcheck="false" autocomplete="email">
+                <input type="email" id="email" name="email" spellcheck="false" autocomplete="email" aria-describedby="emailError">
 
                 <br><br>
 
-                <fieldset style="border:none; padding:0;">
+                <fieldset style="border:none; padding:0;" aria-describedby="dateError">
                     <legend class="gov-label">Date of birth</legend>
                     <div class="gov-hint">For example, 31 3 1980</div>
                     <div id="dateError" class="error-message">Enter a valid date of birth</div>
@@ -51,9 +52,15 @@
                 <button type="submit" id="submitBtn">BEGIN THE DECADE</button>
             </form>
 
-            <div id="successMsg" style="display:none;">
-                <h2>Synchronization Complete.</h2>
-                <p>Your life manual is now standing by. Check your inbox.</p>
+            <div id="successMsg" class="success-message" hidden aria-live="polite">
+                <h2>Thanks for signing up.</h2>
+                <p>You will receive your first Decader email on <time id="firstEmailDate"></time>.</p>
+                <p>While you wait, check out these excellent resources:</p>
+                <ul class="resource-list">
+                    <li><a href="https://www.nhs.uk/live-well/" target="_blank" rel="noopener noreferrer">NHS: Live Well</a></li>
+                    <li><a href="https://www.moneyhelper.org.uk/" target="_blank" rel="noopener noreferrer">MoneyHelper</a></li>
+                    <li><a href="https://www.gov.uk/check-state-pension" target="_blank" rel="noopener noreferrer">GOV.UK: Check your State Pension forecast</a></li>
+                </ul>
             </div>
         </div>
     </main>
@@ -76,7 +83,67 @@
     <footer class="tidy-footer"><a href="/">See more projects at Tidy Swan</a></footer>
 
     <script>
-        // ... (Keep the script logic exactly as before) ...
+        const signupForm = document.getElementById('signupForm');
+        const emailInput = document.getElementById('email');
+        const dayInput = document.getElementById('day');
+        const monthInput = document.getElementById('month');
+        const yearInput = document.getElementById('year');
+        const errorSummary = document.getElementById('errorSummary');
+        const emailError = document.getElementById('emailError');
+        const dateError = document.getElementById('dateError');
+        const successMessage = document.getElementById('successMsg');
+        const firstEmailDate = document.getElementById('firstEmailDate');
+        const heroPitch = document.querySelector('.hero-pitch');
+
+        function nextMilestoneDate(day, month, year, today = new Date()) {
+            const birthday = new Date(year, month - 1, day);
+            if (birthday.getFullYear() !== year || birthday.getMonth() !== month - 1 || birthday.getDate() !== day) {
+                return null;
+            }
+
+            const birthdayHasPassed = today.getMonth() + 1 > month ||
+                (today.getMonth() + 1 === month && today.getDate() >= day);
+            const age = today.getFullYear() - year - (birthdayHasPassed ? 0 : 1);
+            if (age < 0) return null;
+
+            const milestoneAge = Math.floor(age / 10) * 10 + 10;
+            return new Date(year + milestoneAge, month - 1, day);
+        }
+
+        signupForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const day = Number(dayInput.value);
+            const month = Number(monthInput.value);
+            const year = Number(yearInput.value);
+            const emailIsValid = emailInput.value.trim() !== '' && emailInput.validity.valid;
+            const milestoneDate = nextMilestoneDate(day, month, year);
+            const dateIsComplete = dayInput.value !== '' && monthInput.value !== '' && yearInput.value !== '';
+            const dateIsValid = dateIsComplete && milestoneDate !== null;
+
+            emailError.style.display = emailIsValid ? 'none' : 'block';
+            dateError.style.display = dateIsValid ? 'none' : 'block';
+            emailInput.setAttribute('aria-invalid', String(!emailIsValid));
+            [dayInput, monthInput, yearInput].forEach((input) => input.setAttribute('aria-invalid', String(!dateIsValid)));
+
+            if (!emailIsValid || !dateIsValid) {
+                errorSummary.style.display = 'block';
+                errorSummary.focus();
+                return;
+            }
+
+            errorSummary.style.display = 'none';
+            const formattedDate = new Intl.DateTimeFormat('en-GB', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            }).format(milestoneDate);
+            firstEmailDate.dateTime = `${milestoneDate.getFullYear()}-${String(milestoneDate.getMonth() + 1).padStart(2, '0')}-${String(milestoneDate.getDate()).padStart(2, '0')}`;
+            firstEmailDate.textContent = formattedDate;
+            signupForm.hidden = true;
+            heroPitch.hidden = true;
+            successMessage.hidden = false;
+        });
     </script>
 
 </body>
