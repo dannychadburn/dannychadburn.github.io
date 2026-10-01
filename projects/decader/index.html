@@ -94,6 +94,8 @@
         const successMessage = document.getElementById('successMsg');
         const firstEmailDate = document.getElementById('firstEmailDate');
         const heroPitch = document.querySelector('.hero-pitch');
+        const submitButton = document.getElementById('submitBtn');
+        const signupEndpoint = 'https://script.google.com/macros/s/AKfycbz8WDuBI7vPm0auJsiv54q1-oe3vbMWx0Fxyc3fQkW97jeT6sSoh-jLawrfoVUvkwql/exec';
 
         function nextMilestoneDate(day, month, year, today = new Date()) {
             const birthday = new Date(year, month - 1, day);
@@ -110,7 +112,7 @@
             return new Date(year + milestoneAge, month - 1, day);
         }
 
-        signupForm.addEventListener('submit', (event) => {
+        signupForm.addEventListener('submit', async (event) => {
             event.preventDefault();
 
             const day = Number(dayInput.value);
@@ -127,12 +129,35 @@
             [dayInput, monthInput, yearInput].forEach((input) => input.setAttribute('aria-invalid', String(!dateIsValid)));
 
             if (!emailIsValid || !dateIsValid) {
+                errorSummary.textContent = 'Please correct the errors below.';
                 errorSummary.style.display = 'block';
                 errorSummary.focus();
                 return;
             }
 
             errorSummary.style.display = 'none';
+            submitButton.disabled = true;
+            submitButton.textContent = 'SENDING...';
+            const birthday = `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+            try {
+                await fetch(signupEndpoint, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: new URLSearchParams({
+                        email: emailInput.value.trim(),
+                        birthday
+                    })
+                });
+            } catch (error) {
+                errorSummary.textContent = "We couldn't submit your signup. Please try again.";
+                errorSummary.style.display = 'block';
+                errorSummary.focus();
+                submitButton.disabled = false;
+                submitButton.textContent = 'BEGIN THE DECADE';
+                return;
+            }
+
             const formattedDate = new Intl.DateTimeFormat('en-GB', {
                 day: 'numeric',
                 month: 'long',
